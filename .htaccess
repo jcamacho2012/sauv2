@@ -1,0 +1,23 @@
+<IfModule mod_rewrite.c>
+# Activar RewriteEngine
+RewriteEngine on
+
+
+RewriteRule ^dashboard(.+)?$ panel.php
+RewriteRule ^followers(.+)?$ followers.php
+RewriteRule ^allusers(.+)?$ allusers.php
+RewriteRule ^perfil(.*)?$ profile.php?perma=$1
+RewriteRule ^publication(.*)?$ publish.php?permalink=$1
+RewriteRule ^feed(.+)?$ feed.php
+RewriteRule ^config(.+)?$ configuration.php
+RewriteRule ^task(.+)?$ tareas.php
+RewriteRule ^unAssig(.+)?$ sinAsignar.php
+RewriteRule ^logout(.+)?$ logout.php
+
+
+
+# publicaciones
+RewriteRule ^comment(.+)?$ comment-post.php
+RewriteRule ^post(.+)?$ post-post.php
+
+</IfModule>

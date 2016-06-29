@@ -1,0 +1,1 @@
+16009084201600000988P5UPDATE tramite SET certificador_asignado= :id WHERE req_no = :reqno
