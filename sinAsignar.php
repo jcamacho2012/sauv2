@@ -114,6 +114,7 @@ if (isset($_SESSION['iduser'])){
                                 <div class="form-group">                                   
                                    <div class="col-xs-5">
                                        <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
+                                       <input type="hidden" class="form-control" name="rank" value="<?php echo $_SESSION['rank']; ?>"/>
                                    </div>
                                </div>
                                 
@@ -207,12 +208,13 @@ if (isset($_SESSION['iduser'])){
         // Get the record's ID via attribute
         var req_no = $(this).attr('data-id');
         var id= $("input[name=id]").val();
+        var rank= $("input[name=rank]").val();
         var opcion=2;
         
         $.ajax({
             url: 'buscar.php',
             method: 'POST',           
-            data: { reqno: req_no,opcion:opcion,id:id}
+            data: { reqno: req_no,opcion:opcion,id:id,rank:rank}
         }).success(function(response) {
             // Populate the form fields with the data returned from server
             alert("Solicitud tomada")

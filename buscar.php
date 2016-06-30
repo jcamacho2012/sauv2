@@ -13,8 +13,9 @@ if(isset($_POST['opcion'])){
     if($_POST['opcion']==2){
         $reqno=$_POST['reqno'];
         $id=$_POST['id'];
+        $rank=$_POST['rank'];
         $response = array();
-        $response=consultaxid($reqno,$id);
+        $response=consultaxid($reqno,$id,$rank);
         $formulario=  dibujarFormulario($response);
         echo $formulario;  
     }

@@ -145,11 +145,7 @@ function buscarNombreXId($id){
 
 function tareaSinAsignar($ciudad){
     // conexon a base de datos
-    $conexion = Conexion::singleton_conexion();
-     $myFile = "ciudad.txt";
-    $fh = fopen($myFile, 'w') or die("can't open file");
-    fwrite($fh, $ciudad);
-     fclose($fh);
+    $conexion = Conexion::singleton_conexion();     
     // consulta a base de datos
     
 	$SQL = "SELECT req_no,dcm_no,empresa FROM tramite where certificador_asignado=0 and receptor_revisado='t' and ciudad=:ciudad";
@@ -222,7 +218,7 @@ $conexion = Conexion::singleton_conexion();
     ';  
 }
 
-function consultaxid($reqno,$id){
+function consultaxid($reqno,$id,$rank){
     // conexon a base de datos
   
     $conexion = Conexion::singleton_conexion();
@@ -243,16 +239,24 @@ function consultaxid($reqno,$id){
 		}
 	}
     //actualizar id del usuario que toma la solicitud sin asignar
-        actualizarId($reqno, $id);
-        return json_encode($response);
+        actualizarId($reqno, $id,$rank);
+        $myFile = "ciudad.txt";
+        $fh = fopen($myFile, 'w') or die("can't open file");
+        fwrite($fh, $response['dcm_no']);
+        fclose($fh);
+        return $response;
 }
 
-function actualizarId($reqno,$id){
+function actualizarId($reqno,$id,$rank){
     // conexon a base de datos
   
     $conexion = Conexion::singleton_conexion();
     // consulta a base de datos
+    if($rank==4){
         $SQL = "UPDATE tramite SET certificador_asignado= :id WHERE req_no = :reqno";
+    }else{
+        $SQL = "UPDATE tramite SET receptor_asignado= :id WHERE req_no = :reqno";
+    }        
         $sentence = $conexion -> prepare($SQL);
         $sentence -> bindParam(':reqno', $reqno);
         $sentence -> bindParam(':id', $id);

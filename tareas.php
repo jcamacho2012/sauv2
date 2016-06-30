@@ -128,6 +128,40 @@ if (isset($_SESSION['iduser'])){
                                        <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
                                    </div>
                                 </div>
+<!--                                <div class="form-group">
+                                    <div class="col-xs-6 form-group">
+                                        <label>Solicitud</label>                                      
+                                        <input type="text" class="form-control" name="req_no" disabled="true" />                                    
+                                    </div>
+                                    <div class="col-xs-1 form-group">
+                                         espacio entre columnas
+                                    </div>
+
+                                    <div class="col-xs-6 form-group">
+                                        <label>Documento</label>                                        
+                                        <input type="text" class="form-control" name="dcm_no" disabled="true" />
+                                    </div>
+                               </div> 
+                                 <div class="form-group">
+                                    <div class="col-xs-6 form-group">
+                                        <label>Solicitud</label>                                      
+                                        <input type="text" class="form-control" name="req_no" disabled="true" />                                    
+                                    </div>
+                                    <div class="col-xs-1 form-group">
+                                         espacio entre columnas
+                                    </div>
+
+                                    <div class="col-xs-6 form-group">
+                                        <label>Documento</label>                                        
+                                        <input type="text" class="form-control" name="dcm_no" disabled="true" />
+                                    </div>
+                               </div> 
+                               
+                               <div class="form-group">
+                                   <div class="col-xs-5 col-xs-offset-3">
+                                       <button type="submit" class="btn btn-success" id="aprobar">Aprobar</button>
+                                   </div>
+                               </div>-->
                                 
                            </form>
                          </div>
@@ -208,11 +242,11 @@ if (isset($_SESSION['iduser'])){
             data: { reqno: req_no,opcion:opcion,id:id}
         }).success(function(response) {
             // Populate the form fields with the data returned from server
-              var response = $.parseJSON(response);
-            $('#userForm')
-                .find('[name="req_no"]').val(response.req_no).end()
-                .find('[name="dcm_no"]').val(response.dcm_no).end()
-                .append('<p>prueba</p>');
+//              var response = $.parseJSON(response);
+              
+            $('#userForm').append(response);
+//                .find('[name="req_no"]').val(response.req_no).end()
+//                .find('[name="dcm_no"]').val(response.dcm_no).end();
 
             // Show the dialog
             bootbox
@@ -233,7 +267,10 @@ if (isset($_SESSION['iduser'])){
                     $('#userForm').hide().appendTo('body');
                 })
                 .modal('show');
-        });
+        })
+                .fail(function(response){
+                    alert ('error');
+                });
     });
     
      $('.liberar').on('click', function() {

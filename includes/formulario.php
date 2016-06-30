@@ -17,7 +17,7 @@ function sanitarios(){
     return '<div class="row" style="padding:5px 20px;">
                                     <div class="col-xs-6 form-group">
                                         <label>Solicitud</label>                                      
-                                        <input type="text" class="form-control" name="req_no" disabled="true" />                                    
+                                        <input type="text" class="form-control" name="req_no" disabled="true" value="sanitario" />                                    
                                     </div>
                                     <div class="col-xs-1 form-group">
                                         <!-- espacio entre columnas-->
