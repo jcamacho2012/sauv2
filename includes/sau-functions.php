@@ -58,7 +58,7 @@ $conexion = Conexion::singleton_conexion();
 
 function geterror(){
   echo'<!-- alert -->
-<div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <strong> Error! </strong> Tus datos de acceso son incorrectos, por favor revisarlos e intentarlo de nuevo. </div>
+<div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <strong> Error! </strong> Tus datos de acceso son incorrectos o tu cuenta se encuentra deshabilitada, por favor comunicate con Gestion de Procesos. </div>
 <!-- alert -->';
 }
 
@@ -240,10 +240,7 @@ function consultaxid($reqno,$id,$rank){
 	}
     //actualizar id del usuario que toma la solicitud sin asignar
         actualizarId($reqno, $id,$rank);
-        $myFile = "ciudad.txt";
-        $fh = fopen($myFile, 'w') or die("can't open file");
-        fwrite($fh, $response['dcm_no']);
-        fclose($fh);
+       
         return $response;
 }
 
@@ -989,7 +986,7 @@ if (empty($results)) {
        if ($key['maintenance'] == 1) {
          echo'
            <form id="form-login" method="POST" action="">
-             <label>Email:</label>
+             <label>Usuario:</label>
              <input class="form-control" type="text" name="mail">
              <label>Contraseña:</label>
              <input class="form-control" type="password" name="password"><p></p>

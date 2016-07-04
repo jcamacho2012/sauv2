@@ -3,15 +3,12 @@ require_once 'includes/admin.functions.php';
 error_reporting(E_ALL);
 
 $singleton = Login::singleton_login();
-if(isset($_POST['mail'])){
-    $mail = $_POST['mail'];
+if(isset($_POST['username'])){
+    $username = $_POST['username'];
     $password = $_POST['password'];
-    $usuario = $singleton->login_users($mail,$password);
-    $myFile = "prueba.txt";
-    $fh = fopen($myFile, 'w') or die("can't open file");
     
-     fwrite($fh, 'prueba');
-     fclose($fh);
+    $usuario = $singleton->login_users($username,$password);
+
     if($usuario == TRUE){header("Location: index.php");}
     if($usuario == FALSE){header("Location: ../index.php?error");}
 }
@@ -46,13 +43,13 @@ if (isset($_SESSION['iduser'])){header("Location: index.php");}
 	<div class="well">
       
            <form id="form-login" method="POST" action="">
-             <label>Email:</label>
-             <input class="form-control" type="text" name="mail">
+             <label>Usuario:</label>
+             <input class="form-control" type="text" name="username">
              <label>Contraseña:</label>
              <input class="form-control" type="password" name="password"><p></p>
              <button type="submit" class="btn btn-default pull-right"><i class="fa fa-power-off"></i> Iniciar sesión</button>        
            </form>
-         	</div>
+         </div>
 	
 </div>
 

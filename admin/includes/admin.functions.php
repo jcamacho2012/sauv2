@@ -84,17 +84,15 @@ class Login
 
     }
   
-  public function login_users($email,$password){
+  public function login_users($username,$password){
     
     try {
 
-      $crypt = sha1(SALT.$password.PEPER);
-      
-      
-      $sql = "SELECT * FROM users WHERE email = ? AND  password = ? AND rank = 2";
+     // $crypt = sha1(SALT.$password.PEPER);
+
+      $sql = "SELECT * FROM users WHERE name = ? AND rank = 2 AND estado='HABILITADO'";
       $query = $this->dbh->prepare($sql);
-      $query->bindParam(1,$email);
-      $query->bindParam(2,$crypt);
+      $query->bindParam(1,$username);      
       $query->execute();
       $this->dbh = null;
       
@@ -103,11 +101,14 @@ class Login
       {
          
          $fila  = $query->fetch();
-         $_SESSION['iduser'] = $fila['iduser'];
-         $_SESSION['nombre'] = $fila['name'];
-         $_SESSION['rank'] = $fila['rank'];
-         return TRUE;
-  
+         if (password_verify($password, $fila['password'])){ 
+               $_SESSION['iduser'] = $fila['iduser'];
+               $_SESSION['nombre'] = $fila['name'];
+               $_SESSION['rank'] = $fila['rank'];
+               return TRUE;
+            }else{
+               return FALSE;
+            }
       }else
       return FALSE;
       
@@ -247,7 +248,7 @@ function userslist(){
     $conexion = Conexion::singleton_conexion();
 
     // consulta a base de datos
-	$SQL = "SELECT * FROM users";
+	$SQL = "SELECT iduser,name,email,public,nombre,ciudad,estado FROM users,rol where users.rank=rol.id";
 	$sentence = $conexion -> prepare($SQL);
 	$sentence -> execute();
 	$results = $sentence -> fetchAll();
@@ -260,32 +261,32 @@ function userslist(){
             }else{
                 $publico = 'NO';
             }
-
-            if ($key['rank'] == 1) {
-            	$rango = 'Usuario';
-            }else{
-                $rango = 'Administrador';
-            }
-
+          
 			echo'
               <tr>
                 <td>'.$key['name'].'</td>
                 <td>'.$key['email'].'</td>
                 <td>'.$publico.'</td>
-                <td>'.$rango.'</td>
-                <td><p></p><a class="btn btn-info btn-sm btn-block" target="_blank" href="../perfil'.$key['profile'].'"><i class="glyphicon glyphicon-search"></i> Ver Perfil</a></td>
+                <td>'.$key['nombre'].'</td>
+                <td>'.$key['estado'].'</td>
+                <td>'.$key['ciudad'].'</td>    
                 <td>
                    
                    <form method="POST" action="">
-                    <input type="hidden" name="editarusuario" value="'.$key['iduser'].'">
-                    <button type="submit" class="btn btn-block btn-xs btn-warning"><i class="glyphicon glyphicon-tasks"></i> Editar</button>
+                        <input type="hidden" name="editarusuario" value="'.$key['iduser'].'">
+                        <button type="submit" class="btn btn-block btn-xs btn-warning"><i class="glyphicon glyphicon-tasks"></i> Editar</button>
                    </form>
 
                    <form method="POST" action="">
-                    <input type="hidden" name="eliminarusuario" value="'.$key['iduser'].'">
-                    <button type="submit" class="btn btn-block btn-xs btn-danger"><i class="glyphicon glyphicon-remove-sign"></i> Eliminar</button>
+                        <input type="hidden" name="eliminarusuario" value="'.$key['iduser'].'">
+                        <button type="submit" class="btn btn-block btn-xs btn-danger"><i class="glyphicon glyphicon-remove-sign"></i> Eliminar</button>
                    </form>
-
+                   
+                   <form method="POST" action="">
+                        <input type="hidden" name="deshabusuarioid" value="'.$key['iduser'].'">
+                        <input type="hidden" name="deshabusuarioestado" value="'.$key['estado'].'">    
+                        <button type="submit" class="btn btn-block btn-xs btn-info"><i class="glyphicon glyphicon-'.(($key['estado']=="HABILITADO")? "thumbs-down":"thumbs-up").'"></i>'.(($key['estado']=="HABILITADO")? " Deshabilitar":" Habilitar").'</button>
+                   </form>
 
                 </td>
               </tr>
@@ -293,7 +294,6 @@ function userslist(){
 		}
 	}	
 }
-
 
 
 function followlist(){
@@ -508,13 +508,39 @@ header('Location: '.$_SERVER['HTTP_REFERER'].'');
 
 }
 
+function rol($nombre){
+    // conexon a base de datos
+    
+    $conexion = Conexion::singleton_conexion();
+    
+    // consulta a base de datos
+        $lista="";
+	$SQL = "SELECT * FROM rol";
+	$sentence = $conexion -> prepare($SQL);
+        $sentence -> bindParam(':nombre',$nombre);
+	$sentence -> execute(); 
+	$results = $sentence -> fetchAll();
+	if (empty($results)) {
+	}else{
+		foreach ($results as $key){
+		$lista.='
+                      <option value="'.$key['id'].'"'.(($key['nombre']==$nombre)? "selected":" ").'>'.$key['nombre'].'</option>';
+		}
+	}
+       
+        return $lista;
+}
+
+
+
 
 function editarusuario($user){
   // conexon a base de datos
+
   $conexion = Conexion::singleton_conexion();
 
   // consulta a base de datos
-  $SQL = "SELECT * FROM users WHERE iduser = :iduser";
+  $SQL = "SELECT iduser,name,email,public,nombre,ciudad FROM users,rol where users.rank=rol.id and iduser = :iduser";
   $sentence = $conexion -> prepare($SQL);
   $sentence -> bindParam(':iduser',$user);
   $sentence -> execute();
@@ -529,20 +555,15 @@ function editarusuario($user){
           $publico = '<option value="2">NO</option><option value="1">SI</option>';
         }
 
-        if ($key['rank'] == 1) {
-          $rango = '
-              <option value="1">Usuario</option>
-              <option value="2">Administrador</option>
-          ';
+        $rango = rol($key['nombre']);
+         if ($key['ciudad'] == 'GYE') {
+          $ciudad = '<option value="GYE" selected>GUAYAQUIL</option><option value="MNT">MANTA</option>';
         }else{
-          $rango = '
-              <option value="2">Administrador</option>
-              <option value="1">Usuario</option>
-          ';
+          $ciudad = '<option value="MNT" selected>MANTA</option><option value="GYE">GUAYAQUIL</option>';
         }
+        
 
       echo'
-
             <!-- configuracion -->
             <div class="col-sm-6 paddingone">
               <div class="well configuracion-cube">
@@ -559,6 +580,10 @@ function editarusuario($user){
                   <label>Rango:</label>
                   <select class="form-control" name="rango">
                       '.$rango.'
+                  </select>
+                  <label>Ciudad:</label>
+                  <select class="form-control" name="ciudad">
+                      '.$ciudad.'
                   </select>
                   <input type="hidden" name="userid" value="'.$user.'" >
                   <p></p>
@@ -624,7 +649,7 @@ header('Location: '.$_SERVER['HTTP_REFERER'].'');
 }
 
 
-function cambiardatos($nombre,$email,$public,$rango,$usuario){
+function cambiardatos($nombre,$email,$public,$rango,$ciudad,$usuario){
 // conexon a base de datos
 $conexion = Conexion::singleton_conexion();
 
@@ -634,13 +659,14 @@ $conexion = Conexion::singleton_conexion();
 $newprofile = md5($nombre);
 
 // consulta a base de datos
-$SQL = "UPDATE users SET name = :name, email = :email, public = :public, profile = :profile, rank = :rank WHERE iduser = :iduser";
+$SQL = "UPDATE users SET name = :name, email = :email, public = :public, profile = :profile, rank = :rank , ciudad = :ciudad WHERE iduser = :iduser";
 $sentence = $conexion -> prepare($SQL);
 $sentence -> bindParam(':name', $nombre);
 $sentence -> bindParam(':email', $email);
 $sentence -> bindParam(':public', $public);
 $sentence -> bindParam(':profile', $newprofile);
 $sentence -> bindParam(':rank', $rango);
+$sentence -> bindParam(':ciudad', $ciudad);
 $sentence -> bindParam(':iduser', $usuario);
 $sentence -> execute();
 
@@ -656,19 +682,41 @@ echo'
   
 }
 
+function deshabusuario($id,$estado){
+// conexon a base de datos
+$conexion = Conexion::singleton_conexion();
 
+// consulta a base de datos
+if($estado=='HABILITADO'){
+    $estado='DESHABILITADO';
+}else{
+    $estado='HABILITADO';
+}
+$SQL = "UPDATE users SET estado = :estado WHERE iduser = :iduser";
+$sentence = $conexion -> prepare($SQL);
+$sentence -> bindParam(':estado', $estado);
+$sentence -> bindParam(':iduser', $id);
+$sentence -> execute();
+
+echo'
+  <!-- alertas -->
+  <div class="col-md-12">
+  <div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+   <strong><i class="fa fa-check"></i> Correcto! </strong> El usuario fue '.$estado.'. </div>            
+  </div>
+  <!-- alertas -->
+';
+
+  
+}
 
 
 function cambiarpassword($nueva,$usuario){
 // conexon a base de datos
 $conexion = Conexion::singleton_conexion();
 
-// has de la password actual
-$crypt = sha1(SALT.$actual.PEPER);
 
-//------------------------------------------------------------------------------------
-
-$nuevapassword = sha1(SALT.$nueva.PEPER);
+$nuevapassword=password_hash($nueva, PASSWORD_BCRYPT, ['cost'=>12]);
 
 $updapass = "UPDATE users SET password = :password WHERE iduser = :iduser";
 $updasentence = $conexion -> prepare($updapass);
@@ -696,12 +744,14 @@ function newusuario($nombre,$email,$password,$profile,$rank,$ciudad){
 $conexion = Conexion::singleton_conexion();
 
 // contraseña
-$nuevapassword = sha1(SALT.$nueva.PEPER);
+//$nuevapassword = sha1(SALT.$nueva.PEPER);
 
 // perfil
 $newprofile = md5($nombre);
+$nuevapassword=password_hash($password, PASSWORD_BCRYPT, ['cost'=>12]);
 
-$SQL = "INSERT INTO users(name,email,password,profile,public,rank,ciudad) VALUES(:name,:email,:password,:profile,:public,:rank,:ciudad)";
+
+$SQL = "INSERT INTO users(name,email,password,profile,public,rank,ciudad,estado) VALUES(:name,:email,:password,:profile,:public,:rank,:ciudad,'HABILITADO')";
 $sentence = $conexion -> prepare($SQL);
 $sentence -> bindParam(':name',$nombre);
 $sentence -> bindParam(':email',$email);

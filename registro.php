@@ -33,13 +33,14 @@ if (empty($resultados)) {
 //--------------------------------------------------------------
 
 // contraseña
-$nuevapassword = sha1(SALT.$_POST['password'].PEPER);
+
+$nuevapassword=password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost'=>12]);
 // perfil
 $newprofile = md5($_POST['nombre']);
 // Rango
 $rank = 1;
 
-$SQL = "INSERT INTO users(name,email,password,profile,public,rank) VALUES(:name,:email,:password,:profile,:public,:rank)";
+$SQL = "INSERT INTO users(name,email,password,profile,public,rank,ciudad,estado) VALUES(:name,:email,:password,:profile,:public,:rank,'GYE','HABILITADO')";
 $sentence = $conexion -> prepare($SQL);
 $sentence -> bindParam(':name',$_POST['nombre']);
 $sentence -> bindParam(':email',$_POST['mail']);

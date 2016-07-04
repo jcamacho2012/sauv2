@@ -36,7 +36,7 @@ define('PEPER', 'shElNgFg6qOv5um1bQpvgoI51jGl6t22');
 // Finalmente el nombre del sistema, para no tener que estarlo editando siempre
 // por que algunas personas me dicen, es que son muchas paginas y no puedo editar
 // todas, me lleva tiempo bla bla bla, asi que pues ya de una vez no jajaja :D
-define('SITETITLE', 'SAU v2 Beta 1 | JHCodes');
+define('SITETITLE', 'SAU v2');
 
 
 
