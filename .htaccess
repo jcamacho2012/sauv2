@@ -11,6 +11,7 @@ RewriteRule ^publication(.*)?$ publish.php?permalink=$1
 RewriteRule ^feed(.+)?$ feed.php
 RewriteRule ^config(.+)?$ configuration.php
 RewriteRule ^task(.+)?$ tareas.php
+RewriteRule ^done(.+)?$ terminadas.php
 RewriteRule ^unAssig(.+)?$ sinAsignar.php
 RewriteRule ^logout(.+)?$ logout.php
 

@@ -1,8 +1,8 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp001/TnInp001VO.php';
-//require_once 'VUE/formulario/TnInp001/TnInp001PdVO.php';
-//require_once 'VUE/formulario/TnInp001/TnInp001CtnrVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp001/TnInp001PdVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp001/TnInp001CtnrVO.php';
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -133,36 +133,36 @@ function consulta_datos_formulario_001_004($req_no) {
         return $TnInp001; 
 }
 
-//function consulta_datos_producto_001_004($req_no) {   
-//        $sql="SELECT  					
-//                COALESCE(a.prdt_sn::TEXT,'No Aplica') AS prdt_sn
-//                ,COALESCE(a.hc::TEXT,'No Aplica') AS hc					
-//                ,COALESCE(a.prdt_desc::TEXT,'No Aplica') AS prdt_desc
-//                ,COALESCE(a.prdt_stn::TEXT,'No Aplica') AS prdt_stn					
-//                ,COALESCE(CAST(round(a.pkgs_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_qt								
-//                ,COALESCE(a.pkgs_qt_ut::TEXT,'No Aplica') AS pkgs_qt_ut
-//                ,COALESCE(CAST(round(a.prdt_nwt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS prdt_nwt
-//                ,COALESCE(a.prdt_nwt_ut::TEXT,'No Aplica') AS prdt_nwt_ut														
-//                ,COALESCE(a.lot_cd::TEXT,'No Aplica') AS lot_cd
-//                FROM  vue_gateway.tn_inp_001_it_pd as a			  				
-//                where a.req_no='".$req_no."'";               					
-//        $conexion=new conexion();        
-//        $result = $conexion->consultar($sql,2);          
-//        $objeto=new TnInp001PdVO();        
-//        $lista=$objeto->getProducto001($result);  
-//        return $lista; 
-//}
-//
-//function consulta_datos_contenedor_001_004($req_no) {      
-//        $sql="SELECT  					 
-//		 COALESCE(a.ctnr_sn::TEXT,'No Aplica') AS ctnr_sn
-//		,COALESCE(a.ctnr_idt_desc::TEXT,'No Aplica') AS ctnr_idt_desc
-//		,COALESCE(a.seal_no::TEXT,'No Aplica') AS seal_no					
-//                FROM  vue_gateway.tn_inp_001_it_cntr as a			  
-//                where a.req_no='".$req_no."'";               					
-//        $conexion=new conexion();        
-//        $result = $conexion->consultar($sql,2);          
-//        $objeto=new TnInp001CntrVO();        
-//        $lista=$objeto->getContenedor001($result);  
-//        return $lista; 
-//}
+function consulta_datos_producto_001_004($req_no) {   
+        $sql="SELECT  					
+                COALESCE(a.prdt_sn::TEXT,'No Aplica') AS prdt_sn
+                ,COALESCE(a.hc::TEXT,'No Aplica') AS hc					
+                ,COALESCE(a.prdt_desc::TEXT,'No Aplica') AS prdt_desc
+                ,COALESCE(a.prdt_stn::TEXT,'No Aplica') AS prdt_stn					
+                ,COALESCE(CAST(round(a.pkgs_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_qt								
+                ,COALESCE(a.pkgs_qt_ut::TEXT,'No Aplica') AS pkgs_qt_ut
+                ,COALESCE(CAST(round(a.prdt_nwt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS prdt_nwt
+                ,COALESCE(a.prdt_nwt_ut::TEXT,'No Aplica') AS prdt_nwt_ut														
+                ,COALESCE(a.lot_cd::TEXT,'No Aplica') AS lot_cd
+                FROM  vue_gateway.tn_inp_001_it_pd as a			  				
+                where a.req_no='".$req_no."'";               					
+        $conexion=new DB();        
+        $result = $conexion->consultar($sql,2);          
+        $objeto=new TnInp001PdVO();        
+        $lista=$objeto->getProducto001($result);  
+        return $lista; 
+}
+
+function consulta_datos_contenedor_001_004($req_no) {      
+        $sql="SELECT  					 
+		 COALESCE(a.ctnr_sn::TEXT,'No Aplica') AS ctnr_sn
+		,COALESCE(a.ctnr_idt_desc::TEXT,'No Aplica') AS ctnr_idt_desc
+		,COALESCE(a.seal_no::TEXT,'No Aplica') AS seal_no					
+                FROM  vue_gateway.tn_inp_001_it_cntr as a			  
+                where a.req_no='".$req_no."'";               					
+        $conexion=new DB();        
+        $result = $conexion->consultar($sql,2);          
+        $objeto=new TnInp001CntrVO();        
+        $lista=$objeto->getContenedor001($result);  
+        return $lista; 
+}

@@ -111,7 +111,7 @@ function tareas($iduser,$rank){
                 echo ' 
                     <td>';
                         if($rank!=2){
-                            echo '<button type="button" data-id="'.$key['req_no'].'" class="btn btn-primary editButton">Hacer</button>';
+                            echo '<button type="button" data-id="'.$key['req_no'].'" class="btn btn-primary hacer">Hacer</button>';
                         }
                
                         if($rank==4){
@@ -769,48 +769,58 @@ function cambiarpassword($actual,$nueva){
 // conexon a base de datos
 $conexion = Conexion::singleton_conexion();
 
-// has de la password actual
-$crypt = sha1(SALT.$actual.PEPER);
 
 // consulta a base de datos
-$SQL = "SELECT * FROM users WHERE password = :password AND iduser = :iduser LIMIT 1";
+$SQL = "SELECT * FROM users WHERE  iduser = :iduser LIMIT 1";
 $sentence = $conexion -> prepare($SQL);
-$sentence -> bindParam(':password', $crypt);
 $sentence -> bindParam(':iduser', $_SESSION['iduser']);
 $sentence -> execute();
-$results = $sentence -> fetchAll();
-if (empty($results)) {
-//------------------------------------------------------------------------------------
 
-echo '
- <!-- alertas -->
- <div class="col-md-12">
- <div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-  <strong><i class="fa fa-times"></i> Error! </strong> Tiene que proporcionar su contraseña actual para poder actualizar a una nueva, de lo contrario esta operación no sera procesada. </div>            
- </div>
- <!-- alertas -->
-';
+if ($sentence->rowCount() == 1) {
+//------------------------------------------------------------------------------------
+    $results = $sentence -> fetch();
+    if (password_verify($actual, $results['password'])){
+        $nuevapassword=password_hash($nueva, PASSWORD_BCRYPT, ['cost'=>12]);
+
+        $updapass = "UPDATE users SET password = :password WHERE iduser = :iduser";
+        $updasentence = $conexion -> prepare($updapass);
+        $updasentence -> bindParam(':password',$nuevapassword);
+        $updasentence -> bindParam(':iduser',$_SESSION['iduser']);
+        $updasentence -> execute();
+
+        echo'
+          <!-- alertas -->
+          <div class="col-md-12">
+          <div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+           <strong><i class="fa fa-check"></i> Correcto! </strong> Tu contraseña ha sido actualizada correctamente, tendrás que usarla para poder iniciar sesión en el sistema. </div>            
+          </div>
+          <!-- alertas -->
+        ';
+    }else{
+        echo'
+           <!-- alertas -->
+            <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+             <strong><i class="fa fa-times"></i> Error! </strong> Contraseña ingresada es incorrecta, vuelva a digitar su contraseña. </div>            
+            </div>
+           <!-- alertas -->
+        ';
+    }
+
+
 
 //------------------------------------------------------------------------------------
 }else{
 //------------------------------------------------------------------------------------
 
-$nuevapassword = sha1(SALT.$nueva.PEPER);
-
-$updapass = "UPDATE users SET password = :password WHERE iduser = :iduser";
-$updasentence = $conexion -> prepare($updapass);
-$updasentence -> bindParam(':password',$nuevapassword);
-$updasentence -> bindParam(':iduser',$_SESSION['iduser']);
-$updasentence -> execute();
-
-echo'
-  <!-- alertas -->
-  <div class="col-md-12">
-  <div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-   <strong><i class="fa fa-check"></i> Correcto! </strong> Tu contraseña ha sido actualizada correctamente, tendrás que usarla para poder iniciar sesión en el sistema. </div>            
-  </div>
-  <!-- alertas -->
-';
+    echo '
+     <!-- alertas -->
+     <div class="col-md-12">
+     <div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <strong><i class="fa fa-times"></i> Error! </strong> Tiene que proporcionar su contraseña actual para poder actualizar a una nueva, de lo contrario esta operación no sera procesada. </div>            
+     </div>
+     <!-- alertas -->
+    ';
 
 //------------------------------------------------------------------------------------
   }  

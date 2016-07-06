@@ -80,7 +80,8 @@ if (isset($_POST['delcomment'])) {
                 }else if($_SESSION['rank']==2){
                      echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Tareas</a></li>";
                 }else{
-                    echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                    echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
+                          <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                 }
             ?>
           </ul>

@@ -16,7 +16,8 @@ class DB{
     
     function __construct() {
         $cadena = "host='$this->host' port='$this->port' dbname='$this->dbname' user='$this->user' password='$this->password'";        
-        $this->conexion= pg_connect($cadena) or die("<h1>Error conexion con VUE</h1>".  pg_last_error());   
+        $this->conexion= pg_connect($cadena) or die('<img src="themes/images/background1.jpg" alt="Smiley face" height="42" width="42">'
+                                                    . '<h1>Error al conectar</h1>');   
     }
           
     

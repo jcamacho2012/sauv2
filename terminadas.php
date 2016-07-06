@@ -65,12 +65,15 @@ if (isset($_SESSION['iduser'])){
             <li><a href="allusers"><i class="fa fa-users"></i> Usuarios</a></li>
             <li><a href="feed"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
-             <?php if($_SESSION['rank']==4){
+            <?php if($_SESSION['rank']==4){
                      echo "<li><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
-                     <li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                     <li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
                              
+                }else if($_SESSION['rank']==2){
+                     echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Tareas</a></li>";
                 }else{
-                     echo "<li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                    echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
+                          <li class=\"active\"><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                 }
             ?>
           </ul>
@@ -79,15 +82,12 @@ if (isset($_SESSION['iduser'])){
        
           <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mensaje">
           <!-- contenido -->
-          <div class="col-sm-6" id="contenido">
+            <div class="col-sm-6">
               <div class="well configuracion-cube">
-                <h4><i class="fa fa-tasks"></i> Mis Tareas</h4>               
+                <h4><i class="fa fa-check-circle"></i> Tareas Terminadas</h4>               
                 <div class="container">
-                  <h2>Mis Tareas</h2>
+                  <h2>Tareas</h2>
                   <div>
-                        <div class="input-group"> <span class="input-group-addon">Buscar: </span>
-                            <input id="filter" type="text" class="form-control" placeholder="buscar por solicitud, documento o empresa">
-                        </div>
                        <table class="table table-striped">
                	  	<thead>
                	  		<tr>                                    
@@ -109,13 +109,42 @@ if (isset($_SESSION['iduser'])){
                                   
                	  		</tr>
                	  	</thead>
-               	  	<tbody class="searchable">
-               	  	  <?php  tareas($_SESSION['iduser'],$_SESSION['rank']);
-                           ?>
+               	  	<tbody>
+               	  	  <?php tareas($_SESSION['iduser'],$_SESSION['rank']); ?>
                	  	</tbody>
                      </table>
-                      <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
-                  </div>                 
+                  </div>
+                  
+                 <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                        <div class="modal-content">
+                               <div class="modal-header" style="padding:35px 50px;">
+                                    <h4><span class="glyphicon glyphicon-check"></span> Revisión de Solicitud</h4>
+                              </div>
+                              <div class="modal-body" style="padding:40px 50px;">
+                                   <div id="fountainG">
+                                        <div id="fountainG_1" class="fountainG"></div>
+                                        <div id="fountainG_2" class="fountainG"></div>
+                                        <div id="fountainG_3" class="fountainG"></div>
+                                        <div id="fountainG_4" class="fountainG"></div>
+                                        <div id="fountainG_5" class="fountainG"></div>
+                                        <div id="fountainG_6" class="fountainG"></div>
+                                        <div id="fountainG_7" class="fountainG"></div>
+                                        <div id="fountainG_8" class="fountainG"></div>
+                                    </div>
+                                    <form id="userForm" name="form1" method="post" class="form-horizontal">
+                                    <div class="form-group">                                   
+                                       <div class="col-xs-5">
+                                           <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
+                                       </div>
+                                    </div> 
+                               </form>
+                             </div>                     
+                        </div>
+                    </div>
+                </div>
                 </div>                             
               </div>
             </div>
@@ -137,8 +166,6 @@ if (isset($_SESSION['iduser'])){
     <!-- validation -->
     <script src="themes/js/jquery.validate.min.js"></script>
     <script src="themes/js/additional-methods.min.js"></script>
-   
-    
     <style>
         #fountainG{
 	position:relative;
@@ -320,23 +347,10 @@ if (isset($_SESSION['iduser'])){
         }
     </style>
     <script type="text/javascript">
-        $(document).ready(function() {
-            (function($) {
-
-              $('#filter').keyup(function() {
-
-                var rex = new RegExp($(this).val(), 'i');
-                $('.searchable tr').hide();
-                $('.searchable tr').filter(function() {
-                  return rex.test($(this).text());
-                }).show();
-              })
-            }(jQuery));
-          });
         
-//        $(":button").not('.liberar').click(function(){
-//             $("#myModal").modal();
-//        });
+        $(":button").not('.liberar').click(function(){
+             $("#myModal").modal();
+        });
         
         $("#aprobar").click(function(){
             var num= $("input[name=req_no]").val();
@@ -372,23 +386,11 @@ if (isset($_SESSION['iduser'])){
         });
         
         
-         $('.hacer').on('click', function() {
+         $('.editButton').on('click', function() {
         // Get the record's ID via attribute
         var req_no = $(this).attr('data-id');
         var id= $("input[name=id]").val();
         var opcion=2;
-        $("#contenido").empty();
-        $('.greyBox').after("<div class='redBox'>Iron man</div>");
-        $("#contenido").append("<div id='fountainG'>\n\
-                                    <div id='fountainG_1' class='fountainG'></div>\n\
-                                    <div id='fountainG_2' class='fountainG'></div>\n\
-                                    <div id='fountainG_3' class='fountainG'></div>\n\
-                                    <div id='fountainG_4' class='fountainG'></div>\n\
-                                    <div id='fountainG_5' class='fountainG'></div>\n\
-                                    <div id='fountainG_6' class='fountainG'></div>\n\
-                                    <div id='fountainG_7' class='fountainG'></div>\n\
-                                    <div id='fountainG_8' class='fountainG'></div>\n\
-                                </div>");
         
         $.ajax({
             url: 'buscar.php',
@@ -397,8 +399,8 @@ if (isset($_SESSION['iduser'])){
         }).success(function(response) {
             // Populate the form fields with the data returned from server
 //              var response = $.parseJSON(response);
-              $('#fountainG').remove();
-              $('#contenido').append(response);
+              $("#fountainG").remove();
+            $('#userForm').append(response);
 //                .find('[name="req_no"]').val(response.req_no).end()
 //                .find('[name="dcm_no"]').val(response.dcm_no).end();
 
