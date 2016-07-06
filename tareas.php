@@ -318,6 +318,96 @@ if (isset($_SESSION['iduser'])){
                         background-color:rgb(255,255,255);
                 }
         }
+        
+        
+.funkyradio div {
+  clear: both;
+  overflow: hidden;
+}
+
+.funkyradio label {
+  width: 50%;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4;
+  font-weight: normal;
+  margin-left: 20em;
+}
+
+.funkyradio input[type="radio"]:empty,
+.funkyradio input[type="checkbox"]:empty {
+  display: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label,
+.funkyradio input[type="checkbox"]:empty ~ label {
+  position: relative;
+  line-height: 2.5em;
+  text-indent: 3.25em;
+  margin-top: 2em;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label:before,
+.funkyradio input[type="checkbox"]:empty ~ label:before {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: '';
+  width: 2.5em;
+  background: #D1D3D4;
+  border-radius: 3px 0 0 3px;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+  color: #888;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+  content: '\2714';
+  text-indent: .9em;
+  color: #C2C2C2;
+}
+
+.funkyradio input[type="radio"]:checked ~ label,
+.funkyradio input[type="checkbox"]:checked ~ label {
+  color: #777;
+}
+
+.funkyradio input[type="radio"]:checked ~ label:before,
+.funkyradio input[type="checkbox"]:checked ~ label:before {
+  content: '\2714';
+  text-indent: .9em;
+  color: #333;
+  background-color: #ccc;
+}
+
+.funkyradio input[type="radio"]:focus ~ label:before,
+.funkyradio input[type="checkbox"]:focus ~ label:before {
+  box-shadow: 0 0 0 3px #999;
+}
+
+.funkyradio-success input[type="radio"]:checked ~ label:before {
+  color: #fff;
+  background-color: #5cb85c;
+}
+
+.funkyradio-danger input[type="radio"]:checked ~ label:before{
+  color: #fff;
+  background-color: #d9534f;
+}
+
+.funkyradio-warning input[type="radio"]:checked ~ label:before{
+  color: #fff;
+  background-color: #f0ad4e;
+}
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -334,9 +424,6 @@ if (isset($_SESSION['iduser'])){
             }(jQuery));
           });
         
-//        $(":button").not('.liberar').click(function(){
-//             $("#myModal").modal();
-//        });
         
         $("#aprobar").click(function(){
             var num= $("input[name=req_no]").val();
@@ -399,8 +486,28 @@ if (isset($_SESSION['iduser'])){
 //              var response = $.parseJSON(response);
               $('#fountainG').remove();
               $('#contenido').append(response);
-//                .find('[name="req_no"]').val(response.req_no).end()
-//                .find('[name="dcm_no"]').val(response.dcm_no).end();
+              $('#contenido').append("<div class='panel panel-primary'>\n\
+                                            <div class='panel-heading'>\n\
+                                                <h3>Acciones</h3>\n\
+                                            </div>\n\
+                                            <div class='panel-body'>\n\
+                                                <div class='funkyradio'>\n\
+                                                     <div class='funkyradio-success'>\n\
+                                                        <input type='radio' name='radio' id='aprobar'/>\n\
+                                                        <label for='aprobar'>Aprobar</label>\n\
+                                                    </div>\n\
+                                                   <div class='funkyradio-warning'>\n\
+                                                        <input type='radio' name='radio' id='subsanar' />\n\
+                                                        <label for='subsanar'>Subsanar</label>\n\
+                                                    </div>\n\
+                                                    <div class='funkyradio-danger'>\n\
+                                                        <input type='radio' name='radio' id='rechazar' />\n\
+                                                        <label for='rechazar'>Rechazar</label>\n\
+                                                    </div>\n\
+                                                </div>\n\
+                                            </div>\n\
+                                    </div>");
+
 
             // Show the dialog
             bootbox
@@ -440,29 +547,7 @@ if (isset($_SESSION['iduser'])){
             // Populate the form fields with the data returned from server
             alert('Solicitud fue liberada');
             var pathname = window.location.pathname;
-            window.location.replace(pathname);
-//              var response = $.parseJSON(response);
-           
-
-//            // Show the dialog
-//            bootbox
-//                .dialog({
-//                    title: 'Edit the user profile',
-//                    message: $('#userForm'),
-//                    show: false // We will show it manually later
-//                })
-//                .on('shown.bs.modal', function() {
-//                    $('#userForm')
-//                        .show()                             // Show the login form
-//                        .formValidation('resetForm'); // Reset form
-//                })
-//                .on('hide.bs.modal', function(e) {
-//                    // Bootbox will remove the modal (including the body which contains the login form)
-//                    // after hiding the modal
-//                    // Therefor, we need to backup the form
-//                    $('#userForm').hide().appendTo('body');
-//                })
-//                .modal('show');
+            window.location.replace(pathname); 
         });
     });
         

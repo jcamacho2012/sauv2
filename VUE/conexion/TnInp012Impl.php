@@ -1,8 +1,10 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp012/TnInp012PdVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp012/TnInp012CtnrVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp012/TnInp012VO.php';
+
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp012/TnInp012VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp012/TnInp012PdVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp012/TnInp012CtnrVO.php';
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -114,7 +116,7 @@ function consulta_datos_formulario_012($req_no) {
                 ,COALESCE(a.inv_no::TEXT,'No Aplica') AS inv_no																				
                 FROM  vue_gateway.tn_inp_012 as a 
                 where a.req_no='".$req_no."'";               
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp012=new TnInp012VO($row);         
         return $TnInp012; 
@@ -134,7 +136,7 @@ function consulta_datos_producto_012($req_no) {
                     ,COALESCE(a.pdtn_de::TEXT,'No Aplica') AS pdtn_de					
                     FROM  vue_gateway.tn_inp_012_pd as a 
                     where a.req_no='".$req_no."'";			  				                 					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp012PdVO();        
         $lista=$objeto->getProducto012($result);                   
@@ -148,7 +150,7 @@ function consulta_datos_contenedor_012($req_no) {
                     ,COALESCE(a.seal_no::TEXT,'No Aplica') AS seal_no					
                     FROM  vue_gateway.tn_inp_012_cntr as a 
                     where a.req_no='".$req_no."'";			  				                 					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp012CtnrVO();        
         $lista=$objeto->getContenedor012($result);                   

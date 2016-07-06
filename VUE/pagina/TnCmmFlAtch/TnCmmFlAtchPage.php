@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnCmmFlAtchImpl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnCmmFlAtchImpl.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,7 +8,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnCmmFlAtchImpl.
 
 function cargar_lista_adjuntos($req_no){
     $listaAdjuntos= consulta_datos_adjuntos($req_no);
-    $retval='<table class="adjunto"><tr>    
+    $retval='<table class="table table-striped"><tr>    
     <th>Nombre</th>
     <th>Documento</th>
     </tr>';    

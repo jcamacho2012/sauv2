@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp014Impl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp014Impl.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,7 +8,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp014Impl.php
 
 function cargar_lista_contenedor_014($req_no){    
     $listaContenedor=  consulta_datos_contenedor_014($req_no);
-    $retval='<table class="tabla"><tr>
+    $retval='<table class="table table-striped"><tr>
     <th>No</th>
     <th>Número de Contenedor</th>
     <th>Precinto</th>

@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp012Impl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp012Impl.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,7 +9,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp012Impl.php
 
 function cargar_lista_producto_012($req_no){   
     $listaProducto= consulta_datos_producto_012($req_no);
-    $retval='<table class="tabla"> <tr>
+    $retval='<table class="table table-striped"> <tr>
     <th>No</th>
     <th>Subpartida Arancelaria</th>
     <th>Nombre de Producto</th>

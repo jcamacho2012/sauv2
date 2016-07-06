@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp019/TnInp019VO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp019/TnInp019PdVO.php';
 
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp019/TnInp019VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp019/TnInp019PdVO.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -60,7 +60,7 @@ function consulta_datos_formulario_019($req_no) {
             ,COALESCE(TO_CHAR(a.mdf_dt,'DD/MM/YYYY HH24:MI:SS')::TEXT,'No Aplica') AS mdf_dt							
             FROM  vue_gateway.tn_inp_019 as a			 			 
             where a.req_no='".$req_no."'";               
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp019=new TnInp019VO($row);        
     return $TnInp019;     
@@ -77,7 +77,7 @@ function consulta_datos_producto_019($req_no) {
                 ,COALESCE(a.sty_rgs_no::TEXT,'No Aplica') AS sty_rgs_no										
                 FROM  vue_gateway.tn_inp_019_pd as a			 					  				
                 where a.req_no='".$req_no."'";               					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp019PdVO();        
         $lista=$objeto->getProducto019($result);                   

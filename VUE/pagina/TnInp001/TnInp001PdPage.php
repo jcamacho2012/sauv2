@@ -8,7 +8,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp001Impl.php';
 
 function cargar_lista_productos_001_004($req_no){   
     $listaProducto= consulta_datos_producto_001_004($req_no);
-    $retval='<table class="tabla"> <tr>
+    $retval='<table class="table table-striped"> <tr>
     <th>No</th>
     <th>Subpartida Arancelaria</th>
     <th>Descripción de Producto</th>

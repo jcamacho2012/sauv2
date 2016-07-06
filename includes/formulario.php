@@ -1,5 +1,9 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp001/TnInp001Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp010/TnInp010Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp012/TnInp012Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp014/TnInp014Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp019/TnInp019Page.php';
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -27,15 +31,15 @@ function dibujarFormulario($array){
             break;
         }
         case '130-010':{
-            return sanitarios($array['dcm_no']);
+            return cargar_formulario_010($array['req_no']);
             break;
         }
         case '130-012':{
-            return sanitarios($array['dcm_no']);
+            return cargar_formulario_012($array['req_no']);
             break;
         }
         case '130-014':{
-            return sanitarios($array['dcm_no']);
+            return cargar_formulario_014($array['req_no']);
             break;
         }
         case '130-016':{
@@ -43,7 +47,7 @@ function dibujarFormulario($array){
             break;
         }
         case '130-019':{
-            return importacion();
+            return cargar_formulario_019($array['req_no']);
             break;
         }
         case '130-021':{

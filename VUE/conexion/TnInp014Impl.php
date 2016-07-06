@@ -1,7 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp014/TnInp014CtnrVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp014/TnInp014VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp014/TnInp014VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp014/TnInp014CtnrVO.php';
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -111,7 +112,7 @@ function consulta_datos_formulario_014($req_no) {
             ,COALESCE(to_char(a.mdf_dt,'DD/MM/YYYY HH24:MI:SS')::TEXT,'No Aplica') AS mdf_dt				
             FROM  vue_gateway.tn_inp_014 as a
             where a.req_no='".$req_no."'";               
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp014=new TnInp014VO($row);         
         return $TnInp014; 
@@ -124,7 +125,7 @@ function consulta_datos_contenedor_014($req_no) {
                     ,COALESCE(a.seal_no::TEXT,'No Aplica') AS seal_no					
                     FROM  vue_gateway.tn_inp_014_cntr as a 
                     where a.req_no='".$req_no."'";			  				                 					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp014CtnrVO();        
         $lista=$objeto->getContenedor014($result);                   

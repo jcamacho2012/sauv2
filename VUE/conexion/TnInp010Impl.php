@@ -1,9 +1,10 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp010/TnInp010PdVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp010/TnInp010CtnrVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp010/TnInp010LotVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp010/TnInp010VO.php';
+
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp010/TnInp010VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp010/TnInp010PdVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp010/TnInp010CtnrVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp010/TnInp010LotVO.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -100,7 +101,7 @@ function consulta_datos_formulario_010($req_no) {
                 ,COALESCE(to_char(a.mdf_dt,'DD/MM/YYYY HH24:MI:SS')::TEXT,'No Aplica') AS mdf_dt																				
                 FROM  vue_gateway.tn_inp_010 as a 
                 where a.req_no='".$req_no."'";               
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp010=new TnInp010VO($row);         
         return $TnInp010; 
@@ -116,7 +117,7 @@ function consulta_datos_producto_010($req_no) {
                     ,COALESCE(a.prdt_nwt_ut::TEXT,'No Aplica') AS prdt_nwt_ut					
                     FROM  vue_gateway.tn_inp_010_pd as a 
                     where a.req_no='".$req_no."'";			  				                 					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp010PdVO();        
         $lista=$objeto->getProducto010($result);                   
@@ -131,7 +132,7 @@ function consulta_datos_lote_010($req_no) {
                     ,COALESCE(to_char(a.csbt_lim_de,'DD/MM/YYYY')::TEXT,'No Aplica') AS csbt_lim_de					
                     FROM  vue_gateway.tn_inp_010_lot as a 
                     where a.req_no='".$req_no."'";			  				                 					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp010LotVO();        
         $lista=$objeto->getLote010($result);                   
@@ -145,7 +146,7 @@ function consulta_datos_contenedor_010($req_no) {
                     ,COALESCE(a.seal_no::TEXT,'No Aplica') AS seal_no					
                     FROM  vue_gateway.tn_inp_010_cntr as a 
                     where a.req_no='".$req_no."'";			  				                 					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp010CtnrVO();        
         $lista=$objeto->getContenedor010($result);                   

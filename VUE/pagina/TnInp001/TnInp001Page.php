@@ -2,6 +2,7 @@
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp001Impl.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp001/TnInp001CtnrPage.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp001/TnInp001PdPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,11 +17,11 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
     }else{                
     $contenedor= cargar_lista_contenedor_001_004($req_no);
     $producto= cargar_lista_productos_001_004($req_no);
-  //  $adjunto= cargar_lista_adjuntos($req_no);        
+    $adjunto= cargar_lista_adjuntos($req_no);        
   //  $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
          	<div class="display-2">
-			<h2 align="center">130-001 Certificado Sanitario de Exportacion Consumo Humano</h2>
+			<h2 align="center">'.substr($tninp001->getDcm_no(), 0, -4).'  '.$tninp001->getDcm_nm().'</h2>
 		</div>           
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -179,6 +180,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                         </div>				
                     </div>
 		</div>';
+            
             $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -248,6 +250,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                         </div>				
                     </div>
 		</div> ';
+            
             $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -391,6 +394,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                         </div>				
                     </div>
 		</div>';
+            
             $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -496,6 +500,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                             <input type="text" class="form-control" name="dst_ntn_nm" readonly value="'.$tninp001->getMfr_atr_no().'" />                                    
                         </div>';
 		}
+                
             $retval.='		
                         <div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
                             <label>Lugar de Carga</label>                                        
@@ -522,6 +527,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                         </div>																												
                     </div>
 		</div>';
+            
             $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -530,8 +536,8 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                     <div class="panel-body">						
 			'.$contenedor.'																												
                     </div>
-		</div>
-                    ';
+		</div>';
+            
             $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -552,6 +558,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                         </div>
                     </div>
 		</div>';
+            
             $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -574,6 +581,33 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                                 <input type="text" class="form-control" name="prdt_tot_nwt" readonly value="'.$tninp001->getPrdt_tot_nwt().'"  />
                             </div>
                         </div>   
+                    </div>
+		</div>';
+            
+            $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Observaciones</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-xs-11 form-group">
+                            <label>Observaciones del solicitante</label>
+                            <textarea class="form-control" rows="5" name="dclr_rmk">'.$tninp001->getDclr_rmk().'</textarea>
+                        </div>
+                        <div class="col-xs-11 form-group">
+                            <label>Observaciones del Aprobador</label>
+                            <textarea class="form-control" rows="5" name="aprb_rmk"></textarea>
+                        </div>
+                    </div>
+		</div>';
+            
+            $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Documentos Adjuntos</h3>
+                    </div>
+                    <div class="panel-body">
+                        '.$adjunto.'
                     </div>
 		</div>';
           

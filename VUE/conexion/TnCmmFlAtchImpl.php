@@ -1,8 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnCmmFlAtch/TnCmmFlAtchVO.php';
-
-
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnCmmFlAtch/TnCmmFlAtchVO.php';
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -32,7 +30,7 @@ function consulta_datos_adjuntos($req_no) {
                                             order by rgs_dt desc
                                             limit 1
                                          );";       
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql, 2);
         $objeto=new TnCmmFlAtchVO();        
         $lista=$objeto->getAdjuntos($result);                             
