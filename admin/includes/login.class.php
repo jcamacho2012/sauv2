@@ -33,12 +33,11 @@ class Login
 		
 		try {
 
-			$crypt = sha1(SALT.$password.PEPER);
-			
-			$sql = "SELECT * FROM users WHERE email = ? AND  password = ?";
+			//$crypt = sha1(SALT.$password.PEPER);
+                        
+			$sql = "SELECT * FROM users WHERE name = ? AND estado='HABILITADO'";
 			$query = $this->dbh->prepare($sql);
 			$query->bindParam(1,$email);
-			$query->bindParam(2,$crypt);
 			$query->execute();
 			$this->dbh = null;
 
@@ -47,12 +46,17 @@ class Login
 			{
 				 
 				 $fila  = $query->fetch();
-				 $_SESSION['iduser'] = $fila['iduser'];
-				 $_SESSION['nombre'] = $fila['name'];
-				 $_SESSION['rank'] = $fila['rank'];
-                                 $_SESSION['ciudad']=$fila['ciudad'];
-				 return TRUE;
-	
+
+                                 if (password_verify($password, $fila['password'])){ 
+                                    $_SESSION['iduser'] = $fila['iduser'];
+                                    $_SESSION['nombre'] = $fila['name'];
+                                    $_SESSION['rank'] = $fila['rank'];
+                                    $_SESSION['ciudad']=$fila['ciudad'];
+                                    return TRUE;
+                                 }else{
+                                    return FALSE;
+                                 }
+				
 			}else
 			return FALSE;
 			
@@ -61,7 +65,6 @@ class Login
 			print "Error!: " . $e->getMessage();
 			
 		}		
-		
 	}
     
 

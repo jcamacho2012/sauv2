@@ -5,10 +5,23 @@
         <group>
             <file>file:/C:/xampp/htdocs/sauv2/buscar.txt</file>
             <file>file:/C:/xampp/htdocs/sauv2/prueba.php</file>
+<<<<<<< HEAD
             <file>file:/C:/xampp/htdocs/sauv2/consulta.txt</file>
             <file>file:/C:/xampp/htdocs/sauv2/install.php</file>
             <file>file:/C:/xampp/htdocs/sauv2/ciudad.txt</file>
             <file>file:/C:/xampp/htdocs/sauv2/themes/css/animate.css</file>
+=======
+            <file>file:/C:/xampp/htdocs/sauv2/includes/sau-functions.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/buscar.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/tareas.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/conexion/Conexion.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/admin/index.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp001/TnInp001Page.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/conexion/TnInp001Impl.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/sinAsignar.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/includes/formulario.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/panel.php</file>
+>>>>>>> origin/master
         </group>
     </open-files>
 </project-private>

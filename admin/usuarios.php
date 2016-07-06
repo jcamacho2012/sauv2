@@ -74,8 +74,8 @@ if (isset($_SESSION['iduser'])) {
 
              <?php
 
-              if (isset($_POST['rango'])) {
-                   cambiardatos($_POST['nombre'],$_POST['email'],$_POST['public'],$_POST['rango'],$_POST['userid']);
+              if (isset($_POST['nombre']) || isset($_POST['email']) || isset($_POST['public']) || isset($_POST['rango']) || isset($_POST['ciudad'])) {
+                   cambiardatos($_POST['nombre'],$_POST['email'],$_POST['public'],$_POST['rango'],$_POST['ciudad'],$_POST['userid']);
               }
 
               if (isset($_POST['nueva2'])) {
@@ -88,6 +88,10 @@ if (isset($_SESSION['iduser'])) {
 
               if (isset($_POST['nuevousuario'])) {
                  newusuario($_POST['nombre'],$_POST['email'],$_POST['password'],$_POST['profile'],$_POST['rank'],$_POST['ciudad']);
+              }
+              
+              if (isset($_POST['deshabusuarioid'])) {
+                 deshabusuario($_POST['deshabusuarioid'],$_POST['deshabusuarioestado']);
               }
 
               ?>
@@ -152,12 +156,13 @@ if (isset($_SESSION['iduser'])) {
                	  <table class="table table-striped">
                	  	<thead>
                	  		<tr>
-               	  		  <th>Nombre</th>
-                        <th>Email</th>
-               	  		  <th>Perfil Publico</th>
-               	  		  <th>Rango</th>
-                        <th>Ver Perfil</th>
-                        <th>Acciones</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Perfil Publico</th>                                   
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Ciudad</th>
+                                    <th>Acciones</th>
                	  		</tr>
                	  	</thead>
                	  	<tbody>
