@@ -3,14 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/sauv2/includes/sau-functions.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/configuration.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/buscar.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp014/TnInp014Page.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp019/TnInp019Page.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/admin/includes/login.class.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp021/TnInp021Page.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp019/TnInp019PdPage.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp021/TnInp021AnlsPage.php</file>
             <file>file:/C:/xampp/htdocs/sauv2/includes/formulario.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/admin/includes/admin.functions.php</file>
         </group>
     </open-files>
 </project-private>

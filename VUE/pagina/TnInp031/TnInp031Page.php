@@ -55,7 +55,7 @@ function cargar_formulario_031($req_no){
                                 <input type="text" class="form-control" name="exp_sty_ctft_req_no" readonly value="'.$tninp031->getExp_sty_ctft_req_no().'" />                                    
                             </div>
                         </div>
-			<div class="col-xs-5 form-group">
+			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
                             <label>Número de Certificado de Calidad</label>                                        
                             <input type="text" class="form-control" name="qlt_ctft_no" readonly value="'.$tninp031->getQlt_ctft_no().'"  />
                         </div>						
@@ -83,10 +83,12 @@ function cargar_formulario_031($req_no){
                                 <input type="text" class="form-control" name="dclr_idt_no" readonly value="'.$tninp031->getDclr_idt_no().'"  />
                             </div>
                         </div>
-			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
-                            <label>Razón Social del Solicitante</label>                                        
-                            <input type="text" class="form-control" name="dclr_nole" readonly value="'.$tninp031->getDclr_nole().'"  />
-                        </div>						
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Razón Social del Solicitante</label>                                        
+                                <input type="text" class="form-control" name="dclr_nole" readonly value="'.$tninp031->getDclr_nole().'"  />
+                            </div>
+                        </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Provincia de la Empresa Solicitante</label>                                      
@@ -133,7 +135,7 @@ function cargar_formulario_031($req_no){
                                 <input type="text" class="form-control" name="dclr_fax_no" readonly value="'.$tninp031->getDclr_fax_no().'" />                                    
                             </div>                            
                         </div>
-			<div class="col-xs-5 form-group">
+			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
                             <label>Correo Electrónico del Solicitante</label>                                        
                             <input type="text" class="form-control" name="dclr_em" readonly value="'.$tninp031->getDclr_em().'"  />
                         </div>						
@@ -161,10 +163,12 @@ function cargar_formulario_031($req_no){
                                 <input type="text" class="form-control" name="expr_idt_no" readonly value="'.$tninp031->getExpr_idt_no().'"  />
                             </div>
                         </div>
-			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
-                            <label>Nombre del Exportador</label>                                      
-                            <input type="text" class="form-control" name="expr_nm" readonly value="'.$tninp031->getExpr_nm().'" />                                    
-                        </div>						 
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Nombre del Exportador</label>                                      
+                                <input type="text" class="form-control" name="expr_nm" readonly value="'.$tninp031->getExpr_nm().'" />                                    
+                            </div>
+                        </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Provincia</label>                                      

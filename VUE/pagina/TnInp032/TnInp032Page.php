@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp032Impl.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnNtfc/TnNtfcPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp032Impl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
+//require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnNtfc/TnNtfcPage.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,7 +15,7 @@ function cargar_formulario_032($req_no){
         $retval='<h1>Solicitud no existe</h1>';
     }else{    
     $adjunto= cargar_lista_adjuntos($req_no);
-    $notificacion= cargar_lista_notificaciones($req_no);
+    //$notificacion= cargar_lista_notificaciones($req_no);
     $retval='  <div class="header">
                 <h1>'.substr($tninp032->getDcm_no(), 0, -4).'  '.$tninp032->getDcm_nm().'</h1> 
             </div>

@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp044Impl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp044Impl.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,7 +8,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp044Impl.php
 
 function cargar_lista_analisis_044($req_no){ 
     $listaAnalisis= consulta_datos_analisis_044($req_no);
-    $retval='<table class="tabla"> <tr>
+    $retval='<table class="table table-striped"> <tr>
     <th>No</th>
     <th>Nombre de Análisis</th>
     <th>Cantidad de Análisis</th>    

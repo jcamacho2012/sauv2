@@ -592,7 +592,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                     <div class="panel-body">
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del solicitante</label>
-                            <textarea class="form-control" rows="5" name="dclr_rmk">'.$tninp001->getDclr_rmk().'</textarea>
+                            <textarea class="form-control" rows="5" readonly name="dclr_rmk">'.$tninp001->getDclr_rmk().'</textarea>
                         </div>
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del Aprobador</label>

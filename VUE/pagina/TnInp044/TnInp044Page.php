@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp044Impl.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnInp044/TnInp044AnlsPage.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnNtfc/TnNtfcPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp044Impl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp044/TnInp044AnlsPage.php';
+//require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnNtfc/TnNtfcPage.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -17,7 +17,7 @@ function cargar_formulario_044($req_no,$rol){
     }else{
     $analisis= cargar_lista_analisis_044($req_no);
     $adjunto= cargar_lista_adjuntos($req_no);
-     $notificacion= cargar_lista_notificaciones($req_no);
+    //$notificacion= cargar_lista_notificaciones($req_no);
      $retval='<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> 
 <script>
          $(document).ready(function() {

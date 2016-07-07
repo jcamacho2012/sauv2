@@ -158,7 +158,7 @@ function cargar_formulario_021($req_no){
                                 <input type="text" class="form-control" name="dclr_fax_no" readonly value="'.$tninp021->getDclr_fax_no().'" />                                    
                             </div>                            
                         </div>
-			<div class="col-xs-5 form-group">
+			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
                             <label>Correo Electrónico del Solicitante</label>                                        
                             <input type="text" class="form-control" name="dclr_em" readonly value="'.$tninp021->getDclr_em().'"  />
                         </div>						
@@ -277,7 +277,7 @@ function cargar_formulario_021($req_no){
                                 <input type="text" class="form-control" name="prdt_arv_de" readonly value="'.$tninp021->getPrdt_arv_de().'"  />
                             </div>
                         </div>
-			<div class="col-xs-11 form-group">
+			<div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
                             <label>Tipo de Producto</label>                                      
                             <input type="text" class="form-control" name="prdt_type_nm" readonly value="'.$tninp021->getPrdt_type_nm().'" />                                    
                         </div>
@@ -341,7 +341,7 @@ function cargar_formulario_021($req_no){
                                 <input type="text" class="form-control" name="spm_mtdrt_desc" readonly value="'.$tninp021->getSpm_mtdrt_desc().'"  />
                             </div>
                         </div>
-			<div class="col-xs-5 form-group">
+			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
                             <label>Número de Guía</label>                                        
                             <input type="text" class="form-control" name="gud_no" readonly value="'.$tninp021->getGud_no().'"  />
                         </div>
@@ -366,7 +366,7 @@ function cargar_formulario_021($req_no){
                     <div class="panel-body">
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del solicitante</label>
-                            <textarea class="form-control" rows="5" name="dclr_rmk">'.$tninp021->getDclr_rmk().'</textarea>
+                            <textarea class="form-control" rows="5" readonly name="dclr_rmk">'.$tninp021->getDclr_rmk().'</textarea>
                         </div>
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del Aprobador</label>

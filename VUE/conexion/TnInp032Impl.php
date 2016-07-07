@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp032/TnInp032VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp032/TnInp032VO.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -134,7 +134,7 @@ function consulta_datos_formulario_032($req_no) {
                 ,COALESCE(to_char(a.mdf_dt,'DD/MM/YYYY HH24:MI:SS')::TEXT,'No Aplica') AS mdf_dt
                 FROM  vue_gateway.tn_inp_032 as a
                 where a.req_no='".$req_no."'";               
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp032=new TnInp032VO($row);         
         return $TnInp032; 

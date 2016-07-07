@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp044/TnInp044AnlsVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp044/TnInp044VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp044/TnInp044AnlsVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp044/TnInp044VO.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -82,7 +82,7 @@ function consulta_datos_formulario_044($req_no) {
                 ,COALESCE(to_char(a.samp_rcv_de,'DD/MM/YYYY')::TEXT,'No Aplica') AS samp_rcv_de
                 FROM  vue_gateway.tn_inp_044 as a 
                 where a.req_no='".$req_no."'";
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp044=new TnInp044VO($row);  
         return $TnInp044;
@@ -96,7 +96,7 @@ function consulta_datos_analisis_044($req_no) {
                     ,COALESCE(a.anls_qt_ut::TEXT,'No Aplica') AS anls_qt_ut						
                     FROM  vue_gateway.tn_inp_044_anls as a 
                     where a.req_no='".$req_no."'";   
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp044AnlsVO();        
         $lista=$objeto->getAnalisis044($result);                   
