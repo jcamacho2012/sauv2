@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp008Impl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp008Impl.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,11 +9,11 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp008Impl.php
 
 function cargar_lista_producto_008($req_no,$dcm_cd){   
     $listaProducto= consulta_datos_producto_008($req_no);
-    $retval='<table class="tabla"> <tr>
+    $retval='<table class="table table-striped"> <tr>
     <th>No</th>
     <th>Subpartida Arancelaria</th>
     <th>Nombre de Producto</th>';
-    if($dcm_cd=='130-008-REQ'){
+    if($dcm_cd=='130-008'){
         $retval.='<th>Nombre de Especie de Producto</th>';
     }
     $retval.=    
@@ -31,20 +31,20 @@ function cargar_lista_producto_008($req_no,$dcm_cd){
         $retval.='<td></td><td></td><td></td><td></td><td></td><td>No hay Productos ingresados</td><td></td><td></td><td></td><td></td><td></td>';
     }else{
         foreach($listaProducto as $producto){            
-            $lote=wordwrap($producto->getLot_no(), 17, "<br />",true);
+            //$lote=wordwrap($producto->getLot_no(), 17, "<br />",true);
             $retval.=' <tr><td>'.$producto->getPrdt_sn().'</td>'
                     . '<td>'.$producto->getHc().'</td>'
                     . '<td>'.$producto->getPrdt_nm().'</td>';
-                     if($dcm_cd=='130-008-REQ'){
+                     if($dcm_cd=='130-008'){
                          $retval.= '<td>'.$producto->getPrdt_spc_nm().'</td>';
                      }
                     $retval.='<td>'.$producto->getPdtn_de().'</td>'
                     . '<td>'.$producto->getPkgs_qt().'</td>'
                     . '<td>'.$producto->getPrdt_nwt().'</td>' 
-                    . '<td>'.$lote.'</td>'
+                    . '<td>'.$producto->getLot_no().'</td>'
                     . '<td>'.$producto->getBdnm().'</td>'
                     . '<td>'.$producto->getTrsp_whos_cdt_det().'</td>';
-                    if($dcm_cd=='130-008-REQ'){
+                    if($dcm_cd=='130-008'){
                         $retval.= '<td>'.$producto->getDfct_slz_prcg_tp_ut().'</td></tr>';
                     }
                     $retval.='</tr>';                                                                                                             

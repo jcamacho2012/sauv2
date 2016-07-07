@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnNtfc/TnNtfcVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnNtfc/TnNtfcVO.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,7 +13,7 @@ function consulta_datos_notificacion($req_no) {
 	,COALESCE(ntfc_ctxt::TEXT,'No Aplica') AS ntfc_ctxt
 	from vue_gateway.tn_eld_ntfc 
         where req_no='".$req_no."'";     
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnNtfcVO();        
         $lista=$objeto->getNotificacion($result);                   

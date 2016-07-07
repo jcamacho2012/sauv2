@@ -3,6 +3,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp001Impl.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp001/TnInp001CtnrPage.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp001/TnInp001PdPage.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,11 +19,23 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
     $contenedor= cargar_lista_contenedor_001_004($req_no);
     $producto= cargar_lista_productos_001_004($req_no);
     $adjunto= cargar_lista_adjuntos($req_no);        
-  //  $notificacion= cargar_lista_notificaciones($req_no);
+    $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
          	<div class="display-2">
 			<h2 align="center">'.substr($tninp001->getDcm_no(), 0, -4).'  '.$tninp001->getDcm_nm().'</h2>
-		</div>           
+		</div>
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                          <a data-toggle="collapse" href="#collapse1">Mostrar Notificaciones Solicitadas</a>
+                        </h3>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            '.$notificacion.'
+                        </div>        
+                    </div>
+                </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3>Datos de Solicitud</h3>
