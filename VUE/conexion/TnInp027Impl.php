@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp027/TnInp027VO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp027/TnInp027PdVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp027/TnInp027AnlsVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp027/TnInp027VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp027/TnInp027PdVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp027/TnInp027AnlsVO.php';
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -72,7 +72,7 @@ function consulta_datos_formulario_027($req_no){
                         ,COALESCE(to_char(a.mdf_dt,'DD/MM/YYYY HH24:MI:SS')::TEXT,'No Aplica') AS mdf_dt					                                                
 			FROM  vue_gateway.tn_inp_027 a 
                 where a.req_no='".$req_no."'";              
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp027=new TnInp027VO($row);        
     return $TnInp027;            
@@ -93,7 +93,7 @@ function consulta_datos_producto_027($req_no) {
                 ,COALESCE(a.prdt_nwt_ut::TEXT,'No Aplica') AS prdt_nwt_ut
                 FROM  vue_gateway.tn_inp_027_pd as a			  				
                 where a.req_no='".$req_no."'";               					
-    $conexion=new conexion();        
+    $conexion=new DB();        
     $result = $conexion->consultar($sql,2);          
     $objeto=new TnInp027PdVO();        
     $lista=$objeto->getProducto027($result);                   
@@ -108,7 +108,7 @@ function consulta_datos_analisis_027($req_no) {
                 ,COALESCE(a.anls_qt_ut::TEXT,'No Aplica') AS anls_qt_ut					
 		FROM  vue_gateway.tn_inp_027_anls  a 
                 where a.req_no='".$req_no."'";               					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp027AnlsVO();        
         $lista=$objeto->getAnalisis027($result);                   

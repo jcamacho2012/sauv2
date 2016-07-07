@@ -4,6 +4,9 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp010/TnInp010Page.
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp012/TnInp012Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp014/TnInp014Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp019/TnInp019Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp021/TnInp021Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp027/TnInp027Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp031/TnInp031Page.php';
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -51,11 +54,15 @@ function dibujarFormulario($array){
             break;
         }
         case '130-021':{
-            return importacion();
+            return cargar_formulario_021($array['req_no']);
+            break;
+        }
+        case '130-027':{
+            return cargar_formulario_027($array['req_no']);
             break;
         }
         case '130-031':{
-            return certificacion();
+            return cargar_formulario_031($array['req_no']);
             break;
         }
         case '130-032':{

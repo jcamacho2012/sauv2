@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp031/TnInp031VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp031/TnInp031VO.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -64,7 +64,7 @@ function consulta_datos_formulario_031($req_no) {
                 ,COALESCE(a.expr_autho::TEXT,'No Aplica') AS expr_autho
                 FROM  vue_gateway.tn_inp_031 as a
                 where a.req_no='".$req_no."'";               
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp031=new TnInp031VO($row);
         return $TnInp031;
