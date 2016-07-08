@@ -16,7 +16,7 @@ if(isset($_POST['opcion'])){
         $rank=$_POST['rank'];
         $response = array();
         $response=consultaxid($reqno,$id,$rank);
-        $formulario=  dibujarFormulario($response);
+        $formulario=  dibujarFormulario($response,$rank);
         echo $formulario;  
     }
 }

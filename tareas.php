@@ -24,6 +24,11 @@ if (isset($_SESSION['iduser'])){
     <!-- SAU core CSS -->
     <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
     <link href="themes/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="themes/css/datepicker.css">
+    <link rel="stylesheet" href="themes/css/bootstrap-switch.css">
+    <link rel="stylesheet" href="themes/css/highlight.css">
+   
+       
     <?php getstyle(); ?>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -115,6 +120,7 @@ if (isset($_SESSION['iduser'])){
                	  	</tbody>
                      </table>
                       <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
+                      <input type="hidden" class="form-control" name="rank" value="<?php echo $_SESSION['rank']; ?>"/>
                   </div>                 
                 </div>                             
               </div>
@@ -137,6 +143,11 @@ if (isset($_SESSION['iduser'])){
     <!-- validation -->
     <script src="themes/js/jquery.validate.min.js"></script>
     <script src="themes/js/additional-methods.min.js"></script>
+    <script src="themes/js/bootstrap-datepicker.js"></script>
+    <script src="themes/js/bootstrap-switch.js"></script>
+    <script src="themes/js/highlight.js"></script>
+    <script src="themes/js/main.js"></script>
+    
    
     
     <style>
@@ -431,21 +442,22 @@ if (isset($_SESSION['iduser'])){
     display: none;   
 }
 
-
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
             (function($) {
-
-              $('#filter').keyup(function() {
-
-                var rex = new RegExp($(this).val(), 'i');
-                $('.searchable tr').hide();
-                $('.searchable tr').filter(function() {
-                  return rex.test($(this).text());
-                }).show();
-              })
+                $('#filter').keyup(function() {
+                    var rex = new RegExp($(this).val(), 'i');
+                    $('.searchable tr').hide();
+                    $('.searchable tr').filter(function() {
+                        return rex.test($(this).text());
+                    }).show();
+                })
             }(jQuery));
+                       
+             $('#example1').datepicker({
+                    format: "dd/mm/yyyy"
+                });  
           });
         
         
@@ -487,6 +499,7 @@ if (isset($_SESSION['iduser'])){
         // Get the record's ID via attribute
         var req_no = $(this).attr('data-id');
         var id= $("input[name=id]").val();
+        var rank= $("input[name=rank]").val();
         var opcion=2;
         $("#contenido").empty();
         $('.greyBox').after("<div class='redBox'>Iron man</div>");
@@ -504,14 +517,14 @@ if (isset($_SESSION['iduser'])){
         $.ajax({
             url: 'buscar.php',
             method: 'POST',           
-            data: { reqno: req_no,opcion:opcion,id:id}
+            data: { reqno: req_no,opcion:opcion,id:id,rank:rank}
         }).success(function(response) {
             // Populate the form fields with the data returned from server
 //              var response = $.parseJSON(response);
               $('#fountainG').remove();
               $('#contenido').append(response);
               var id= $("input[name=id]").val();
-              if(id){
+              if(!id){
                   $('#contenido').append("<div class='panel panel-primary'>\n\
                                             <div class='panel-heading'>\n\
                                                 <h3>Acciones</h3>\n\
@@ -535,26 +548,6 @@ if (isset($_SESSION['iduser'])){
                                     </div>");
               }
               
-
-            // Show the dialog
-            bootbox
-                .dialog({
-                    title: 'Edit the user profile',
-                    message: $('#userForm'),
-                    show: false // We will show it manually later
-                })
-                .on('shown.bs.modal', function() {
-                    $('#userForm')
-                        .show()                             // Show the login form
-                        .formValidation('resetForm'); // Reset form
-                })
-                .on('hide.bs.modal', function(e) {
-                    // Bootbox will remove the modal (including the body which contains the login form)
-                    // after hiding the modal
-                    // Therefor, we need to backup the form
-                    $('#userForm').hide().appendTo('body');
-                })
-                .modal('show');
         })
                 .fail(function(response){
                     $('#userForm').append('<h1>No existe conexion con ecuapass</h1>');

@@ -8,7 +8,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php'
  * and open the template in the editor.
  */
 
-function cargar_formulario_016($req_no){    
+function cargar_formulario_016($req_no,$rol){    
     $tninp016= consulta_datos_formulario_016($req_no);   
     $solicitud=$tninp016->getReq_no();
     if(empty($solicitud)){
@@ -17,6 +17,15 @@ function cargar_formulario_016($req_no){
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
+                <script type="text/javascript">
+                    // When the document is ready
+                    $(document).ready(function () {                      
+                        $("#vigencia").datepicker({
+                             format: "yyyy/mm/dd"
+                        });
+
+                    });
+                </script>
             	<div class="display-2">
                     <h2 align="center">'.substr($tninp016->getDcm_no(), 0, -4).'  '.$tninp016->getDcm_nm().'</h2>
                 </div>
@@ -202,10 +211,12 @@ function cargar_formulario_016($req_no){
                                 <input type="text" class="form-control" name="impr_idt_no" readonly value="'.$tninp016->getImpr_idt_no().'"  />
                             </div>
                         </div>
-			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
-                            <label>Nombre del Importador</label>                                      
-                            <input type="text" class="form-control" name="impr_nm" readonly value="'.$tninp016->getImpr_nm().'" />                                    
-                        </div>						
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Nombre del Importador</label>                                      
+                                <input type="text" class="form-control" name="impr_nm" readonly value="'.$tninp016->getImpr_nm().'" />                                    
+                            </div>
+                        </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Provincia</label>                                      
@@ -471,7 +482,66 @@ function cargar_formulario_016($req_no){
                         </div>
                     </div>
 		</div>';
-							
+	 
+     if($rol=='4'){        
+          $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Datos de Aprobación</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">                                  
+                                <div class="funkyradio">
+                                        <div class="funkyradio-info" style="overflow:inherit;">
+                                           <input type="radio" name="opcion" id="nuevo"/>
+                                           <label for="nuevo" style="margin-left:5em;">nuevo</label>
+                                        </div>                                                                                       
+                                </div>
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">                                                                   
+                                <div class="funkyradio">                                                                                        
+                                       <div class="funkyradio-info">
+                                           <input type="radio" name="opcion" id="migracion"/>
+                                           <label for="migracion" style="margin-left:5em;">Migracion</label>
+                                       </div>
+                                </div>
+                                <div class="col-xs-5 form-group">
+                                    <label>Fecha Inicial de Vigencia</label>                                        
+                                    <input type="text" class="form-control" id="vigencia" />
+                                </div>
+                                <div class="col-xs-5 form-group">
+                                    <label>Secuencial</label>                                        
+                                    <input type="text" class="form-control" id="secuencial_migracion"/><br />
+                                    <button type="button" class="btn btn-info">Verificar Secuencial</button>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+		</div>';                
+            }else{
+        $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Verificar Número Registro (Migraciones)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Ingrese Secuencial</label>                                      
+                                <input type="text" class="form-control" name="fml_type_inf"/> <br />
+                                <button type="button" class="btn btn-info">Verificar Secuencial</button>
+                            </div>
+                        </div>
+                    </div>
+		</div>';        
+            }
+                    
         $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">

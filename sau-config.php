@@ -19,7 +19,7 @@
 define('HOST', 'localhost');
 define('DBUSER', 'root');
 define('DBPASSWORD', 'toor');
-define('DBNAME', 'sau2');
+define('DBNAME', 'sau');
 
 
 // Nota: Debes de cambiar estos dos, ya que con estos dos generas

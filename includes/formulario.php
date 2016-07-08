@@ -22,7 +22,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp045/TnInp045Page.
  * and open the template in the editor.
  */
 
-function dibujarFormulario($array){
+function dibujarFormulario($array,$rol){
     switch ($array['dcm_no']){
         case '130-001':{
             return cargar_formulario_001_004($array['req_no'], $array['dcm_no']);            
@@ -53,7 +53,7 @@ function dibujarFormulario($array){
             break;
         }
         case '130-016':{
-            return cargar_formulario_016($array['req_no']);
+            return cargar_formulario_016($array['req_no'],$rol);
             break;
         }
         case '130-019':{
@@ -85,7 +85,7 @@ function dibujarFormulario($array){
             break;
         }
         case '130-039':{
-            return cargar_formulario_039($array['req_no']);
+            return cargar_formulario_039($array['req_no'],$rol);
             break;
         }
         case '130-040':{
