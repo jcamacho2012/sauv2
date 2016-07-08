@@ -1,21 +1,21 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/TnInp039Impl.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnInp039/TnInp039PdPage.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/pagina/TnNtfc/TnNtfcPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/TnInp039Impl.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnCmmFlAtch/TnCmmFlAtchPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp039/TnInp039PdPage.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-function cargar_formulario_039($req_no,$subsanacion,$rol){    
+function cargar_formulario_039($req_no){    
     $tninp039= consulta_datos_formulario_039($req_no);   
     $solicitud=$tninp039->getReq_no();
     if(empty($solicitud)){
         $retval='<h1>Solicitud no existe</h1>';
     }else{    
-    $producto= cargar_lista_productos_039($req_no,$subsanacion,$rol);
+    $producto= cargar_lista_productos_039($req_no);
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='

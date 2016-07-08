@@ -17,347 +17,487 @@ function cargar_formulario_016($req_no){
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
-            <div class="header">
-                <h1>'.substr($tninp016->getDcm_no(), 0, -4).'  '.$tninp016->getDcm_nm().'</h1> 
-            </div>
-            <div>
-            <h1 id="notificacion">Mostrar Notificaciones Solicitadas</h1> 
-            <div id="ntfc_tabla">               
-                '.$notificacion.'                                
-            </div>			
-            <div class="solicitud">
-				<h1>Datos de Solicitud</h1>
-				<div class="col1">
-					 <div>
-						<label>Número de Solicitud</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getReq_no().'">                       
-					</div>                
-					<div>
-						<label>Ciudad de Solicitud</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getReq_city_nm().'">                       
-					</div>
-					<div>
-						<label>Número de Certificado Anterior</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getPrev_ctft_no().'">                       
-					</div>      
-				</div>
-				<div class="col2">
-					<div>
-						<label>Fecha de Solicitud</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMdf_dt().'">                       
-					</div>                
-					<div>
-						<label>Tipo de Documento</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDcm_type_nm().'">                       
-					</div>
-					<div>
-						<label>Fecha de Emisión de Certificado Anterior</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getPrev_ctft_iss_de().'">                       
-					</div>     
-				</div>
-			</div>
-			<div class="solicitante">
-				<h1>Datos de Solicitante</h1>
-				<div class="col1">
-					<div>
-						<label>Clasificacion del Solicitante</label>
-						 <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_cl_cd().'">                       
-					</div>                
-					<div>
-						<label>Razon Social del Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_nole().'">                       
-					</div>
-					<div>
-						<label>Provincia de la Empresa Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_prvhc_nm().'">                       
-					</div>
-				</div>
-				<div class="col2">
-					<div>
-						<label>Número de Identificación de la Empresa Solicitante</label>
-					  <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_idt_no().'">                       
-					</div>                
-					<div>
-						<label>Representante Legal de Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_rpgp_nm().'">                       
-					</div>
-					<div>
-						<label>Canton/Ciudad de la Empresa Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_cuty_nm().'">                       
-					</div>
-				</div>
-				<div>
-                    <label>Parroquia de la Empresa Solicitante</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_prqi_nm().'">                       
+            	<div class="display-2">
+                    <h2 align="center">'.substr($tninp016->getDcm_no(), 0, -4).'  '.$tninp016->getDcm_nm().'</h2>
                 </div>
-				<div class="foo">
-					<div>
-						<label>Direccion de la Empresa Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_ad().'">                                            						
-					</div>
-					<div>
-						<label>Nombre de Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_nm().'">                                            
-					</div>
-				</div>
-				<div class="col1">
-					<div>
-						<label>Cargo de Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_odty_nm().'">                       
-					</div>
-					<div>
-						<label>Fax de Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_fax_no().'">                       
-					</div>
-				</div>
-				<div class="col2">
-					<div>
-						<label>Teléfono de Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_tel_no().'">                       
-					</div> 
-					<div>
-						<label>Correo Electrónico de Solicitante</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getDclr_em().'">                       
-					</div>  
-				</div>
-			</div>
-			<div class="importador">
-				<h1>Datos de Importador</h1>
-				<div class="col1">
-					<div>
-						<label>Código de Clasificacion del Importador</label>
-						 <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_cl_cd().'">                       
-					</div>
-				</div>
-				<div class="col2">
-					<div>
-						<label>Número de Identificación de la Importador</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_idt_no().'">                                             
-					</div>					
-				</div>
-				<div class="foo">
-					<div>
-						<label>Nombre de Importador</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_nm().'">                                             						
-					</div>        				
-				</div>
-				<div class="col1">
-					<div>
-						<label>Provincia</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_prvhc_nm().'">                       
-					</div>
-				</div>
-				<div class="col2">
-					 <div>
-						<label>Canton/Ciudad</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_cuty_nm().'">                       
-					</div>				
-				</div>
-				<div>
-					<label>Parroquia</label>
-					<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_prqi_nm().'">                       
-				</div>
-				<div class="foo">
-					<div>
-						<label>Direccion</label>
-                                                <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_ad().'">                       
-					</div>      				
-				</div>
-				<div class="col1">
-					<div>
-						<label>Teléfono de Importador</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_tel_no().'">                       
-					</div>
-				</div>
-				<div class="col2">
-					<div>
-						<label>Fax de Importador</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_fax_no().'">                       
-					</div>                			
-				</div>
-				<div>
-                    <label>Correo Electrónico de Importador</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getImpr_em().'">                       
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                          <a data-toggle="collapse" href="#collapse1">Mostrar Notificaciones Solicitadas</a>
+                        </h3>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            '.$notificacion.'
+                        </div>        
+                    </div>
                 </div>
-			</div>
-			<div class="exportador">
-				<h1>Datos de Exportador</h1>
-				<div class="col1">
-					<div>
-						<label>Clasificacion del Exportador</label>
-						 <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_cl_cd().'">                       
-					</div> 
-				</div>
-				<div class="col2">
-					<div>
-						<label>Número de Identificación de la Exportador</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_idt_no().'">                                             
-					</div>              			
-				</div>
-				<div class="foo">
-					<div>
-						 <label>Nombre del Exportador</label>
-                                                 <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_nm().'">                       
-					</div>
-					<div>
-						 <label>Representante Legal de Exportador</label>
-                                                 <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_rpgp_nm().'">                       						 
-					</div> 
-				</div>
-				<div class="col1">
-					<div>
-						<label>País del Exportador</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_ntn_nm().'">                       
-					</div>
-				</div>
-				<div class="col2">
-					<div>
-						<label>Ciudad del Exportador</label>
-						<input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_city_nm().'">                       
-					</div>             			
-				</div>
-				<div class="foo">
-					<div>
-						<label>Dirección del Exportador</label>
-                                                <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_ad().'">                       						
-					</div>				
-				</div>
-				<div class="col1">
-					<div>
-                    <label>Teléfono del Exportador</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_tel_no().'">                       
-					</div>  
-				</div>
-				<div class="col2">
-					<div>
-                    <label>Fax de Exportador</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_fax_no().'">                       
-                </div>  
-				</div>
-				 <div>
-                    <label>Correo Electrónico de Exportador</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getMfr_em().'">                       
-                </div>
-			</div>
-			<div class="producto">
-				<h1>Datos de Producto</h1>
-				<div class="col1">
-					<div>
-                    <label>Producto Nacional</label>
-                     <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getNatn_prdt_nm().'">
-                </div>   
-				</div>
-				<div class="col2">
-					<div>
-                    <label>Nombre del Producto</label>
-                   <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getPrdt_nm().'">                       
-					</div> 
-				</div>
-				<div>
-                    <label>Subpartida Arancelaria</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getHc().'">                       
-                </div> 
-				<div class="col1">
-					 <div>
-                    <label>Cantidad de Muestra</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp01661." ".$tninp016->getSamp_qt().'">                       
-					</div> 
-				</div>
-				<div class="col2">
-					 <div>
-                    <label>Forma de Presentación de Producto</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getPrdt_smt_frm_inf().'">                                           
-					</div> 
-				</div>
-				<div>
-                    <label>Cantidad de Producto</label>
-                     <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getPrdt_qt().'">                       
-                </div>
-				<div class="foo">
-					<div>
-                    <label>Número de Lote</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getLot_no().'">                       
-					</div>			
-				</div>
-				<div class="col1">
-					 <div>
-                    <label>Tiempo de Validez de Producto</label>
-                     <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getPrdt_vdt_term().'">                       
-					</div> 
-				</div>
-				<div class="col2">
-					 <div>
-                    <label>Nombre Comercial</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getCmca_nm().'">                       
-					</div>  
-				</div>
-				<div class="foo">
-					<div>
-                    <label>Nombre y Dirección de la Empresa Comercializador</label>
-                    <textarea readonly name="descripcion" class="textarea" >'.$tninp016->getIgdt_con().'</textarea>      
-					</div>
-					<div>
-                    <label>Nombre Común y/o Genérico de Ingredientes</label>
-                    <textarea readonly name="descripcion" class="textarea" >'.$tninp016->getAtvi_con().'</textarea>      
-					</div>                
-					<div>
-                    <label>Composición Declarada</label>
-                    <textarea readonly name="descripcion" class="textarea" >'.$tninp016->getDcd_cps_inf().'</textarea>      
-					</div>		
-				</div>
-				<div class="col1">
-					  <div>
-                    <label>Nombre de País de Procedencia</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getOrg_ntn_nm().'">                       
-					</div>
-					<div>
-                    <label>Clasificación Terapéutica de Producto</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getPrdt_cl_nm().'">                       
-					</div>					
-				</div>
-				<div class="col2">
-					<div>            
-                    <label>Certificado Sanitario de Libre Venta en el País de Origen</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getOrg_sale_free_sty_no().'">                                            
-					</div>         
-					<div>            
-                    <label>Vía de Administración</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getAdmt_mtdrt_desc().'">                                           
-					</div>                					      
-					</div>
-                      <div class="foo">      
-                        <div>
-                    <label>Usos Autorizados</label>                    
-                        <textarea readonly name="descripcion" class="textarea" >'.$tninp016->getAtzd_use().'</textarea>      
-					</div>
-                      </div>
-					<div>
-                    <label>Forma Farmacéutica</label>
-                     <textarea readonly name="descripcion" class="textarea" >'.$tninp016->getPam_frm_desc().'</textarea>      
-					</div>
-                                        <div class="col1">   
-                                        <div>            
-                    <label>Tipo de Formulación</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getFml_type_inf().'">                                            
-					</div></div>
-                                        <div class="col2">   
-					<div>            
-                    <label>Nivel Toxicológico</label>
-                    <input type="text" name="autorizacion"/ readonly value="'.$tninp016->getToxi_lvl_det().'">                                            
-					</div></div>
-			</div>
-                        <div class="observaciones1">
-			 <h1>Observaciones</h1> 
-                         <div>
-                             <label>Observaciones del solicitante</label>
-                            <textarea readonly name="descripcion" class="textarea" >'.$tninp016->getDclr_rmk().'</textarea>      
-                         </div>
-			</div>
-			<div class="adjunto1">
-			 <h1>Documento Adjunto</h1> 
-                 '.$adjunto.'  
-			</div>                
-                ';
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Datos de Solicitud</h3>
+                    </div>
+                    <div class="panel-body">
+                         <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Número de Solicitud</label>                                      
+                                <input type="text" class="form-control" name="req_no" readonly value="'.$tninp016->getReq_no().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Fecha de Solicitud</label>                                        
+                                <input type="text" class="form-control" name="mdf_dt" readonly value="'.$tninp016->getMdf_dt().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Ciudad de Solicitud</label>                                      
+                                <input type="text" class="form-control" name="req_city_nm" readonly value="'.$tninp016->getReq_no().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Tipo de Documento</label>                                        
+                                <input type="text" class="form-control" name="dcm_type_nm" readonly value="'.$tninp016->getMdf_dt().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Número de Certificado Anterior</label>                                      
+                                <input type="text" class="form-control" name="prev_ctft_no" readonly value="'.$tninp016->getReq_no().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Fecha de Emisión de Certificado Anterior</label>                                        
+                                <input type="text" class="form-control" name="prev_ctft_iss_de" readonly value="'.$tninp016->getMdf_dt().'"  />
+                            </div>
+                        </div>                           
+                    </div>
+                </div>';
+ 
+            $retval.='	
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Datos de Solicitante</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Clasificación del Solicitante</label>                                      
+                                <input type="text" class="form-control" name="dclr_cl_cd" readonly value="'.$tninp016->getDclr_cl_cd().'" />                                    
+                            </div>
+					
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Número de Identificación de la Empresa Solicitante</label>                                        
+                                <input type="text" class="form-control" name="dclr_idt_no" readonly value="'.$tninp016->getDclr_idt_no().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Razón Social del Solicitante</label>                                        
+                                <input type="text" class="form-control" name="dclr_nole" readonly value="'.$tninp016->getDclr_nole().'"  />
+                            </div>
+					
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-11 form-group">
+                                <label>Representante Legal del Solicitante</label>                                        
+                                <input type="text" class="form-control" name="dclr_rpgp_nm" readonly value="'.$tninp016->getDclr_rpgp_nm().'"  />
+                            </div>
+                        </div>												
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Provincia de la Empresa Solicitante</label>                                      
+                                <input type="text" class="form-control" name="dclr_prvhc_nm" readonly value="'.$tninp016->getDclr_prvhc_nm().'" />                                    
+                            </div>
+					
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Cantón/Ciudad de la Empresa Solicitante</label>                                        
+                                <input type="text" class="form-control" name="dclr_cuty_nm" readonly value="'.$tninp016->getDclr_cuty_nm().'"  />
+                            </div>
+                        </div>
+                        <div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
+                            <label>Parroquia de la Empresa Solicitante</label>                                        
+                            <input type="text" class="form-control" name="dclr_prqi_nm" readonly value="'.$tninp016->getDclr_prqi_nm().'"  />
+                        </div>
+			<div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
+                            <label>Dirección de la Empresa Solicitante</label>                                        
+                            <input type="text" class="form-control" name="dclr_ad" readonly value="'.$tninp016->getDclr_ad().'"  />
+                        </div>
+                        <div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
+                            <label>Nombre de Solicitante</label>                                        
+                            <input type="text" class="form-control" name="dclr_nm" readonly value="'.$tninp016->getDclr_nm().'"  />
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Cargo del Solicitante</label>                                      
+                                <input type="text" class="form-control" name="dclr_odty_nm" readonly value="'.$tninp016->getDclr_odty_nm().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Teléfono del Solicitante</label>                                        
+                                <input type="text" class="form-control" name="dclr_tel_no" readonly value="'.$tninp016->getDclr_tel_no().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Fax del Solicitante</label>                                      
+                                <input type="text" class="form-control" name="dclr_fax_no" readonly value="'.$tninp016->getDclr_fax_no().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Correo Electrónico del Solicitante</label>                                        
+                                <input type="text" class="form-control" name="dclr_em" readonly value="'.$tninp016->getDclr_em().'"  />
+                            </div>
+                        </div>									
+                    </div>
+		</div>';				            
+				
+        $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Datos de Importador</h3>
+                    </div>
+                    <div class="panel-body">						
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Código de Clasificación del Importador</label>                                      
+                                <input type="text" class="form-control" name="impr_cl_cd" readonly value="'.$tninp016->getImpr_cl_cd().'" />                                    
+                            </div>
+					
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Número de Identificación del Importador</label>                                        
+                                <input type="text" class="form-control" name="impr_idt_no" readonly value="'.$tninp016->getImpr_idt_no().'"  />
+                            </div>
+                        </div>
+			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
+                            <label>Nombre del Importador</label>                                      
+                            <input type="text" class="form-control" name="impr_nm" readonly value="'.$tninp016->getImpr_nm().'" />                                    
+                        </div>						
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Provincia</label>                                      
+                                <input type="text" class="form-control" name="impr_prvhc_nm" readonly value="'.$tninp016->getImpr_prvhc_nm().'" />                                    
+                            </div>
+					
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Cantón/Ciudad</label>                                        
+                                <input type="text" class="form-control" name="impr_cuty_nm" readonly value="'.$tninp016->getImpr_cuty_nm().'"  />
+                            </div>
+                        </div>
+                        <div class="row" style="padding:5px 0 0 30px;">						
+                            <div class="col-xs-5 form-group">
+                                <label>Parroquia</label>                                        
+                                <input type="text" class="form-control" name="impr_prqi_nm" readonly value="'.$tninp016->getImpr_prqi_nm().'"  />
+                            </div>
+                        </div>
+                        <div class="row" style="padding:5px 0 0 30px;">						
+                                <div class="col-xs-11 form-group">
+                                        <label>Dirección</label>                                        
+                                        <input type="text" class="form-control" name="impr_ad" readonly value="'.$tninp016->getImpr_ad().'"  />
+                                </div>
+                        </div>						
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Teléfono del Importador</label>                                      
+                                <input type="text" class="form-control" name="impr_tel_no" readonly value="'.$tninp016->getImpr_tel_no().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Fax del Importador</label>                                        
+                                <input type="text" class="form-control" name="impr_fax_no" readonly value="'.$tninp016->getImpr_fax_no().'"  />
+                            </div>
+                        </div>
+			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
+                            <label>Correo Electrónico del Importador</label>                                        
+                            <input type="text" class="form-control" name="impr_em" readonly value="'.$tninp016->getImpr_em().'"  />
+                        </div>				
+                    </div>
+		</div>';
+				
+        $retval.='
+		<div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Datos de Exportador</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Clasificación del Exportador</label>                                      
+                                <input type="text" class="form-control" name="mfr_cl_cd" readonly value="'.$tninp016->getMfr_cl_cd().'" />                                    
+                            </div>
+					
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Número de Identificación del Exportador</label>                                        
+                                <input type="text" class="form-control" name="mfr_idt_no" readonly value="'.$tninp016->getMfr_idt_no().'"  />
+                            </div>
+                        </div>
+			<div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
+                            <label>Nombre de Exportador</label>                                        
+                            <input type="text" class="form-control" name="mfr_nm" readonly value="'.$tninp016->getMfr_nm().'"  />
+                        </div>
+			<div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
+                            <label>Representante Legal de Exportador</label>                                        
+                            <input type="text" class="form-control" name="mfr_rpgp_nm" readonly value="'.$tninp016->getMfr_rpgp_nm().'"  />
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>País del Exportador</label>                                      
+                                <input type="text" class="form-control" name="mfr_ntn_nm" readonly value="'.$tninp016->getMfr_ntn_nm().'" />                                    
+                            </div>
+					
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Ciudad del Exportador</label>                                        
+                                <input type="text" class="form-control" name="mfr_city_nm" readonly value="'.$tninp016->getMfr_city_nm().'"  />
+                            </div>
+                        </div>
+			<div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
+                            <label>Dirección del Exportador</label>                                        
+                            <input type="text" class="form-control" name="mfr_ad" readonly value="'.$tninp016->getMfr_ad().'"  />
+                        </div>                                             
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Teléfono del Exportador</label>                                      
+                                <input type="text" class="form-control" name="mfr_tel_no" readonly value="'.$tninp016->getMfr_tel_no().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Fax del Exportador</label>                                        
+                                <input type="text" class="form-control" name="mfr_fax_no" readonly value="'.$tninp016->getMfr_fax_no().'"  />
+                            </div>
+                        </div>
+			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
+                            <label>Correo Electrónico del Exportador</label>                                        
+                            <input type="text" class="form-control" name="mfr_em" readonly value="'.$tninp016->getMfr_em().'"  />
+                        </div>				
+                    </div>
+		</div>';
+			
+	$retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Datos de Producto</h3>
+                    </div>
+                    <div class="panel-body">
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Producto Nacional</label>                                      
+                                <input type="text" class="form-control" name="natn_prdt_nm" readonly value="'.$tninp016->getNatn_prdt_nm().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Nombre del Producto</label>                                        
+                                <input type="text" class="form-control" name="prdt_nm" readonly value="'.$tninp016->getPrdt_nm().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Subpartida Arancelaria</label>                                      
+                                <input type="text" class="form-control" name="hc" readonly value="'.$tninp016->getHc().'" />                                    
+                            </div>					
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Cantidad de Muestra</label>                                      
+                                <input type="text" class="form-control" name="samp_qt" readonly value="'.$tninp016->getSamp_qt().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Forma de Presentación de Producto</label>                                        
+                                <input type="text" class="form-control" name="prdt_smt_frm_inf" readonly value="'.$tninp016->getPrdt_smt_frm_inf().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Cantidad de Producto</label>                                      
+                                <input type="text" class="form-control" name="prdt_qt" readonly value="'.$tninp016->getPrdt_qt().'" />                                    
+                            </div>					
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-11 form-group">
+                                <label>Número de Lote</label>                                      
+                                <input type="text" class="form-control" name="lot_no" readonly value="'.$tninp016->getLot_no().'" />                                    
+                            </div>					
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Tiempo de Validez de Producto</label>                                      
+                                <input type="text" class="form-control" name="prdt_vdt_term" readonly value="'.$tninp016->getPrdt_vdt_term().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Nombre Comercial</label>                                        
+                                <input type="text" class="form-control" name="cmca_nm" readonly value="'.$tninp016->getCmca_nm().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-11 form-group">
+                                <label>Nombre y Dirección de la Empresa Comercializadora</label>                                      
+                                <textarea class="form-control" rows="5" readonly name="igdt_con">'.$tninp016->getIgdt_con().'</textarea>
+                            </div>					
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-11 form-group">
+                                <label>Nombre Común y/o Genérico de Ingredientes</label>                                      
+                                <textarea class="form-control" rows="5" readonly name="atvi_con">'.$tninp016->getAtvi_con().'</textarea>
+                            </div>					
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-11 form-group">
+                                <label>Composición Declarada</label>                                      
+                                <textarea class="form-control" rows="5" readonly name="dcd_cps_inf">'.$tninp016->getDcd_cps_inf().'</textarea>
+                            </div>					
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Nombre de País de Procedencia</label>                                      
+                                <input type="text" class="form-control" name="org_ntn_nm" readonly value="'.$tninp016->getOrg_ntn_nm().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Certificado Sanitario de Libre Venta en el País de Origen</label>                                        
+                                <input type="text" class="form-control" name="org_sale_free_sty_no" readonly value="'.$tninp016->getOrg_sale_free_sty_no().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Clasificación Terapéutica de Producto</label>                                      
+                                <input type="text" class="form-control" name="prdt_cl_nm" readonly value="'.$tninp016->getPrdt_cl_nm().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Vía de Administración</label>                                        
+                                <input type="text" class="form-control" name="admt_mtdrt_desc" readonly value="'.$tninp016->getAdmt_mtdrt_desc().'"  />
+                            </div>
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-11 form-group">
+                                <label>Usos Autorizados</label>                                      
+                                <textarea class="form-control" rows="5" readonly name="atzd_use">'.$tninp016->getAtzd_use().'</textarea>
+                            </div>					
+                        </div>
+			<div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Forma Farmacéutica</label>                                      
+                                <textarea class="form-control" rows="5" readonly name="pam_frm_desc">'.$tninp016->getPam_frm_desc().'</textarea>
+                            </div>					
+                        </div>
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Tipo de Formulación</label>                                      
+                                <input type="text" class="form-control" name="fml_type_inf" readonly value="'.$tninp016->getFml_type_inf().'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">
+                                <label>Nivel Toxicológico</label>                                        
+                                <input type="text" class="form-control" name="toxi_lvl_det" readonly value="'.$tninp016->getToxi_lvl_det().'"  />
+                            </div>
+                        </div>
+                    </div>
+		</div>';
+							
+        $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Observaciones</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-xs-11 form-group">
+                            <label>Observaciones del solicitante</label>
+                            <textarea class="form-control" rows="5" readonly name="dclr_rmk">'.$tninp016->getDclr_rmk().'</textarea>
+                        </div>
+                        <div class="col-xs-11 form-group">
+                            <label>Observaciones del Aprobador</label>
+                            <textarea class="form-control" rows="5" name="aprb_rmk"></textarea>
+                        </div>
+                    </div>
+		</div>';
+            
+        $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Documentos Adjuntos</h3>
+                    </div>
+                    <div class="panel-body">
+                        '.$adjunto.'
+                    </div>
+		</div>';
     }
     return $retval;
     

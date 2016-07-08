@@ -1,17 +1,12 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp039/TnInp039PdVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp039/TnInp039VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp039/TnInp039PdVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp039/TnInp039VO.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-$dbhost="192.168.169.90";
-$dbport="5432";
-$dbname="control_bonita_inp";
-$dbuser="postgres";
-$dbpass="1npb0n1t4";
 
 function consulta_datos_formulario_039($req_no) {                           
     $sql=" SELECT
@@ -68,7 +63,7 @@ function consulta_datos_formulario_039($req_no) {
             ,COALESCE(to_char(a.mdf_dt,'DD/MM/YYYY HH24:MI:SS')::TEXT,'No Aplica') AS mdf_dt					
             FROM  vue_gateway.tn_inp_039 as a 
             where a.req_no='".$req_no."'";               
-    $conexion=new conexion();
+    $conexion=new DB();
     $row = $conexion->consultar($sql,1);                
     $TnInp039=new TnInp039VO($row);         
     return $TnInp039; 
@@ -89,64 +84,9 @@ function consulta_datos_producto_039($req_no) {
             ,COALESCE(a.prdt_qt_ut::TEXT,'No Aplica') AS prdt_qt_ut					
             FROM  vue_gateway.tn_inp_039_pd as a 
             where a.req_no='".$req_no."'";			  				                 					
-    $conexion=new conexion();        
+    $conexion=new DB();        
     $result = $conexion->consultar($sql,2);          
     $objeto=new TnInp039PdVO();        
     $lista=$objeto->getProducto039($result);                   
     return $lista;         
-}
-
-function consulta_ultimos_analisis_ingresados_039($req_no){
-    $sql="  SELECT  					 
-            COALESCE(a.prdt_sn::TEXT,'No Aplica') AS prdt_sn                
-            ,COALESCE(a.prdt_nm::TEXT,'No Aplica') AS prdt_nm
-            ,COALESCE(a.prdt_spc_nm::TEXT,'No Aplica') AS prdt_spc_nm
-            ,COALESCE(a.prdt_smt_frm_inf::TEXT,'No Aplica') AS prdt_smt_frm_inf               
-            ,COALESCE(a.lot_cd::TEXT,'No Aplica') AS lot_cd                
-            ,COALESCE(a.anls_rst_nm::TEXT,'No Aplica') AS anls_rst_nm
-            FROM  resultado_analisis_calidad as a 
-            where a.req_no='".$req_no."' order by prdt_sn";			  				                 					
-    $conexion=new conexion();        
-    $result = $conexion->conexion_analisis_039($req_no, $sql);
-    $objeto=new TnInp039PdVO();        
-    $lista=$objeto->getProducto039($result);                   
-    return $lista;       
-}
-
-function guardar_analisis($reqno,$producto,$rol,$subsanacion){
-    global $dbhost,$dbport,$dbname,$dbuser,$dbpass;
-    if($rol!="Certificador" && $subsanacion!="2"){
-        $cadena = "host='$dbhost' port='$dbport' dbname='$dbname' user='$dbuser' password='$dbpass'";        
-        $conexion= pg_connect($cadena) or die("<h1>Error conexion con VUE</h1>");
-        $sql="select true from resultado_analisis_calidad a where a.req_no = '".$reqno."' and a.prdt_sn='".$producto->getPrdt_sn()."';";
-        $result=pg_query($conexion,$sql)or die("Error sql" . pg_last_error());    
-        $existe=  pg_fetch_all($result);
-        if($existe!=TRUE){        
-             $sql="INSERT INTO resultado_analisis_calidad(
-            prdt_sn, req_no, prdt_nm, prdt_spc_nm, prdt_smt_frm_inf, lot_cd, 
-            anls_rst_nm)
-            VALUES ('".$producto->getPrdt_sn()."','".$reqno."','".$producto->getPrdt_nm()."','".
-                     $producto->getPrdt_spc_nm()."','".$producto->getPrdt_smt_frm_inf()."','".$producto->getLot_cd()."','".
-                     $producto->getAnls_rst_nm()."');";
-            pg_query($conexion,$sql)or die("Error sql" . pg_last_error());    
-        }                   
-        pg_close($conexion);
-    }
-}
-
-function eliminar_analisis($reqno,$subsanacion,$rol){
-    global $dbhost,$dbport,$dbname,$dbuser,$dbpass;   
-  
-    if(($subsanacion!="2" || $subsanacion=="null") && $rol!="Certificador"){
-    $cadena = "host='$dbhost' port='$dbport' dbname='$dbname' user='$dbuser' password='$dbpass'";        
-    $conexion= pg_connect($cadena) or die("<h1>Error conexion con VUE</h1>");
-    $sql="select true from resultado_analisis_calidad a where a.req_no = '".$reqno."';";    
-    $result=pg_query($conexion,$sql)or die("Error sql" . pg_last_error());    
-    $existe=  pg_fetch_all($result);
-        if($existe==TRUE){        
-            $sql="DELETE FROM resultado_analisis_calidad WHERE req_no ='".$reqno."'";
-            pg_query($conexion,$sql)or die("Error sql" . pg_last_error());    
-        }            
-    pg_close($conexion);
-    }    
 }

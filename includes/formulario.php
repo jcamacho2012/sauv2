@@ -12,6 +12,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp031/TnInp031Page.
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp032/TnInp032Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp033/TnInp033Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp034/TnInp034Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp039/TnInp039Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp044/TnInp044Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp045/TnInp045Page.php';
 
@@ -84,7 +85,7 @@ function dibujarFormulario($array){
             break;
         }
         case '130-039':{
-            // se lo deja al ultimo
+            return cargar_formulario_039($array['req_no']);
             break;
         }
         case '130-040':{

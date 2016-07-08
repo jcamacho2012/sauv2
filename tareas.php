@@ -510,7 +510,9 @@ if (isset($_SESSION['iduser'])){
 //              var response = $.parseJSON(response);
               $('#fountainG').remove();
               $('#contenido').append(response);
-              $('#contenido').append("<div class='panel panel-primary'>\n\
+              var id= $("input[name=id]").val();
+              if(id){
+                  $('#contenido').append("<div class='panel panel-primary'>\n\
                                             <div class='panel-heading'>\n\
                                                 <h3>Acciones</h3>\n\
                                             </div>\n\
@@ -531,7 +533,8 @@ if (isset($_SESSION['iduser'])){
                                                 </div>\n\
                                             </div>\n\
                                     </div>");
-
+              }
+              
 
             // Show the dialog
             bootbox
