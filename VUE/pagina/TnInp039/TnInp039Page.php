@@ -18,7 +18,17 @@ function cargar_formulario_039($req_no,$rol){
     $producto= cargar_lista_productos_039($req_no);
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
-    $retval='                   
+    $retval='    
+                 <script type="text/javascript"> 
+                    $("#aprobar").change(function(){ 
+                        alert("escod")
+                    });
+
+                   $("#btn_enviar").click(function(){                       
+                        alert("solicitud enviada");
+                    });
+                    
+                </script>
                  <script type="text/javascript">
                     // When the document is ready
                     $(document).ready(function () {                      
@@ -351,6 +361,30 @@ function cargar_formulario_039($req_no,$rol){
                         '.$adjunto.'
                     </div>
 		</div>';
+        
+          $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Acciones</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="funkyradio">
+                             <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="aprobar"/>
+                                <label for="aprobar">Aprobar</label>
+                            </div>
+                           <div class="funkyradio-warning">
+                                <input type="radio" name="radio" id="subsanar" />
+                                <label for="subsanar">Subsanar</label>
+                            </div>
+                            <div class="funkyradio-danger">
+                                <input type="radio" name="radio" id="rechazar" />
+                                <label for="rechazar">Rechazar</label>
+                            </div>
+                        <button type="button" class="btn btn-default" id="btn_enviar">Enviar</button>
+                        </div>
+                    </div>
+                 </div>';
     }
     return $retval;
     

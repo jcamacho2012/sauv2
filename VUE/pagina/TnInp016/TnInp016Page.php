@@ -17,11 +17,50 @@ function cargar_formulario_016($req_no,$rol){
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
-                <script type="text/javascript">
+                <script type="text/javascript"> 
+                       $("#aprobar").change(function(){ 
+                            alert("escod")
+                        });
+                      
+                       $("#btn_enviar").click(function(){                       
+                            alert("solicitud enviada");
+                        });
+                      
+                      $("#verificar").click(function(){
+                        var secuencial= $("#secuencial_migracion").val();
+                        if(secuencial.length != 0){
+                               $.ajax({
+                                    url: "ajax.php",
+                                    method: "POST",
+                                    data: { secuencial: secuencial}
+                                        }).success(function(response) {                   
+                                            alert(response);
+                                        });
+                        }else{
+                            alert("no hay valor del secuencial");
+                        }                                            
+                    });
+                    
                     // When the document is ready
-                    $(document).ready(function () {                      
+                    $(document).ready(function () {
+                        $("#nuevo").change(function(){ 
+                            $("#vigencia").prop("disabled", true);            
+                            $("#secuencial_migracion").prop("disabled", true);
+                            $("#verificar").prop("disabled", true); 
+                            $("#vigencia").val("");            
+                            $("#secuencial_migracion").val("");
+                        });
+                        
+                            $("#migracion").change(function(){ 
+                                $("#vigencia").prop("disabled", false);
+                                $("#secuencial_migracion").prop("disabled", false);
+                                $("#verificar").prop("disabled", false); 
+                            });
+                        
                         $("#vigencia").datepicker({
-                             format: "yyyy/mm/dd"
+                            format: "yyyy/mm/dd",
+                            language: "es",
+                            autoclose: true
                         });
 
                     });
@@ -495,7 +534,7 @@ function cargar_formulario_016($req_no,$rol){
                                 <div class="funkyradio">
                                         <div class="funkyradio-info" style="overflow:inherit;">
                                            <input type="radio" name="opcion" id="nuevo"/>
-                                           <label for="nuevo" style="margin-left:5em;">nuevo</label>
+                                           <label for="nuevo" style="margin-left:5em;">Nuevo</label>
                                         </div>                                                                                       
                                 </div>
                             </div>
@@ -508,17 +547,17 @@ function cargar_formulario_016($req_no,$rol){
                                 <div class="funkyradio">                                                                                        
                                        <div class="funkyradio-info">
                                            <input type="radio" name="opcion" id="migracion"/>
-                                           <label for="migracion" style="margin-left:5em;">Migracion</label>
+                                           <label for="migracion" style="margin-left:5em;">Migración</label>
                                        </div>
                                 </div>
                                 <div class="col-xs-5 form-group">
                                     <label>Fecha Inicial de Vigencia</label>                                        
-                                    <input type="text" class="form-control" id="vigencia" />
+                                    <input type="text" class="form-control" name="muestreo" id="vigencia" placeholder="Escoga fecha de fin análisis" disabled="true" readonly="true"/>
                                 </div>
                                 <div class="col-xs-5 form-group">
                                     <label>Secuencial</label>                                        
-                                    <input type="text" class="form-control" id="secuencial_migracion"/><br />
-                                    <button type="button" class="btn btn-info">Verificar Secuencial</button>
+                                    <input type="number" class="form-control" id="secuencial_migracion" disabled="true"/><br />
+                                    <button type="button" class="btn btn-info" id="verificar" disabled="true">Verificar Secuencial</button>
                                 </div>                                
                             </div>
                         </div>
@@ -568,6 +607,30 @@ function cargar_formulario_016($req_no,$rol){
                         '.$adjunto.'
                     </div>
 		</div>';
+        
+        $retval.='
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>Acciones</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="funkyradio">
+                             <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="aprobar"/>
+                                <label for="aprobar">Aprobar</label>
+                            </div>
+                           <div class="funkyradio-warning">
+                                <input type="radio" name="radio" id="subsanar" />
+                                <label for="subsanar">Subsanar</label>
+                            </div>
+                            <div class="funkyradio-danger">
+                                <input type="radio" name="radio" id="rechazar" />
+                                <label for="rechazar">Rechazar</label>
+                            </div>
+                        <button type="button" class="btn btn-default" id="btn_enviar">Enviar</button>
+                        </div>
+                    </div>
+                 </div>';
     }
     return $retval;
     

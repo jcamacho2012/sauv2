@@ -6,7 +6,10 @@ require_once 'includes/formulario.php';
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+if (isset($_SESSION['iduser'])){
+}else{
+  header("Location: logout");
+}
 
 
 if(isset($_POST['opcion'])){
