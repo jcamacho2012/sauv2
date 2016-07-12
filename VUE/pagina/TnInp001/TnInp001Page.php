@@ -21,15 +21,22 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
     $adjunto= cargar_lista_adjuntos($req_no);        
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
-                <script type="text/javascript"> 
-                    $("#aprobar").change(function(){ 
-                        alert("escod")
-                    });
-
-                   $("#btn_enviar").click(function(){                       
-                        alert("solicitud enviada");
-                    });
-                    
+                <script type="text/javascript">                    
+                    $("#btn_enviar").click(function(){
+                        var opcion= $("input[name=radio]:checked").val();
+                        var obser= $("textarea#aprb_rmk").val();
+                        if(opcion){                            
+                            if((opcion==2 || opcion==3) && !obser){
+                                alert("No ha ingresado alguna observacion");
+                            }else if(opcion==1){
+                                alert("tramite aprobado");
+                            }else{
+                                alert("envio a subsanar");
+                            }
+                        }else{
+                            alert("no ha escogido ninguna opcion");
+                        }   
+                    });                    
                 </script>
          	<div class="display-2">
 			<h2 align="center">'.substr($tninp001->getDcm_no(), 0, -4).'  '.$tninp001->getDcm_nm().'</h2>
@@ -619,7 +626,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                         </div>
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del Aprobador</label>
-                            <textarea class="form-control" rows="5" name="aprb_rmk"></textarea>
+                            <textarea class="form-control" rows="5" name="aprb_rmk" maxlength="500" id="aprb_rmk"></textarea>
                         </div>
                     </div>
 		</div>';
@@ -642,15 +649,15 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                     <div class="panel-body">
                         <div class="funkyradio">
                              <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="aprobar"/>
+                                <input type="radio" name="radio" id="aprobar" value="1"/>
                                 <label for="aprobar">Aprobar</label>
                             </div>
                            <div class="funkyradio-warning">
-                                <input type="radio" name="radio" id="subsanar" />
+                                <input type="radio" name="radio" id="subsanar" value="2"/>
                                 <label for="subsanar">Subsanar</label>
                             </div>
                             <div class="funkyradio-danger">
-                                <input type="radio" name="radio" id="rechazar" />
+                                <input type="radio" name="radio" id="rechazar" value="3"/>
                                 <label for="rechazar">Rechazar</label>
                             </div>
                         <button type="button" class="btn btn-default" id="btn_enviar">Enviar</button>

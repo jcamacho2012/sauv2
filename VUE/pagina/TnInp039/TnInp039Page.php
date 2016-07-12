@@ -20,16 +20,22 @@ function cargar_formulario_039($req_no,$rol){
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='    
                  <script type="text/javascript"> 
-                    $("#aprobar").change(function(){ 
-                        alert("escod")
-                    });
-
-                   $("#btn_enviar").click(function(){                       
-                        alert("solicitud enviada");
-                    });
+                   $("#btn_enviar").click(function(){
+                        var opcion= $("input[name=radio]:checked").val();
+                        var obser= $("textarea#aprb_rmk").val();
+                        if(opcion){                            
+                            if((opcion==2 || opcion==3) && !obser){
+                                alert("No ha ingresado alguna observacion");
+                            }else if(opcion==1){
+                                alert("tramite aprobado");
+                            }else{
+                                alert("envio a subsanar");
+                            }
+                        }else{
+                            alert("no ha escogido ninguna opcion");
+                        }   
+                    });        
                     
-                </script>
-                 <script type="text/javascript">
                     // When the document is ready
                     $(document).ready(function () {                      
                         $("#muestreo").datepicker({
@@ -347,7 +353,7 @@ function cargar_formulario_039($req_no,$rol){
                         </div>
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del Aprobador</label>
-                            <textarea class="form-control" rows="5" name="aprb_rmk"></textarea>
+                            <textarea class="form-control" rows="5" name="aprb_rmk" maxlength="500"></textarea>
                         </div>
                     </div>
 		</div>';
@@ -374,8 +380,8 @@ function cargar_formulario_039($req_no,$rol){
                                 <label for="aprobar">Aprobar</label>
                             </div>
                            <div class="funkyradio-warning">
-                                <input type="radio" name="radio" id="subsanar" />
-                                <label for="subsanar">Subsanar</label>
+                                <input type="radio" name="radio" id="corregir" />
+                                <label for="corregir">Corregir Análisis</label>
                             </div>
                             <div class="funkyradio-danger">
                                 <input type="radio" name="radio" id="rechazar" />

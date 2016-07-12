@@ -222,7 +222,8 @@ if (isset($_SESSION['iduser'])){
                 // Populate the form fields with the data returned from server
                 alert('Solicitud fue liberada');
                 var pathname = window.location.pathname;
-                window.location.replace(pathname); 
+                window.location.replace(pathname);
+                
             });
         });
         

@@ -22,15 +22,22 @@ function cargar_formulario_012($req_no){
     $adjunto= cargar_lista_adjuntos($req_no); 
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='	 
-                 <script type="text/javascript"> 
-                    $("#aprobar").change(function(){ 
-                        alert("escod")
-                    });
-
-                   $("#btn_enviar").click(function(){                       
-                        alert("solicitud enviada");
-                    });
-                    
+                 <script type="text/javascript">                    
+                    $("#btn_enviar").click(function(){
+                        var opcion= $("input[name=radio]:checked").val();
+                        var obser= $("textarea#aprb_rmk").val();
+                        if(opcion){                            
+                            if((opcion==2 || opcion==3) && !obser){
+                                alert("No ha ingresado alguna observacion");
+                            }else if(opcion==1){
+                                alert("tramite aprobado");
+                            }else{
+                                alert("envio a subsanar");
+                            }
+                        }else{
+                            alert("no ha escogido ninguna opcion");
+                        }   
+                    });                    
                 </script>
                 <div class="display-2">
                     <h2 align="center">'.substr($tninp012->getDcm_no(), 0, -4).'  '.$tninp012->getDcm_nm().'</h2>

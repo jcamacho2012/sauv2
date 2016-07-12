@@ -1,1 +1,0 @@
-22SELECT req_no,dcm_no,empresa FROM tramite where receptor_asignado=:iduser and receptor_revisado='f'
