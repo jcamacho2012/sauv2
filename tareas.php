@@ -148,7 +148,6 @@ if (isset($_SESSION['iduser'])){
       
     <script type="text/javascript">
         $(document).ready(function() {
-         
             (function($) {
                 $('#filter').keyup(function() {
                     var rex = new RegExp($(this).val(), 'i');
@@ -158,7 +157,57 @@ if (isset($_SESSION['iduser'])){
                     }).show();
                 })
             }(jQuery));  
-                             
+            
+            
+        var td,valor,id,anls,id,cadena;   
+        $(document).on("click","td.editable",function(e){
+                        anls="";
+			e.preventDefault();
+			$("td:not(.id)").removeClass("editable");
+			td=$(this).closest("td");			
+			valor=$(this).text();
+                        valor=valor.replace('Cancel','');
+                        cadena=valor.split(',')
+                        $.each(cadena, function(index, value) { 
+                            anls+=$.trim(value)+"\n";                               
+                        });                        
+			id=$(this).closest("tr").find("#prdt_sn").text();			
+                        td.text("").html("<textarea class='caja'>"+anls+"</textarea><a class='enlace guardar' href='#'>Guardar</a><a class='enlace cancelar' href='#'>Cancelar</a>");                                                
+		});
+                
+        $(document).on("click",".cancel",function(e){
+			e.preventDefault();                        
+			td.html("<span>"+anls+"</span>");
+			$("td:not(.id)").addClass("copy");
+                        $("td.editable").removeClass("copy");
+                        $("td.editable").addClass("editable");                                                
+		});
+                
+		
+	$(document).on("click",".guardar",function(e){
+			$(".mensaje").html("<img src='images/loading1.gif'>");
+			e.preventDefault();
+                        
+			nuevovalor=$(this).closest("td").find("textarea").val();                        
+			if(nuevovalor.trim()!="")
+			{
+                                var num = $("#reqno").val();
+				$.ajax({
+					type: "POST",
+					url: "ingreso_analisis.php",
+					data: { numero:num,valor: nuevovalor, id:id }
+				})
+				.done(function( msg ) {                                        
+					$(".mensaje").html(msg);
+					td.html("<span>"+nuevovalor+"</span>");
+					$("td:not(.id)").addClass("editable");
+                                        $("td.copy").removeClass("editable");
+                                        $("td.copy").addClass("copy");
+					setTimeout(function() {$('.ok,.ko').fadeOut('fast');}, 3000);
+				});                                
+			}
+			else $(".mensaje").html("<p class='ko'>Debes ingresar un valor</p>");
+		});              
         });
        
         function validateNumber(event) {
