@@ -49,7 +49,7 @@ if (isset($_SESSION['iduser'])){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><i class="fa fa-clone animated infinite flash"></i> SAU v2</a>
+          <a class="navbar-brand" href="#"><i class="fa fa-clone animated infinite flash"></i> Bienvenido(a) <?php echo $_SESSION['name'];?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -65,16 +65,19 @@ if (isset($_SESSION['iduser'])){
         <div class="col-sm-3 col-md-2 sidebar">
 
           <ul class="nav nav-sidebar">
-            <li><a href="dashboard"><i class="glyphicon glyphicon-th"></i> Inicio</a></li>
+<!--            <li><a href="dashboard"><i class="glyphicon glyphicon-th"></i> Inicio</a></li>
             <li><a href="followers"><i class="fa fa-user-plus"></i> Seguidores</a></li>
             <li><a href="allusers"><i class="fa fa-users"></i> Usuarios</a></li>
-            <li><a href="feed"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>
+            <li><a href="feed"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>-->
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
              <?php if($_SESSION['rank']==4){
                      echo "<li><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
                      <li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
                      <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                              
+                }else if($_SESSION['rank']==2){
+                        echo "<li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Tareas Pendientes</a></li>
+                         <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Tareas Finalizadas</a></li>";
                 }else{
                      echo "<li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
                          <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
@@ -98,22 +101,22 @@ if (isset($_SESSION['iduser'])){
                        <table class="table table-striped">
                	  	<thead>
                	  		<tr>
-                                  <th class="hidden">activity</th>
-                                  <th class="hidden">process</th>
+                                 <?php 
+                                    if($_SESSION['rank']!=2){                                        
+                                        echo ' <th class="hidden">activity</th>
+                                               <th class="hidden">process</th>';
+                                    }
+                                ?>                                                                   
                	  		  <th>Solicitud</th>
                                   <th>Documento</th>
+                                  <th>Empresa</th>
                                   <?php 
-                                        if($_SESSION['rank']==2){
-                                            echo '<th>Empresa</th>
-                                                  <th>Receptor</th>
-                                                  <th>Receptor Revisado</th>
-                                                  <th>Certificador</th>
-                                                  <th>Certificador Revisado</th>';
-                                        }else{
-                                            echo '<th>Empresa</th>
-                                                  <th>Acciones</th>';
-                                        }
-                                        
+                                    if($_SESSION['rank']==2){
+                                        echo '                                              
+                                              <th>Usuario</th>';
+                                    }else{
+                                        echo '<th>Acciones</th>';
+                                    }                                        
                                     ?>
                                   
                	  		</tr>

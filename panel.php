@@ -6,14 +6,6 @@ if (isset($_SESSION['iduser'])){
   header("Location: logout");
 }
 
-if (isset($_POST['borrarpost'])) {
-     borrarpublicacion($_POST['borrarpost']);
-}
-
-
-if (isset($_POST['delcomment'])) {
-     borrarcomentario($_POST['delcomment']);
-}
 
 ?>
 <!DOCTYPE html>
@@ -68,10 +60,10 @@ if (isset($_POST['delcomment'])) {
         <div class="col-sm-3 col-md-2 sidebar">
 
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="dashboard"><i class="glyphicon glyphicon-th"></i> Inicio</a></li>
+<!--            <li class="active"><a href="dashboard"><i class="glyphicon glyphicon-th"></i> Inicio</a></li>
             <li><a href="followers"><i class="fa fa-user-plus"></i> Seguidores</a></li>
             <li><a href="allusers"><i class="fa fa-users"></i> Usuarios</a></li>
-            <li><a href="feed"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>
+            <li><a href="feed"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>-->
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
             <?php if($_SESSION['rank']==4){
                      echo "<li><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
@@ -92,7 +84,7 @@ if (isset($_POST['delcomment'])) {
           <!-- contenido -->
 
           <!-- publicar -->
-          <h4 class="login-welcome"><i class="fa fa-hand-paper-o"></i> Bienvenido <?php echo $_SESSION['nombre']; ?></h4>
+          <h4 class="login-welcome"><i class="fa fa-hand-paper-o"></i> Bienvenido <?php echo $_SESSION['name']; ?></h4>
            <div id="publish" class="well">
              <form id="publipost" method="POST" action="post">
                <textarea class="form-control" rows="2" name="posts"></textarea><p></p>

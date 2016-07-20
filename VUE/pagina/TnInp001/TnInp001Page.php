@@ -10,7 +10,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php'
  * and open the template in the editor.
  */
 
-function cargar_formulario_001_004($req_no,$dcm_cd,$process,$activity,$cedula,$username){      
+function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedula,$username){      
     $tninp001= consulta_datos_formulario_001_004($req_no);
     $solicitud=$tninp001->getReq_no();
     if(empty($solicitud)){
@@ -32,38 +32,53 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$process,$activity,$cedula,$u
                                 var num = $("#req_no").val();
                                 var process = $("#process").val();
                                 var activity = $("#activity").val();
-                                var rank= $("input[name=rank]").val();
+                                var rank = $("#rol").val();
                                 var cedula = $("#cedula").val();
+                                var username = $("#username").val();
                                 var estado="aprobar";
-                                 $.ajax({
-                                            url: "acciones.php",
-                                            method: "POST",           
-                                            data: { reqno: num,estado:estado,rank:rank,process:process,activity:activity,cedula:cedula}
-                                        }).success(function(response) {
-                                            // Populate the form fields with the data returned from server
-                                                switch (response) {
-                                                    case "1":
-                                                        alert("APROBADA PARA REVISION FINAL");
-                                                        var pathname = window.location.pathname;
-                                                        window.location.replace(pathname);
-                                                        break;
-                                                    case "2":
-                                                        alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
-                                                        break;
-                                                    case "3":
-                                                        alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
-                                                        break;                                                    
-                                                }
-                                                                                                    
-                                             })
-                                            .fail(function(response){
-                                                alert(response);
-                                            });                               
+                                $.ajax({
+                                        url: "acciones.php",
+                                        method: "POST",           
+                                        data: { reqno: num,estado:estado,rank:rank,process:process,activity:activity,cedula:cedula,username:username}
+                                    }).success(function(response) {
+                                        // Populate the form fields with the data returned from server
+                                            switch (response) {
+                                                case "1":
+                                                    alert("APROBADA PARA REVISION FINAL");
+                                                    var pathname = window.location.pathname;
+                                                    window.location.replace(pathname);
+                                                    break;
+                                                case "2":
+                                                    alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
+                                                    break;
+                                                case "3":
+                                                    alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
+                                                    break;
+                                                case "4":
+                                                    alert("SOLICITUD APROBADA");
+                                                    var pathname = window.location.pathname;
+                                                    window.location.replace(pathname);
+                                                    break;
+                                                case "5":
+                                                    alert("ERROR AL IMPONER TASAS");
+                                                    break;
+                                                case "6":
+                                                    alert("ERROR AL ACTUALIZAR DATOS DE VALIDACION");
+                                                    break;
+                                                case "7":
+                                                    alert("ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
+                                                    break;
+                                            }
+
+                                         })
+                                        .fail(function(response){
+                                            alert(response);
+                                        }); 
                             }else{
                                 var num = $("#req_no").val();
                                 var process = $("#process").val();
                                 var activity = $("#activity").val();
-                                var rank= $("input[name=rank]").val();
+                                var rank = $("#rol").val();
                                 var username = $("#username").val();                                
                                 var estado="subsanar";
                                  $.ajax({
@@ -135,7 +150,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$process,$activity,$cedula,$u
                             </div>
 
                             <div class="col-xs-1 form-group">
-                                <!-- espacio entre columnas-->
+                                <input type="text" class="form-control"  id="rol" readonly value="'.$rol.'" /> 
                             </div>
 
                             <div class="col-xs-5 form-group">                                     

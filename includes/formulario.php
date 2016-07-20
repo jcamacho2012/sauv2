@@ -25,7 +25,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp045/TnInp045Page.
 function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
     switch ($array['dcm_cd']){
         case '130-001':{
-            return cargar_formulario_001_004($array['req_no'], $array['dcm_cd'],$process,$activity,$cedula,$username);            
+            return cargar_formulario_001_004($array['req_no'], $array['dcm_cd'],$rol,$process,$activity,$cedula,$username);            
             break;
         }
         case '130-004':{

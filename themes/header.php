@@ -4,10 +4,10 @@ if(isset($_POST['mail'])){
     $mail = $_POST['mail'];
     $password = $_POST['password'];
     $usuario = $singleton->login_users($mail,$password);
-    if($usuario == TRUE){header("Location: dashboard");}
+    if($usuario == TRUE){header("Location: task");}
     if($usuario == FALSE){header("Location: index.php?error");}
 }
-if (isset($_SESSION['iduser'])){header("Location: dashboard");}
+if (isset($_SESSION['iduser'])){header("Location: task");}
 ?>
 <!DOCTYPE html>
 <html lang="en">

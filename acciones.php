@@ -13,11 +13,14 @@ if (isset($_SESSION['iduser'])){
 
 if (isset($_POST['estado'])){
     if($_POST['estado']=='aprobar'){
-        if($_POST['rank']!=4){
-            $process=$_POST['process'];
-            $activity=$_POST['activity'];
-            $estado=$_POST['estado'];
-            $rank=$_POST['rank'];
+        $reqno=$_POST['reqno'];
+        $process=$_POST['process'];
+        $activity=$_POST['activity'];
+        $estado=$_POST['estado'];
+        $rank=$_POST['rank'];
+        $cedula=$_POST['cedula'];
+        $username=$_POST['username'];
+        if($_POST['rank']!=4){            
             if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
                 if(crearNuevaActividad($process)){
                     echo '1';
@@ -28,7 +31,19 @@ if (isset($_POST['estado'])){
                 echo '3';
             }
         }else{
-           $cedula=$_POST['cedula'];
+           if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
+                if(preaprobacion($reqno, $cedula, $username)){
+                    if(imponerTasas($reqno, $username)){
+                        echo '4';
+                    }else{
+                        echo '5';
+                    }
+                }else{
+                    echo '6';
+                }
+            }else{
+                echo '7';
+            }
         }
     }
 }
@@ -42,7 +57,7 @@ if (isset($_POST['estado'])){
             $mensaje=$_POST['mensaje'];
             $rank=$_POST['rank'];
             $username=$_POST['username'];
-            enviarNotificación($activity, $process, $reqno, $mensaje, $opcion,$rank,$username);
+            echo enviarNotificación($activity, $process, $reqno, $mensaje, $opcion,$rank,$username);
         
     }
 }

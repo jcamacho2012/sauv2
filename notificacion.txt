@@ -1,0 +1,8 @@
+SELECT bonita.accion_notificacion(
+                '01009988201600000082P',
+                '410',
+                'glenda.pin',
+                'PRUEBA',
+                '21',
+                'glenda.pin',
+                'glenda.pin')t

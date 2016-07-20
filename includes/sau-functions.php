@@ -87,12 +87,15 @@ function tareas($iduser,$rank){
                   ON process_instances.id=activities_instances.process_instances_id 
                   AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
     }else if($rank==2){
-          $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM
+          $SQL = "SELECT req_no,dcm_cd,co_nm,username FROM
                   documents JOIN process_instances 
                   ON documents.process_instances_id=process_instances.id 
                   JOIN activities_instances 
-                  ON process_instances.id=activities_instances.process_instances_id 
-                  AND process_instances.state='READY' AND activities_instances.state='READY'";
+                  ON process_instances.id=activities_instances.process_instances_id
+                  JOIN users
+                  ON activities_instances.user_id=users.iduser
+                  AND process_instances.state='READY' AND activities_instances.state='READY'
+                  ORDER BY activities_instances.date_create DESC";
     }else{
         $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM 
                 documents JOIN  process_instances 
@@ -113,12 +116,22 @@ function tareas($iduser,$rank){
 	}else{
 		foreach ($results as $key){
                 echo'
-                  <tr>
+                  <tr>';
+                if($rank!='2'){
+                echo '
                     <td class="hidden"  id="process">'.$key['id_process'].'</td>
-                    <td class="hidden"  id="activity">'.$key['id_activity'].'</td>    
+                    <td class="hidden"  id="activity">'.$key['id_activity'].'</td>';
+                }
+                        
+                echo'
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td> 
                     <td>'.$key['co_nm'].'</td>';
+                
+                if($rank=='2'){
+                echo '
+                    <td>'.$key['username'].'</td>';
+                }
                 echo ' 
                     <td>';
                         if($rank!=2){
@@ -138,8 +151,7 @@ function actualizarEstadoActividad($activity,$process,$estado,$rank){
     $conexion = Conexion::singleton_conexion();
 
     if($estado=='2' || $estado=='3'){
-        $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
-                UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
+        $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";
         $sentence = $conexion -> prepare($SQL);
         $sentence -> bindParam(':activity', $activity);
         $sentence -> bindParam(':process', $process);
@@ -171,6 +183,11 @@ function actualizarEstadoActividad($activity,$process,$estado,$rank){
 
 function enviarNotificación($activity,$process,$reqno,$mensaje,$estado,$rank,$username){
     if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
+        if($estado=='2'){
+            $estado='410';
+        }else if($estado=='3'){
+            $estado='310';
+        }
         $SQL = "SELECT bonita.accion_notificacion(
                 '".$reqno."',
                 '".$estado."',
@@ -179,8 +196,12 @@ function enviarNotificación($activity,$process,$reqno,$mensaje,$estado,$rank,$u
                 '21',
                 '".$username."',
                 '".$username."')"; 
+//        $fp = fopen('notificacion.txt', 'w');
+//        fwrite($fp, $SQL);
+        
         $conexion=new DB();
         $row = $conexion->consultar($SQL,3);
+//        fwrite($fp, $row[0]);
         if($row[0]==true){
             echo '1';
         }else{
@@ -189,9 +210,42 @@ function enviarNotificación($activity,$process,$reqno,$mensaje,$estado,$rank,$u
     }else{
         echo '3';
     }       
-         
+//    fclose($fp);     
 }
 
+function imponerTasas($reqno,$username){
+    $SQL = "SELECT bonita.accion_insertartasa_130xxx(
+            '".$reqno."',
+            '".$username."')"; 
+        
+        $conexion=new DB();
+        $row = $conexion->consultar($SQL,3);
+
+        if($row[0]==true){
+            return true;
+        }else{
+            return false;
+        }        
+       
+}
+
+function preaprobacion($reqno,$cedula,$username){
+    $SQL = "SELECT bonita.accion_preaprobacion(
+            '".$reqno."',
+            '".$cedula."',
+            '',
+            '".$username."')"; 
+
+        $conexion=new DB();
+        $row = $conexion->consultar($SQL,3);
+
+        if($row[0]==true){
+            return true;
+        }else{
+            return false;
+        }        
+       
+}
 
 function crearNuevaActividad($process){
 // conexon a base de datos
@@ -271,12 +325,23 @@ function tareaSinAsignar($ciudad){
 	}	
 }
 
-function tareaTerminadas($iduser){
+function tareaTerminadas($iduser,$rank){
     // conexon a base de datos
     $conexion = Conexion::singleton_conexion();     
     // consulta a base de datos
-    
-	  $SQL = "SELECT req_no,dcm_cd,co_nm,activities_instances.date_modify as date_modify FROM
+        if($rank==2){
+            $SQL = "SELECT req_no,dcm_cd,co_nm,username,activities_instances.date_modify as date_modify FROM
+                  documents JOIN process_instances 
+                  ON documents.process_instances_id=process_instances.id 
+                  JOIN activities_instances 
+                  ON process_instances.id=activities_instances.process_instances_id
+                  JOIN users
+                  ON activities_instances.user_id=users.iduser
+                  AND process_instances.state='FINISH' AND activities_instances.state='FINISH'
+                  ORDER BY activities_instances.date_modify DESC";
+            $sentence = $conexion -> prepare($SQL); 
+        }else{
+            $SQL = "SELECT req_no,dcm_cd,co_nm,activities_instances.date_modify as date_modify FROM
                   documents JOIN process_instances 
                   ON documents.process_instances_id=process_instances.id 
                   JOIN activities_instances 
@@ -284,9 +349,11 @@ function tareaTerminadas($iduser){
                   AND activities_instances.state='FINISH' 
                   AND activities_instances.user_id=:user
                   ORDER BY activities_instances.date_modify DESC";
-          
-	$sentence = $conexion -> prepare($SQL);  
-        $sentence -> bindParam(':user', $iduser);
+            $sentence = $conexion -> prepare($SQL);  
+            $sentence -> bindParam(':user', $iduser);
+        }
+	            
+	
 	$sentence -> execute();
 	$results = $sentence -> fetchAll();
 	if (empty($results)) {
@@ -296,9 +363,16 @@ function tareaTerminadas($iduser){
                   <tr>    
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td>
-                    <td>'.$key['co_nm'].'</td>                    
-                    <td>'.$key['date_modify'].'</td> 
-                  </tr>';
+                    <td>'.$key['co_nm'].'</td>';
+                if($rank==2){
+                    echo '<td>'.$key['username'].'</td>
+                          <td>'.$key['date_modify'].'</td>';
+                }else{
+                    echo '<td>'.$key['date_modify'].'</td>';
+                }
+                     
+                  echo '
+                    </tr>';
 		}
 	}	
 }

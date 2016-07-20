@@ -107,6 +107,7 @@ class Login
                $_SESSION['rank'] = $fila['rank'];
                $_SESSION['city']=$fila['city'];
                $_SESSION['identity_card']=$fila['identity_card'];
+               $_SESSION['name']=$fila['name'];
                return TRUE;
             }else{
                return FALSE;
