@@ -303,3 +303,18 @@ and open the template in the editor.
     margin-top: 2em;
     margin-left: 35em;
 }
+
+#analisis_text{
+    width: 200px;
+    height: 200px;
+    max-width: 440px; 
+    max-height: 250px;
+}
+
+.editable:hover {background:url('themes/images/edit.png');cursor:pointer;}   
+.guardar{background: url(themes/images/save.png) 0 0 no-repeat}
+.cancelar{background:url(themes/images/cancel.png) 0 0 no-repeat}
+
+.mensaje{display:block;text-align:center;margin:0 0 20px 0}
+.ok{display:block;padding:10px;text-align:center;background:green;color:#fff}
+.ko{display:block;padding:10px;text-align:center;background:red;color:#fff}

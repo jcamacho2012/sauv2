@@ -67,10 +67,12 @@ if (isset($_SESSION['iduser'])){
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
              <?php if($_SESSION['rank']==4){
                       echo "<li class=\"active\"><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
-                     <li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                     <li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
+                     <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                              
                 }else{
-                     echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                     echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
+                         <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                 }
             ?>
           </ul>
@@ -85,65 +87,27 @@ if (isset($_SESSION['iduser'])){
                 <div class="container">
                   <h2>Tareas Sin Asignar</h2>
                   <div>
+                        <div class="input-group"> <span class="input-group-addon">Buscar: </span>
+                            <input id="filter" type="text" class="form-control" placeholder="buscar por solicitud, documento o empresa">
+                        </div>
                        <table class="table table-striped">
                	  	<thead>
                	  		<tr>
+                                  <th class="hidden">activity</th>
+                                  <th class="hidden">process</th>
                	  		  <th>Solicitud</th>
                                   <th>Documento</th>
                                   <th>Empresa</th>
                                   <th>Acciones</th>
                	  		</tr>
                	  	</thead>
-               	  	<tbody>
-               	  	  <?php tareaSinAsignar($_SESSION['ciudad']); ?>
+               	  	<tbody class="searchable">
+               	  	  <?php tareaSinAsignar($_SESSION['city']); ?>
                	  	</tbody>
                      </table>
-                  </div>
-                  
-                 <div class="modal fade" id="myModal" role="dialog">
-                    <div class="modal-dialog">
-
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                           <div class="modal-header" style="padding:35px 50px;">
-                               
-                                <h4><span class="glyphicon glyphicon-check"></span> Revisión de Solicitud</h4>
-                          </div>
-                          <div class="modal-body" style="padding:40px 50px;">
-                            <form id="userForm" name="form1" method="post" class="form-horizontal">
-                                <div class="form-group">                                   
-                                   <div class="col-xs-5">
-                                       <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
-                                       <input type="hidden" class="form-control" name="rank" value="<?php echo $_SESSION['rank']; ?>"/>
-                                   </div>
-                               </div>
-                                
-                               <div class="form-group">
-                                   <label class="col-xs-3 control-label">Solicitud</label>
-                                   <div class="col-xs-5">
-                                       <input type="text" class="form-control" name="req_no" disabled="true" />
-                                   </div>
-                               </div>
-
-                               <div class="form-group">
-                                   <label class="col-xs-3 control-label">Documento</label>
-                                   <div class="col-xs-5">
-                                       <input type="text" class="form-control" name="dcm_no" disabled="true" />
-                                   </div>
-                               </div>
-
-                               <div class="form-group">
-                                   <div class="col-xs-5 col-xs-offset-3">
-                                       <button type="submit" class="btn btn-default" id="aprobar">Aprobar</button>
-                                   </div>
-                               </div>
-                           </form>
-                         </div>
-                      
-                  </div>
-
-                    </div>
-                </div>
+                      <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
+                      <input type="hidden" class="form-control" name="rank" value="<?php echo $_SESSION['rank']; ?>"/>
+                  </div>                                  
                 </div>                             
               </div>
             </div>
@@ -166,88 +130,41 @@ if (isset($_SESSION['iduser'])){
     <script src="themes/js/jquery.validate.min.js"></script>
     <script src="themes/js/additional-methods.min.js"></script>
     <script type="text/javascript">
-        
-//        $(":button").click(function(){
-//             $("#myModal").modal();
-//        });
-        
-        $("#aprobar").click(function(){
-            var num= $("input[name=req_no]").val();
-            var id= $("input[name=id]").val();
-            var opcion=1;
-            $.ajax({
-            url: 'buscar.php',
-            method: 'POST',
-            data: { reqno: num, opcion:opcion,id:id}
-                }).success(function(response) {                   
-                    // Show the dialog
-                    $('#mensaje').html(response);// no sale mensaje de confirmacion 
-                    bootbox
-                        .dialog({
-                            title: 'Edit the user profile',
-                            message: $('#userForm'),
-                            show: false // We will show it manually later
-                        })
-                        .on('shown.bs.modal', function() {
-                            $('#userForm')
-                                .show()                             // Show the login form
-                                .formValidation('resetForm'); // Reset form
-                        })
-                        .on('hide.bs.modal', function(e) {
-                            // Bootbox will remove the modal (including the body which contains the login form)
-                            // after hiding the modal
-                            // Therefor, we need to backup the form
-                            $('#userForm').hide().appendTo('body');
-                        })
-                        .modal('show');
-                });
+        $(document).ready(function() {
+             (function($) {
+                $('#filter').keyup(function() {
+                    var rex = new RegExp($(this).val(), 'i');
+                    $('.searchable tr').hide();
+                    $('.searchable tr').filter(function() {
+                        return rex.test($(this).text());
+                    }).show();
+                })
+            }(jQuery));  
         });
         
-        
-         $('.editButton').on('click', function() {
+            
+            
+        $('.tomar').on('click', function() {
         // Get the record's ID via attribute
-        var req_no = $(this).attr('data-id');
-        var id= $("input[name=id]").val();
-        var rank= $("input[name=rank]").val();
-        var opcion=2;
-        
-        $.ajax({
-            url: 'buscar.php',
-            method: 'POST',           
-            data: { reqno: req_no,opcion:opcion,id:id,rank:rank}
-        }).success(function(response) {
-            // Populate the form fields with the data returned from server
-            alert("Solicitud tomada")
-//              var response = $.parseJSON(response);
-//            $('#userForm')
-//                .find('[name="req_no"]').val(response.req_no).end()
-//                .find('[name="dcm_no"]').val(response.dcm_no).end();
-            var pathname = window.location.pathname;
-            window.location.replace(pathname);
-           
-            // Show the dialog
-            bootbox
-                .dialog({
-                    title: 'Edit the user profile',
-                    message: $('#userForm'),
-                    show: false // We will show it manually later
-                    
-                })
-                .on('shown.bs.modal', function() {
-                    $('#userForm')
-                        .show()                             // Show the login form
-                        .formValidation('resetForm'); // Reset form
-                })
-                .on('hide.bs.modal', function(e) {
-                    // Bootbox will remove the modal (including the body which contains the login form)
-                    // after hiding the modal
-                    // Therefor, we need to backup the form
-                    $('#userForm').hide().appendTo('body');
-                    
-                })
-                .modal('show');
+            var id= $("input[name=id]").val();
+            var activity=$(this).closest("tr").find("#activity").text();
+            var process=$(this).closest("tr").find("#process").text();
+            var opcion='tomar';
+
+            $.ajax({
+                url: 'acciones.php',
+                method: 'POST',           
+                data: { id: id,opcion:opcion,activity:activity,process:process}
+            }).success(function(response) {
+                // Populate the form fields with the data returned from server
+                alert('Solicitud fue tomada');
+                var pathname = window.location.pathname;
+                var res = pathname.replace("unAssig", "task");
+                window.location.replace(res);
+
+                
+            });
         });
-    });
         
     </script>
   </body>

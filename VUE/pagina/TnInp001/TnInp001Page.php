@@ -10,7 +10,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php'
  * and open the template in the editor.
  */
 
-function cargar_formulario_001_004($req_no,$dcm_cd){      
+function cargar_formulario_001_004($req_no,$dcm_cd,$process,$activity,$cedula,$username){      
     $tninp001= consulta_datos_formulario_001_004($req_no);
     $solicitud=$tninp001->getReq_no();
     if(empty($solicitud)){
@@ -29,9 +29,67 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                             if((opcion==2 || opcion==3) && !obser){
                                 alert("No ha ingresado alguna observacion");
                             }else if(opcion==1){
-                                alert("tramite aprobado");
+                                var num = $("#req_no").val();
+                                var process = $("#process").val();
+                                var activity = $("#activity").val();
+                                var rank= $("input[name=rank]").val();
+                                var cedula = $("#cedula").val();
+                                var estado="aprobar";
+                                 $.ajax({
+                                            url: "acciones.php",
+                                            method: "POST",           
+                                            data: { reqno: num,estado:estado,rank:rank,process:process,activity:activity,cedula:cedula}
+                                        }).success(function(response) {
+                                            // Populate the form fields with the data returned from server
+                                                switch (response) {
+                                                    case "1":
+                                                        alert("APROBADA PARA REVISION FINAL");
+                                                        var pathname = window.location.pathname;
+                                                        window.location.replace(pathname);
+                                                        break;
+                                                    case "2":
+                                                        alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
+                                                        break;
+                                                    case "3":
+                                                        alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
+                                                        break;                                                    
+                                                }
+                                                                                                    
+                                             })
+                                            .fail(function(response){
+                                                alert(response);
+                                            });                               
                             }else{
-                                alert("envio a subsanar");
+                                var num = $("#req_no").val();
+                                var process = $("#process").val();
+                                var activity = $("#activity").val();
+                                var rank= $("input[name=rank]").val();
+                                var username = $("#username").val();                                
+                                var estado="subsanar";
+                                 $.ajax({
+                                            url: "acciones.php",
+                                            method: "POST",           
+                                            data: { reqno: num,estado:estado,opcion:opcion,rank:rank,mensaje:obser,process:process,activity:activity,username:username}
+                                        }).success(function(response) {
+                                            // Populate the form fields with the data returned from server
+                                                switch (response) {
+                                                    case "1":
+                                                        alert("SUBSANACION FUE ENVIADA");
+                                                        var pathname = window.location.pathname;
+                                                        window.location.replace(pathname);
+                                                        break;
+                                                    case "2":
+                                                        alert("ERROR AL ENVIAR SUBSANACION");
+                                                        break;
+                                                    case "3":
+                                                        alert("ERROR AL FINALIZAR PROCESOS");
+                                                        break;                                                    
+                                                }
+                                                                                                    
+                                             })
+                                            .fail(function(response){
+                                                alert(response);
+                                            });          
                             }
                         }else{
                             alert("no ha escogido ninguna opcion");
@@ -58,10 +116,36 @@ function cargar_formulario_001_004($req_no,$dcm_cd){
                         <h3>Datos de Solicitud</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="hidden" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">                                   
+                                <input type="text" class="form-control"  id="process" readonly value="'.$process.'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">                                     
+                                <input type="text" class="form-control"  id="activity" readonly value="'.$activity.'"  />
+                            </div>
+                         </div>
+                          <div class="hidden" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">                                   
+                                <input type="text" class="form-control"  id="cedula" readonly value="'.$cedula.'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">                                     
+                                <input type="text" class="form-control"  id="username" readonly value="'.$username.'"  />
+                            </div>
+                         </div>
                          <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Número de Solicitud</label>                                      
-                                <input type="text" class="form-control" name="req_no" readonly value="'.$tninp001->getReq_no().'" />                                    
+                                <input type="text" class="form-control" name="req_no" id="req_no" readonly value="'.$tninp001->getReq_no().'" />                                    
                             </div>
 
                             <div class="col-xs-1 form-group">

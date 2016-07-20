@@ -75,7 +75,8 @@ if (isset($_POST['delcomment'])) {
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
             <?php if($_SESSION['rank']==4){
                      echo "<li><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
-                     <li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                     <li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
+                     <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                              
                 }else if($_SESSION['rank']==2){
                      echo "<li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Tareas</a></li>";

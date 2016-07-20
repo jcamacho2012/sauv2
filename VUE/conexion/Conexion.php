@@ -25,6 +25,9 @@ class DB{
         if($flag==1){
             $result=  pg_query($this->conexion,$sql)or die("Error sql" . pg_last_error());                        
             $fila = pg_fetch_array($result, NULL, PGSQL_ASSOC);
+        }else if($flag==3){
+            $result=  pg_query($this->conexion,$sql)or die("Error sql" . pg_last_error());                        
+            $fila = pg_fetch_array($result, NULL, PGSQL_NUM);
         }else{
             $fila= pg_query($this->conexion,$sql)or die("Error sql" . pg_last_error());
         }        

@@ -15,7 +15,7 @@
 //--------------------------------------------------------------
 
 require_once 'admin/includes/login.class.php';
-
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
 
 
 function getdata(){
@@ -32,7 +32,7 @@ if (empty($results)) {
 	# code...
 }else{
 	foreach ($results as $key) {
-		echo $key['name'].'<p></p>';
+		echo $key['username'].'<p></p>';
 	}
 }	
 }
@@ -80,12 +80,27 @@ function tareas($iduser,$rank){
 
     // consulta a base de datos
     if($rank==4){
-         $SQL = "SELECT req_no,dcm_no,empresa FROM tramite where certificador_asignado=:iduser and certificador_revisado='f'";
+         $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM
+                  documents JOIN process_instances 
+                  ON documents.process_instances_id=process_instances.id 
+                  JOIN activities_instances 
+                  ON process_instances.id=activities_instances.process_instances_id 
+                  AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
     }else if($rank==2){
-          $SQL = "SELECT req_no,dcm_no,empresa,receptor_asignado,receptor_revisado,certificador_asignado,certificador_revisado FROM tramite";
+          $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM
+                  documents JOIN process_instances 
+                  ON documents.process_instances_id=process_instances.id 
+                  JOIN activities_instances 
+                  ON process_instances.id=activities_instances.process_instances_id 
+                  AND process_instances.state='READY' AND activities_instances.state='READY'";
     }else{
-        $SQL = "SELECT req_no,dcm_no,empresa FROM tramite where receptor_asignado=:iduser and receptor_revisado='f'";
-    }
+        $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM 
+                documents JOIN  process_instances 
+                ON documents.process_instances_id=process_instances.id 
+                JOIN activities_instances
+                ON process_instances.id=activities_instances.process_instances_id
+                AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
+        }
 
 	$sentence = $conexion -> prepare($SQL);
         if($rank!=2){
@@ -99,15 +114,11 @@ function tareas($iduser,$rank){
 		foreach ($results as $key){
                 echo'
                   <tr>
+                    <td class="hidden"  id="process">'.$key['id_process'].'</td>
+                    <td class="hidden"  id="activity">'.$key['id_activity'].'</td>    
                     <td>'.$key['req_no'].'</td>
-                    <td>'.$key['dcm_no'].'</td> 
-                    <td>'.$key['empresa'].'</td>';
-                if($rank==2){
-                    echo '<td>'.buscarNombreXId($key['receptor_asignado']).'</td>
-                          <td>'.$key['receptor_revisado'].'</td> 
-                          <td>'.buscarNombreXId($key['certificador_asignado']).'</td>
-                          <td>'.$key['certificador_revisado'].'</td> ';
-                }
+                    <td>'.$key['dcm_cd'].'</td> 
+                    <td>'.$key['co_nm'].'</td>';
                 echo ' 
                     <td>';
                         if($rank!=2){
@@ -123,12 +134,95 @@ function tareas($iduser,$rank){
 	}	
 }
 
+function actualizarEstadoActividad($activity,$process,$estado,$rank){
+    $conexion = Conexion::singleton_conexion();
+
+    if($estado=='2' || $estado=='3'){
+        $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+                UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
+        $sentence = $conexion -> prepare($SQL);
+        $sentence -> bindParam(':activity', $activity);
+        $sentence -> bindParam(':process', $process);
+    }else{
+        if($rank==4){
+              $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+                UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
+                $sentence = $conexion -> prepare($SQL);
+                $sentence -> bindParam(':activity', $activity);
+                $sentence -> bindParam(':process', $process);
+        }else{
+            $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";                
+                $sentence = $conexion -> prepare($SQL);
+                $sentence -> bindParam(':activity', $activity);                
+        }
+    }
+    // consulta a base de datos 
+    
+    if ( $sentence -> execute())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+      
+}
+
+function enviarNotificación($activity,$process,$reqno,$mensaje,$estado,$rank,$username){
+    if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
+        $SQL = "SELECT bonita.accion_notificacion(
+                '".$reqno."',
+                '".$estado."',
+                '".$username."',
+                '".$mensaje."',
+                '21',
+                '".$username."',
+                '".$username."')"; 
+        $conexion=new DB();
+        $row = $conexion->consultar($SQL,3);
+        if($row[0]==true){
+            echo '1';
+        }else{
+            echo '2';
+        }        
+    }else{
+        echo '3';
+    }       
+         
+}
+
+
+function crearNuevaActividad($process){
+// conexon a base de datos
+$conexion = Conexion::singleton_conexion();
+
+// pues la fecha para saber desde cuando lo sigue xD
+
+// consulta a base de datos 
+$insertactividad = "INSERT INTO activities_instances(name, state, date_create, date_modify,user_id, process_instances_id) 
+    VALUES ('REVISION FINAL','READY',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0,:process)";
+
+$updasentence = $conexion -> prepare($insertactividad);
+$updasentence -> bindParam(':process',$process);
+
+if ( $updasentence -> execute())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
 function buscarNombreXId($id){
     $conexion = Conexion::singleton_conexion();
     
     // consulta a base de datos
     
-	$SQL = "SELECT name FROM users where iduser=:id";
+	$SQL = "SELECT username FROM users where iduser=:id";
 	$sentence = $conexion -> prepare($SQL);  
         $sentence -> bindParam(':id', $id);        
 	$sentence -> execute();
@@ -138,7 +232,7 @@ function buscarNombreXId($id){
            return 'Sin Asignar';
 	}else{
 		foreach ($results as $key){
-                    return $key['name'];
+                    return $key['username'];
 		}
 	}
 }
@@ -148,7 +242,13 @@ function tareaSinAsignar($ciudad){
     $conexion = Conexion::singleton_conexion();     
     // consulta a base de datos
     
-	$SQL = "SELECT req_no,dcm_no,empresa FROM tramite where certificador_asignado=0 and receptor_revisado='t' and ciudad=:ciudad";
+	  $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM
+                  documents JOIN process_instances 
+                  ON documents.process_instances_id=process_instances.id 
+                  JOIN activities_instances 
+                  ON process_instances.id=activities_instances.process_instances_id 
+                  AND process_instances.state='READY' AND activities_instances.state='READY' 
+                  AND activities_instances.user_id=0 AND documents.req_city_cd=:ciudad";
 	$sentence = $conexion -> prepare($SQL);  
         $sentence -> bindParam(':ciudad', $ciudad);
 	$sentence -> execute();
@@ -158,53 +258,62 @@ function tareaSinAsignar($ciudad){
 		foreach ($results as $key){
                 echo'
                   <tr>
+                    <td class="hidden"  id="process">'.$key['id_process'].'</td>
+                    <td class="hidden"  id="activity">'.$key['id_activity'].'</td>    
                     <td>'.$key['req_no'].'</td>
-                    <td>'.$key['dcm_no'].'</td>
-                    <td>'.$key['empresa'].'</td> 
+                    <td>'.$key['dcm_cd'].'</td>
+                    <td>'.$key['co_nm'].'</td> 
                     <td>
-                        <button type="button" data-id="'.$key['req_no'].'" class="btn btn-default editButton">Tomar/Revisar</button>                        
+                        <button type="button" data-id="'.$key['req_no'].'" class="btn btn-default tomar">Tomar/Revisar</button>                        
                     <td>
                   </tr>';
 		}
 	}	
 }
 
-function aprobar($reqno,$rank){
+function tareaTerminadas($iduser){
+    // conexon a base de datos
+    $conexion = Conexion::singleton_conexion();     
+    // consulta a base de datos
+    
+	  $SQL = "SELECT req_no,dcm_cd,co_nm,activities_instances.date_modify as date_modify FROM
+                  documents JOIN process_instances 
+                  ON documents.process_instances_id=process_instances.id 
+                  JOIN activities_instances 
+                  ON process_instances.id=activities_instances.process_instances_id 
+                  AND activities_instances.state='FINISH' 
+                  AND activities_instances.user_id=:user
+                  ORDER BY activities_instances.date_modify DESC";
+          
+	$sentence = $conexion -> prepare($SQL);  
+        $sentence -> bindParam(':user', $iduser);
+	$sentence -> execute();
+	$results = $sentence -> fetchAll();
+	if (empty($results)) {
+	}else{
+		foreach ($results as $key){
+                echo'
+                  <tr>    
+                    <td>'.$key['req_no'].'</td>
+                    <td>'.$key['dcm_cd'].'</td>
+                    <td>'.$key['co_nm'].'</td>                    
+                    <td>'.$key['date_modify'].'</td> 
+                  </tr>';
+		}
+	}	
+}
+
+
+function liberar($activity,$process){
 // conexon a base de datos
 $conexion = Conexion::singleton_conexion();
 
 
 // consulta a base de datos
-if($rank==4){
-    $SQL = "UPDATE tramite SET mdf_dt= now(),certificador_revisado='t' WHERE req_no = :reqno";
-}else{
-    $SQL = "UPDATE tramite SET mdf_dt= now(),receptor_revisado='t' WHERE req_no = :reqno";
-}
-
-$sentence = $conexion -> prepare($SQL);
-$sentence -> bindParam(':reqno', $reqno);
-
-$sentence -> execute();
-
-echo'
-  <!-- alertas -->
-  <div class="col-md-12">
-  <div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-   <strong><i class="fa fa-check"></i> Correcto! </strong> Tus datos han sido actualizados correctamente, estos datos puedes actualizarlos cuantas veces quieras. </div>            
-  </div>
-  <!-- alertas -->
-';  
-}
-
-function liberar($reqno){
-// conexon a base de datos
-$conexion = Conexion::singleton_conexion();
-
-
-// consulta a base de datos
-    $SQL = "UPDATE tramite SET certificador_asignado=0 WHERE req_no = :reqno";
+    $SQL = "UPDATE activities_instances SET user_id=0, date_modify= now() WHERE id = :activity and process_instances_id=:process";
     $sentence = $conexion -> prepare($SQL);
-    $sentence -> bindParam(':reqno', $reqno);
+    $sentence -> bindParam(':activity', $activity);
+    $sentence -> bindParam(':process', $process);
 
     $sentence -> execute();
 
@@ -224,7 +333,7 @@ function consultaxid($reqno,$id,$rank){
     $conexion = Conexion::singleton_conexion();
 
     // consulta a base de datos
-        $SQL = "SELECT req_no,dcm_no FROM tramite WHERE req_no = :reqno";
+        $SQL = "SELECT req_no,dcm_cd FROM documents WHERE req_no = :reqno";
         $sentence = $conexion -> prepare($SQL);
         $sentence -> bindParam(':reqno', $reqno);
         $sentence -> execute();
@@ -234,30 +343,29 @@ function consultaxid($reqno,$id,$rank){
 	}else{
 		foreach ($results as $key){                 
                    $response['req_no'] = $key['req_no'];
-                   $response['dcm_no'] = $key['dcm_no'];   
+                   $response['dcm_cd'] = $key['dcm_cd'];   
                    
 		}
 	}
     //actualizar id del usuario que toma la solicitud sin asignar
-        actualizarId($reqno, $id,$rank);
+        //actualizarId($reqno, $id,$rank);
        
         return $response;
 }
 
-function actualizarId($reqno,$id,$rank){
+function tomar($id,$process,$activity){
     // conexon a base de datos
   
     $conexion = Conexion::singleton_conexion();
     // consulta a base de datos
-    if($rank==4){
-        $SQL = "UPDATE tramite SET certificador_asignado= :id WHERE req_no = :reqno";
-    }else{
-        $SQL = "UPDATE tramite SET receptor_asignado= :id WHERE req_no = :reqno";
-    }        
-        $sentence = $conexion -> prepare($SQL);
-        $sentence -> bindParam(':reqno', $reqno);
-        $sentence -> bindParam(':id', $id);
-        $sentence -> execute();
+    
+    $SQL = "UPDATE activities_instances SET user_id= :id,date_modify=now() WHERE id = :activity AND process_instances_id=:process";
+
+    $sentence = $conexion -> prepare($SQL);  
+    $sentence -> bindParam(':id', $id);
+    $sentence -> bindParam(':activity', $activity);
+    $sentence -> bindParam(':process', $process);
+    $sentence -> execute();
 
 }
 

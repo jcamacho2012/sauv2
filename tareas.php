@@ -72,10 +72,12 @@ if (isset($_SESSION['iduser'])){
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
              <?php if($_SESSION['rank']==4){
                      echo "<li><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
-                     <li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                     <li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
+                     <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                              
                 }else{
-                     echo "<li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>";
+                     echo "<li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
+                         <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
                 }
             ?>
           </ul>
@@ -95,7 +97,9 @@ if (isset($_SESSION['iduser'])){
                         </div>
                        <table class="table table-striped">
                	  	<thead>
-               	  		<tr>                                    
+               	  		<tr>
+                                  <th class="hidden">activity</th>
+                                  <th class="hidden">process</th>
                	  		  <th>Solicitud</th>
                                   <th>Documento</th>
                                   <?php 
@@ -121,6 +125,8 @@ if (isset($_SESSION['iduser'])){
                      </table>
                       <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
                       <input type="hidden" class="form-control" name="rank" value="<?php echo $_SESSION['rank']; ?>"/>
+                      <input type="hidden" class="form-control" name="username" value="<?php echo $_SESSION['username']; ?>"/>
+                      <input type="hidden" class="form-control" name="identity_card" value="<?php echo $_SESSION['identity_card']; ?>"/>
                   </div>                 
                 </div>                             
               </div>
@@ -157,57 +163,53 @@ if (isset($_SESSION['iduser'])){
                     }).show();
                 })
             }(jQuery));  
-            
-            
-        var td,valor,id,anls,id,cadena;   
-        $(document).on("click","td.editable",function(e){
-                        anls="";
+   
+        	var td,campo,valor,id;
+		$(document).on("click","td.editable span",function(e)
+		{
+			anls="";
 			e.preventDefault();
 			$("td:not(.id)").removeClass("editable");
-			td=$(this).closest("td");			
+			td=$(this).closest("td");
 			valor=$(this).text();
                         valor=valor.replace('Cancel','');
-                        cadena=valor.split(',')
-                        $.each(cadena, function(index, value) { 
-                            anls+=$.trim(value)+"\n";                               
-                        });                        
-			id=$(this).closest("tr").find("#prdt_sn").text();			
-                        td.text("").html("<textarea class='caja'>"+anls+"</textarea><a class='enlace guardar' href='#'>Guardar</a><a class='enlace cancelar' href='#'>Cancelar</a>");                                                
+                        cadena=valor.split(',');
+                        $.each(cadena, function(index, value) {
+                            anls+=$.trim(value)+"\n";
+                        });
+			id=$(this).closest("tr").find("#prdt_sn").text();
+                        td.text("").html("<textarea class='caja' id='analisis_text'>"+anls+"</textarea><a class='enlace guardar' href='#'>Guardar</a><a class='enlace cancelar' href='#'>Cancelar</a>");
 		});
-                
-        $(document).on("click",".cancel",function(e){
+		
+		$(document).on("click",".cancelar",function(e)
+		{
 			e.preventDefault();                        
 			td.html("<span>"+anls+"</span>");
-			$("td:not(.id)").addClass("copy");
-                        $("td.editable").removeClass("copy");
-                        $("td.editable").addClass("editable");                                                
+			$("td:not(.id)").addClass("editable");
 		});
-                
 		
-	$(document).on("click",".guardar",function(e){
-			$(".mensaje").html("<img src='images/loading1.gif'>");
+		$(document).on("click",".guardar",function(e)
+		{
+			$(".mensaje").html("<img src='themes/images/loading.gif'>");
 			e.preventDefault();
-                        
-			nuevovalor=$(this).closest("td").find("textarea").val();                        
+			nuevovalor=$(this).closest("td").find("textarea").val();
 			if(nuevovalor.trim()!="")
 			{
-                                var num = $("#reqno").val();
+                                var num = $("#req_no").val();
 				$.ajax({
 					type: "POST",
-					url: "ingreso_analisis.php",
-					data: { numero:num,valor: nuevovalor, id:id }
+					url: "includes/editinplace.php",
+                                        data: { numero:num,valor: nuevovalor, id:id }					
 				})
-				.done(function( msg ) {                                        
+				.done(function( msg ) {
 					$(".mensaje").html(msg);
 					td.html("<span>"+nuevovalor+"</span>");
 					$("td:not(.id)").addClass("editable");
-                                        $("td.copy").removeClass("editable");
-                                        $("td.copy").addClass("copy");
 					setTimeout(function() {$('.ok,.ko').fadeOut('fast');}, 3000);
-				});                                
+				});
 			}
 			else $(".mensaje").html("<p class='ko'>Debes ingresar un valor</p>");
-		});              
+		});
         });
        
         function validateNumber(event) {
@@ -228,7 +230,12 @@ if (isset($_SESSION['iduser'])){
             var req_no = $(this).attr('data-id');
             var id= $("input[name=id]").val();
             var rank= $("input[name=rank]").val();
-            var opcion=2;
+            var identity_card= $("input[name=identity_card]").val();
+            var username= $("input[name=username]").val();
+            var activity=$(this).closest("tr").find("#activity").text();
+            var process=$(this).closest("tr").find("#process").text();
+            var opcion='hacer';
+
             $("#contenido").empty();
             $('.greyBox').after("<div class='redBox'>Iron man</div>");
             $("#contenido").append("<div id='fountainG'>\n\
@@ -245,7 +252,7 @@ if (isset($_SESSION['iduser'])){
             $.ajax({
                 url: 'acciones.php',
                 method: 'POST',           
-                data: { reqno: req_no,opcion:opcion,id:id,rank:rank}
+                data: { reqno: req_no,opcion:opcion,id:id,rank:rank,activity:activity,process:process,username:username,identity_card:identity_card}
             }).success(function(response) {
                 // Populate the form fields with the data returned from server
                   $('#fountainG').remove();
@@ -256,17 +263,18 @@ if (isset($_SESSION['iduser'])){
                 });
         });
     
-      
+         
     
         $('.liberar').on('click', function() {
         // Get the record's ID via attribute
-            var req_no = $(this).attr('data-id');       
-            var opcion=3;
+            var activity=$(this).closest("tr").find("#activity").text();
+            var process=$(this).closest("tr").find("#process").text();       
+            var opcion='liberar';
 
             $.ajax({
                 url: 'acciones.php',
                 method: 'POST',           
-                data: { reqno: req_no,opcion:opcion}
+                data: { activity:activity,process:process,opcion:opcion}
             }).success(function(response) {
                 // Populate the form fields with the data returned from server
                 alert('Solicitud fue liberada');

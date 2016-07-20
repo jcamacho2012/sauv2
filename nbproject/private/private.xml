@@ -6,11 +6,13 @@
             <file>file:/C:/xampp/htdocs/sauv2/acciones.php</file>
             <file>file:/C:/xampp/htdocs/sauv2/includes/sau-functions.php</file>
             <file>file:/C:/xampp/htdocs/sauv2/tareas.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/VUE/conexion/Funciones.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/ajax.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/admin/usuarios.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/VUE/conexion/TnInp001Impl.php</file>
-            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp016/TnInp016Page.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/terminadas.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/conexion/Conexion.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/themes/css/style.css</file>
+            <file>file:/C:/xampp/htdocs/sauv2/index.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/VUE/pagina/TnInp001/TnInp001Page.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/sinAsignar.php</file>
+            <file>file:/C:/xampp/htdocs/sauv2/panel.php</file>
         </group>
     </open-files>
 </project-private>

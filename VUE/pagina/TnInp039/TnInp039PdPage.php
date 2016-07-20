@@ -10,7 +10,7 @@ function cargar_lista_productos_039($req_no){
     $listaProductos= consulta_datos_producto_039($req_no);
     $retval='<table class="table table-hover" class="editinplace" id="calidad">
                 <tr>
-                    <th>No.</th>
+                    <th class="id">No.</th>
                     <th>Subpartida Arancelaria</th>
                     <th>Nombre de Producto</th>
                     <th>Nombre de Especie de Producto</th>
@@ -19,7 +19,6 @@ function cargar_lista_productos_039($req_no){
                     <th>Cantidad de Producto</th>
                     <th>Peso Neto de Producto</th>
                     <th>Código de Lote</th>
-                    <th> </th>
                 </tr>';    
      if(count($listaProductos)<1){
         $retval.='<td></td><td></td><td>No hay Productos ingresados</td><td></td><td></td>';
@@ -34,10 +33,7 @@ function cargar_lista_productos_039($req_no){
                         . '<td class="editable" data-campo="nombre" id="col_analisis"><span>'.$producto->getAnls_type_nm().'</span></td>'
                         . '<td class="id"><span>'.$producto->getPrdt_qt().'</span></td>'
                         . '<td class="id"><span>'.$producto->getPrdt_nwt().'</span></td>'
-                        . '<td class="id"><span>'.$producto->getLot_cd().'</span></td>'
-                        . '<td><button type="button" class="btn btn-default btn-sm modificar" data-id="'.$producto->getPrdt_sn().'">
-                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                </button></td></tr>'; 
+                        . '<td class="id"><span>'.$producto->getLot_cd().'</span></td></tr>';                       
         }            
     }
     $retval.='</table>';

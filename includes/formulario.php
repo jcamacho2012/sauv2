@@ -22,22 +22,22 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp045/TnInp045Page.
  * and open the template in the editor.
  */
 
-function dibujarFormulario($array,$rol){
-    switch ($array['dcm_no']){
+function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
+    switch ($array['dcm_cd']){
         case '130-001':{
-            return cargar_formulario_001_004($array['req_no'], $array['dcm_no']);            
+            return cargar_formulario_001_004($array['req_no'], $array['dcm_cd'],$process,$activity,$cedula,$username);            
             break;
         }
         case '130-004':{
-            return cargar_formulario_001_004($array['req_no'], $array['dcm_no']);
+            return cargar_formulario_001_004($array['req_no'], $array['dcm_cd']);
             break;
         }
         case '130-006':{
-            //return sanitarios($array['dcm_no']);      pendiente jackson
+            //return sanitarios($array['dcm_cd']);      pendiente jackson
             break;
         }
         case '130-008':{
-            return cargar_formulario_008($array['req_no'], $array['dcm_no']);
+            return cargar_formulario_008($array['req_no'], $array['dcm_cd']);
             break;
         }
         case '130-010':{
@@ -89,11 +89,11 @@ function dibujarFormulario($array,$rol){
             break;
         }
         case '130-040':{
-            //return sanitarios($array['dcm_no']);      pendiente jackson
+            //return sanitarios($array['dcm_cd']);      pendiente jackson
             break;
         }
         case '130-042':{
-            return cargar_formulario_008($array['req_no'],$array['dcm_no']);
+            return cargar_formulario_008($array['req_no'],$array['dcm_cd']);
             break;
         }
         case '130-044':{

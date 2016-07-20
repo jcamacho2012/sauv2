@@ -70,7 +70,7 @@ function cargar_formulario_039($req_no,$rol){
                          <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Número de Solicitud</label>                                      
-                                <input type="text" class="form-control" name="req_no" readonly value="'.$tninp039->getReq_no().'" />                                    
+                                <input type="text" class="form-control" name="req_no" id="req_no" readonly value="'.$tninp039->getReq_no().'" />                                    
                             </div>
 
                             <div class="col-xs-1 form-group">
@@ -263,6 +263,7 @@ function cargar_formulario_039($req_no,$rol){
                         <h3>Datos Producto</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="mensaje"></div>
 			'.$producto.'
                         <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">

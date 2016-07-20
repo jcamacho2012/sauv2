@@ -35,7 +35,7 @@ class Login
 
 			//$crypt = sha1(SALT.$password.PEPER);
                         
-			$sql = "SELECT * FROM users WHERE name = ? AND estado='HABILITADO'";
+			$sql = "SELECT * FROM users WHERE username = ? AND state='HABILITADO'";
 			$query = $this->dbh->prepare($sql);
 			$query->bindParam(1,$email);
 			$query->execute();
@@ -49,9 +49,10 @@ class Login
 
                                  if (password_verify($password, $fila['password'])){ 
                                     $_SESSION['iduser'] = $fila['iduser'];
-                                    $_SESSION['nombre'] = $fila['name'];
+                                    $_SESSION['username'] = $fila['username'];
                                     $_SESSION['rank'] = $fila['rank'];
-                                    $_SESSION['ciudad']=$fila['ciudad'];
+                                    $_SESSION['city']=$fila['city'];
+                                    $_SESSION['identity_card']=$fila['identity_card'];
                                     return TRUE;
                                  }else{
                                     return FALSE;
