@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/conexion/Conexion.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp006/TnInp006VO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp006/TnInp006PdVO.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/formularioVUE/formulario/TnInp006/TnInp006CtnrVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp006/TnInp006VO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp006/TnInp006PdVO.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/formulario/TnInp006/TnInp006CtnrVO.php';
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -98,7 +98,7 @@ function consulta_datos_formulario_006_040($req_no) {
                 ,COALESCE(a.prnt_ctxt_fg::TEXT,'No Aplica') AS prnt_ctxt_fg
                 from vue_gateway.tn_inp_006_it a		
                 where a.req_no='".$req_no."'";               
-        $conexion=new conexion();
+        $conexion=new DB();
         $row = $conexion->consultar($sql,1);                
         $TnInp006=new TnInp006VO($row); 
         return $TnInp006; 
@@ -121,7 +121,7 @@ function consulta_datos_producto_006_040($req_no) {
 		,COALESCE(TO_CHAR(a.mdf_dt,'DD/MM/YYYY')::TEXT,'No Aplica') AS prdt_prodt	
                 FROM  vue_gateway.tn_inp_006_it_pd as a			  				
                 where a.req_no='".$req_no."'";               					
-        $conexion=new conexion();        
+        $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp006PdVO();        
         $lista=$objeto->getProducto006($result);  
@@ -135,7 +135,7 @@ function consulta_datos_contenedor_006_040($req_no) {
 		,COALESCE(a.seal_no::TEXT,'No Aplica') AS seal_no					
                 FROM  vue_gateway.tn_inp_006_it_cntr as a			  
                 where a.req_no='".$req_no."'";
-        $conexion=new conexion();   
+        $conexion=new DB();  
         $result = $conexion->consultar($sql,2);  
         $objeto=new TnInp006CntrVO();        
         $lista=$objeto->getContenedor006($result);  

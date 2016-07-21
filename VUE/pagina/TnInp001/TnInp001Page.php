@@ -202,7 +202,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                                 <input type="text" class="form-control" name="prev_ctft_iss_de" readonly value="'.$tninp001->getPrev_ctft_iss_de().'"  />
                             </div>
                         </div>';
-                   if($dcm_cd=='130-001'){
+        if($dcm_cd=='130-001'){
                 $retval.='
                         <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">

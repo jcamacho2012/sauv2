@@ -1,5 +1,6 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp001/TnInp001Page.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp006/TnInp006Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp008/TnInp008Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp010/TnInp010Page.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnInp012/TnInp012Page.php';
@@ -33,7 +34,7 @@ function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
             break;
         }
         case '130-006':{
-            //return sanitarios($array['dcm_cd']);      pendiente jackson
+            return cargar_formulario_006_040($array['req_no'], $array['dcm_cd'], $rol);
             break;
         }
         case '130-008':{
@@ -89,7 +90,7 @@ function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
             break;
         }
         case '130-040':{
-            //return sanitarios($array['dcm_cd']);      pendiente jackson
+            return cargar_formulario_006_040($array['req_no'], $array['dcm_cd'], $rol);
             break;
         }
         case '130-042':{
@@ -97,7 +98,7 @@ function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
             break;
         }
         case '130-044':{
-           // return cargar_formulario_044($array['req_no'],$rol);      pendiente jackson
+           return cargar_formulario_044($array['req_no']);
             break;
         }
         case '130-045':{
