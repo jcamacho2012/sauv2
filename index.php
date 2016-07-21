@@ -15,9 +15,11 @@
 //--------------------------------------------------------------
 
 // incluimos las funciones
-require_once 'includes/sau-functions.php';
+
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/sau-functions.php';
 // incluimos la cabecera
-include 'themes/header.php'; 
+
+include $_SERVER["DOCUMENT_ROOT"].'/sauv2/themes/header.php';
 ?>
 
 
@@ -39,4 +41,4 @@ include 'themes/header.php';
 
 
 
-<?php include 'themes/footer.php'; ?>
+<?php include $_SERVER["DOCUMENT_ROOT"].'/sauv2/themes/footer.php'; ?>

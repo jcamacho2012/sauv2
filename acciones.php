@@ -1,6 +1,7 @@
 <?php
-require_once 'includes/sau-functions.php';
-require_once 'includes/formulario.php';
+
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/sau-functions.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/formulario.php';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates

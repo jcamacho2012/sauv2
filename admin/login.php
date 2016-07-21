@@ -1,5 +1,6 @@
 <?php
-require_once 'includes/admin.functions.php';
+
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/admin/includes/admin.functions.php';
 error_reporting(E_ALL);
 
 $singleton = Login::singleton_login();

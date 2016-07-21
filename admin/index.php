@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/admin.functions.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/admin/includes/admin.functions.php';
 
 if (isset($_SESSION['iduser'])) {
    if ($_SESSION['rank'] <> 2) {

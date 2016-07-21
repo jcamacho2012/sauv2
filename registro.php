@@ -15,8 +15,9 @@
 //--------------------------------------------------------------
 
 // incluimos las funciones
-require_once 'admin/includes/config.class.php';
-require_once 'includes/sau-functions.php';
+
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/sau-functions.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/admin/includes/config.class.php';
 
 if (isset($_POST['nombre'])) {
 

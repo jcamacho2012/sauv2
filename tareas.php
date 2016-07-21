@@ -1,6 +1,7 @@
 <?php
 // incluimos las funciones
-require_once 'includes/sau-functions.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/sau-functions.php';
+
 if (isset($_SESSION['iduser'])){
 }else{
   header("Location: logout");

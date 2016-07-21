@@ -1,6 +1,8 @@
 <?php
 
-require_once 'config.class.php';
+//require_once 'config.class.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/admin/includes/config.class.php';
+
 session_start();
 class Login
 {

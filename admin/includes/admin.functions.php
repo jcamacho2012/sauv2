@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
-require_once '../sau-config.php';
+//require_once '../sau-config.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/sau-config.php';
 
 // iniciamos session XD
 session_start();

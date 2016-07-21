@@ -14,7 +14,8 @@
 //
 //--------------------------------------------------------------
 
-require_once 'admin/includes/login.class.php';
+
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/admin/includes/login.class.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/conexion/Conexion.php';
 
 
