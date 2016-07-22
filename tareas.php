@@ -50,7 +50,7 @@ if (isset($_SESSION['iduser'])){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><i class="fa fa-clone animated infinite flash"></i> Bienvenido(a) <?php echo $_SESSION['name'];?></a>
+          <a class="navbar-brand" href="#"><i class="fa fa-user"></i> Bienvenido(a) <?php echo $_SESSION['name'];?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -114,7 +114,8 @@ if (isset($_SESSION['iduser'])){
                                   <?php 
                                     if($_SESSION['rank']==2){
                                         echo '                                              
-                                              <th>Usuario</th>';
+                                              <th>Usuario</th>
+                                              <th>Acciones</th>';
                                     }else{
                                         echo '<th>Acciones</th>';
                                     }                                        
@@ -155,139 +156,7 @@ if (isset($_SESSION['iduser'])){
     <script src="themes/js/additional-methods.min.js"></script>
     <script src="themes/js/bootstrap-datepicker.js"></script>
     <script src="themes/js/bootstrap-switch.js"></script>
-      
-    <script type="text/javascript">
-        $(document).ready(function() {
-            (function($) {
-                $('#filter').keyup(function() {
-                    var rex = new RegExp($(this).val(), 'i');
-                    $('.searchable tr').hide();
-                    $('.searchable tr').filter(function() {
-                        return rex.test($(this).text());
-                    }).show();
-                })
-            }(jQuery));  
-   
-        	var td,campo,valor,id;
-		$(document).on("click","td.editable span",function(e)
-		{
-			anls="";
-			e.preventDefault();
-			$("td:not(.id)").removeClass("editable");
-			td=$(this).closest("td");
-			valor=$(this).text();
-                        valor=valor.replace('Cancel','');
-                        cadena=valor.split(',');
-                        $.each(cadena, function(index, value) {
-                            anls+=$.trim(value)+"\n";
-                        });
-			id=$(this).closest("tr").find("#prdt_sn").text();
-                        td.text("").html("<textarea class='caja' id='analisis_text'>"+anls+"</textarea><a class='enlace guardar' href='#'>Guardar</a><a class='enlace cancelar' href='#'>Cancelar</a>");
-		});
-		
-		$(document).on("click",".cancelar",function(e)
-		{
-			e.preventDefault();                        
-			td.html("<span>"+anls+"</span>");
-			$("td:not(.id)").addClass("editable");
-		});
-		
-		$(document).on("click",".guardar",function(e)
-		{
-			$(".mensaje").html("<img src='themes/images/loading.gif'>");
-			e.preventDefault();
-			nuevovalor=$(this).closest("td").find("textarea").val();
-			if(nuevovalor.trim()!="")
-			{
-                                var num = $("#req_no").val();
-				$.ajax({
-					type: "POST",
-					url: "includes/editinplace.php",
-                                        data: { numero:num,valor: nuevovalor, id:id }					
-				})
-				.done(function( msg ) {
-					$(".mensaje").html(msg);
-					td.html("<span>"+nuevovalor+"</span>");
-					$("td:not(.id)").addClass("editable");
-					setTimeout(function() {$('.ok,.ko').fadeOut('fast');}, 3000);
-				});
-			}
-			else $(".mensaje").html("<p class='ko'>Debes ingresar un valor</p>");
-		});
-        });
-       
-        function validateNumber(event) {
-            var key = window.event ? event.keyCode : event.which;
-            if (event.keyCode === 8 || event.keyCode === 46
-                || event.keyCode === 37 || event.keyCode === 39) {
-                return true;
-            }
-            else if ( key < 48 || key > 57 ) {
-                return false;
-            }
-            else return true;
-        };
-            
-        
-        $('.hacer').on('click', function() {
-            // Get the record's ID via attribute
-            var req_no = $(this).attr('data-id');
-            var id= $("input[name=id]").val();
-            var rank= $("input[name=rank]").val();
-            var identity_card= $("input[name=identity_card]").val();
-            var username= $("input[name=username]").val();
-            var activity=$(this).closest("tr").find("#activity").text();
-            var process=$(this).closest("tr").find("#process").text();
-            var opcion='hacer';
+    <script src="themes/js/script.js"></script>  
 
-            $("#contenido").empty();
-            $('.greyBox').after("<div class='redBox'>Iron man</div>");
-            $("#contenido").append("<div id='fountainG'>\n\
-                                        <div id='fountainG_1' class='fountainG'></div>\n\
-                                        <div id='fountainG_2' class='fountainG'></div>\n\
-                                        <div id='fountainG_3' class='fountainG'></div>\n\
-                                        <div id='fountainG_4' class='fountainG'></div>\n\
-                                        <div id='fountainG_5' class='fountainG'></div>\n\
-                                        <div id='fountainG_6' class='fountainG'></div>\n\
-                                        <div id='fountainG_7' class='fountainG'></div>\n\
-                                        <div id='fountainG_8' class='fountainG'></div>\n\
-                                    </div>");
-        
-            $.ajax({
-                url: 'acciones.php',
-                method: 'POST',           
-                data: { reqno: req_no,opcion:opcion,id:id,rank:rank,activity:activity,process:process,username:username,identity_card:identity_card}
-            }).success(function(response) {
-                // Populate the form fields with the data returned from server
-                  $('#fountainG').remove();
-                  $('#contenido').append(response);              
-                 })
-                .fail(function(response){
-                    $('#userForm').append('<h1>No existe conexion con ecuapass</h1>');
-                });
-        });
-    
-         
-    
-        $('.liberar').on('click', function() {
-        // Get the record's ID via attribute
-            var activity=$(this).closest("tr").find("#activity").text();
-            var process=$(this).closest("tr").find("#process").text();       
-            var opcion='liberar';
-
-            $.ajax({
-                url: 'acciones.php',
-                method: 'POST',           
-                data: { activity:activity,process:process,opcion:opcion}
-            }).success(function(response) {
-                // Populate the form fields with the data returned from server
-                alert('Solicitud fue liberada');
-                var pathname = window.location.pathname;
-                window.location.replace(pathname);
-                
-            });
-        });
-        
-    </script>
   </body>
 </html>

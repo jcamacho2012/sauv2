@@ -70,8 +70,8 @@ if (isset($_POST['mantenimiento'])) {
           <ul class="nav nav-sidebar">
             <li><a href="index.php"><i class="glyphicon glyphicon-th"></i> Inicio</a></li>
             <li><a href="usuarios"><i class="fa fa-users"></i> Usuarios</a></li>
-            <li><a href="seguidores"><i class="fa fa-user-plus"></i> Seguidores</a></li>
-            <li><a href="publicaciones"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>
+<!--            <li><a href="seguidores"><i class="fa fa-user-plus"></i> Seguidores</a></li>
+            <li><a href="publicaciones"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>-->
             <li class="active"><a href="configuration"><i class="fa fa-cog fa-spin"></i> Configuración</a></li>
           </ul>
         </div>

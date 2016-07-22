@@ -12,6 +12,9 @@ if (isset($_SESSION['iduser'])){
   header("Location: logout");
 }
 
+/*
+ * Solicitud aprobada
+ */
 if (isset($_POST['estado'])){
     if($_POST['estado']=='aprobar'){
         $reqno=$_POST['reqno'];
@@ -21,48 +24,77 @@ if (isset($_POST['estado'])){
         $rank=$_POST['rank'];
         $cedula=$_POST['cedula'];
         $username=$_POST['username'];
-        if($_POST['rank']!=4){            
-            if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
-                if(crearNuevaActividad($process)){
-                    echo '1';
-                }else{
-                    echo '2';
-                }
-            }else{
-                echo '3';
-            }
-        }else{
-           if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
-                if(preaprobacion($reqno, $cedula, $username)){
-                    if(imponerTasas($reqno, $username)){
-                        echo '4';
+        if(!consultarDesistimiento($reqno)){
+            if($_POST['rank']!=4){            
+                if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
+                    if(crearNuevaActividad($process)){
+                        echo '1';
                     }else{
-                        echo '5';
+                        echo '2';
                     }
                 }else{
-                    echo '6';
+                    echo '3';
                 }
             }else{
-                echo '7';
+                if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
+                     if(preaprobacion($reqno, $cedula, $username)){
+                         if(imponerTasas($reqno, $username)){
+                             echo '4';
+                         }else{
+                             echo '5';
+                         }
+                     }else{
+                         echo '6';
+                     }
+                 }else{
+                     echo '7';
+                 }
             }
-        }
+        }else{
+            if(actualizarEstadoActividad($activity,$process,$estado,'DESISTIDA')){
+                 echo '8';
+            }else{
+                echo '9';
+            }
+           
+        }        
     }
 }
 
+/*
+ * Solicitud subsanada
+ */
 if (isset($_POST['estado'])){
     if($_POST['estado']=='subsanar'){
-            $process=$_POST['process'];
-            $activity=$_POST['activity'];
             $reqno=$_POST['reqno'];
             $opcion=$_POST['opcion'];
-            $mensaje=$_POST['mensaje'];
-            $rank=$_POST['rank'];
+            $mensaje=$_POST['mensaje'];            
+            $process=$_POST['process'];
+            $activity=$_POST['activity'];            
             $username=$_POST['username'];
-            echo enviarNotificación($activity, $process, $reqno, $mensaje, $opcion,$rank,$username);
-        
+            if(!consultarDesistimiento($reqno)){
+                if(actualizarEstadoActividad($activity,$process,$opcion,'')){
+                    if(enviarNotificación($reqno, $mensaje, $opcion,$username)){
+                        echo '1';
+                    }else{
+                        echo '2';
+                    }
+                }else{
+                    echo '3';
+                }     
+            }else{
+                 if(actualizarEstadoActividad($activity,$process,$estado,'DESISTIDA')){
+                    echo '8';
+                }else{
+                    echo '9';
+                }
+            }                       
     }
 }
 
+/*
+ * Devuelve formulario por ajax en la pagina tareas.php (/task)
+ */
 if(isset($_POST['opcion'])){
     if($_POST['opcion']=='hacer'){
         $reqno=$_POST['reqno'];
@@ -72,14 +104,25 @@ if(isset($_POST['opcion'])){
         $activity=$_POST['activity'];
         $cedula=$_POST['identity_card'];
         $username=$_POST['username'];
-        $response = array();
-        $response=consultaxid($reqno,$id,$rank);
-        $formulario=  dibujarFormulario($response,$rank,$process,$activity,$cedula,$username);
-        echo $formulario;  
+        
+        if(!consultarDesistimiento($reqno)){
+            $response = array();
+            $response=consultaxid($reqno);
+            $formulario=  dibujarFormulario($response,$rank,$process,$activity,$cedula,$username);
+            echo $formulario;  
+        }else{
+            if(actualizarEstadoActividad($activity,$process,$estado,'DESISTIDA')){
+                echo '8';
+            }else{
+                echo '9';
+            }
+        }        
     }
 }
 
-
+/*
+ * Liberar una solicitud (Aprobador)
+ */
 if(isset($_POST['opcion'])){
     if($_POST['opcion']=='liberar'){
            $activity=$_POST['activity'];
@@ -89,6 +132,9 @@ if(isset($_POST['opcion'])){
  
 }
 
+/*
+ * Tomar una solicitud que se encuentra sin usuario asignado (Aprobador)
+ */
 if(isset($_POST['opcion'])){
     if($_POST['opcion']=='tomar'){
         $id=$_POST['id'];
@@ -99,4 +145,17 @@ if(isset($_POST['opcion'])){
  
 }
 
+/*
+ * Vista previa de la Solicitud (Admin)
+ */
 
+if(isset($_POST['opcion'])){
+    if($_POST['opcion']=='ver'){
+        $reqno=$_POST['reqno'];
+        $response = array();
+        $response=consultaxid($reqno);
+        $formulario=  dibujarFormulario($response,'2','','','','');        
+        echo $formulario;  
+          
+    }
+}

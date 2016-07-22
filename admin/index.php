@@ -64,8 +64,8 @@ if (isset($_SESSION['iduser'])) {
           <ul class="nav nav-sidebar">
             <li class="active"><a href="index.php"><i class="glyphicon glyphicon-th"></i> Inicio</a></li>
             <li><a href="usuarios"><i class="fa fa-users"></i> Usuarios</a></li>
-            <li><a href="seguidores"><i class="fa fa-user-plus"></i> Seguidores</a></li>
-            <li><a href="publicaciones"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>
+<!--            <li><a href="seguidores"><i class="fa fa-user-plus"></i> Seguidores</a></li>
+            <li><a href="publicaciones"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>-->
             <li><a href="configuration"><i class="fa fa-cog fa-spin"></i> Configuración</a></li>
           </ul>
         </div>
@@ -106,33 +106,7 @@ if (isset($_SESSION['iduser'])) {
                	  <div id="donut-example"></div>
                </div>             	
              </div>
-             <!-- graficas -->
-             <!-- ultimos posts -->
-             <div class="col-sm-6 paddingone">
-               <div class="well graficas">
-               	  
-
-               	  <table class="table table-striped">
-               	  	<thead>
-               	  		<tr>
-               	  		  <th>Usuario</th>
-               	  		  <th>Fecha</th>
-               	  		  <th>Permalink</th>
-               	  		</tr>
-               	  	</thead>
-               	  	<tbody>
-               	  	  <?php lastsix(); ?>
-               	  	</tbody>
-               	  </table>
-                    
-
-
-               </div>             	
-             </div>             
-             <!-- ultimos posts -->
-
-
-
+           
           <!-- contenido -->
         </div>
       </div>

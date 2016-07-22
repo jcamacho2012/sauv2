@@ -16,7 +16,7 @@
 */
 
 .paddingone{padding:1px;}
-.data-cubes{text-align:center; color:#FFF; padding:15px 1%; float:left; width:100%;}
+.data-cubes{/*text-align:center;*/ color:#FFF; padding:15px 1%; float:left; width:100%;}
 .data-cubes h1{margin:0px;}
 .data-cubes-1{background-color:#E80A0A;}
 .data-cubes-2{background-color:#FF9A04;}

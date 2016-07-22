@@ -26,5 +26,35 @@
             
             });
         </script>
+        <?php
+//            $servername = "localhost";
+//            $username = "root";
+//            $password = "toor";
+//            $dbname = "sau2";
+//
+//            // Create connection
+//            $conn = new mysqli($servername, $username, $password, $dbname);
+//            // Check connection
+//            if ($conn->connect_error) {
+//                die("Connection failed: " . $conn->connect_error);
+//            } 
+//
+//            $sql = "INSERT INTO rol (id,nombre)
+//            VALUES (1, 'Doe')";
+//
+//            if ($conn->query($sql) === TRUE) {
+//                echo "New record created successfully";
+//            } else {
+//                echo "Error: " . $sql . "<br>" . $conn->error;
+//            }
+//
+//            $conn->close();
+        require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/sau-functions.php';
+            if(prueba()){
+                echo 'true';               
+            }else{
+                echo 'false';
+            }
+        ?>
     </body>
 </html>

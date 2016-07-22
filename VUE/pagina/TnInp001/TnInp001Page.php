@@ -21,96 +21,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
     $adjunto= cargar_lista_adjuntos($req_no);        
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
-                <script type="text/javascript">                    
-                    $("#btn_enviar").click(function(){
-                        var opcion= $("input[name=radio]:checked").val();
-                        var obser= $("textarea#aprb_rmk").val();
-                        if(opcion){                            
-                            if((opcion==2 || opcion==3) && !obser){
-                                alert("No ha ingresado alguna observacion");
-                            }else if(opcion==1){
-                                var num = $("#req_no").val();
-                                var process = $("#process").val();
-                                var activity = $("#activity").val();
-                                var rank = $("#rol").val();
-                                var cedula = $("#cedula").val();
-                                var username = $("#username").val();
-                                var estado="aprobar";
-                                $.ajax({
-                                        url: "acciones.php",
-                                        method: "POST",           
-                                        data: { reqno: num,estado:estado,rank:rank,process:process,activity:activity,cedula:cedula,username:username}
-                                    }).success(function(response) {
-                                        // Populate the form fields with the data returned from server
-                                            switch (response) {
-                                                case "1":
-                                                    alert("APROBADA PARA REVISION FINAL");
-                                                    var pathname = window.location.pathname;
-                                                    window.location.replace(pathname);
-                                                    break;
-                                                case "2":
-                                                    alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
-                                                    break;
-                                                case "3":
-                                                    alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
-                                                    break;
-                                                case "4":
-                                                    alert("SOLICITUD APROBADA");
-                                                    var pathname = window.location.pathname;
-                                                    window.location.replace(pathname);
-                                                    break;
-                                                case "5":
-                                                    alert("ERROR AL IMPONER TASAS");
-                                                    break;
-                                                case "6":
-                                                    alert("ERROR AL ACTUALIZAR DATOS DE VALIDACION");
-                                                    break;
-                                                case "7":
-                                                    alert("ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
-                                                    break;
-                                            }
-
-                                         })
-                                        .fail(function(response){
-                                            alert(response);
-                                        }); 
-                            }else{
-                                var num = $("#req_no").val();
-                                var process = $("#process").val();
-                                var activity = $("#activity").val();
-                                var rank = $("#rol").val();
-                                var username = $("#username").val();                                
-                                var estado="subsanar";
-                                 $.ajax({
-                                            url: "acciones.php",
-                                            method: "POST",           
-                                            data: { reqno: num,estado:estado,opcion:opcion,rank:rank,mensaje:obser,process:process,activity:activity,username:username}
-                                        }).success(function(response) {
-                                            // Populate the form fields with the data returned from server
-                                                switch (response) {
-                                                    case "1":
-                                                        alert("SUBSANACION FUE ENVIADA");
-                                                        var pathname = window.location.pathname;
-                                                        window.location.replace(pathname);
-                                                        break;
-                                                    case "2":
-                                                        alert("ERROR AL ENVIAR SUBSANACION");
-                                                        break;
-                                                    case "3":
-                                                        alert("ERROR AL FINALIZAR PROCESOS");
-                                                        break;                                                    
-                                                }
-                                                                                                    
-                                             })
-                                            .fail(function(response){
-                                                alert(response);
-                                            });          
-                            }
-                        }else{
-                            alert("no ha escogido ninguna opcion");
-                        }   
-                    });                    
-                </script>
+                <script src="themes/js/script.js"></script>
          	<div class="display-2">
 			<h2 align="center">'.substr($tninp001->getDcm_no(), 0, -4).'  '.$tninp001->getDcm_nm().'</h2>
 		</div>
@@ -333,7 +244,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                         </div>
 			<div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
                             <label>Nombre de Exportador</label>                                        
-                            <input type="text" class="form-control" name="expr_nm" readonly value="'.$tninp001->getExpr_ad().'"  />
+                            <input type="text" class="form-control" name="expr_nm" readonly value="'.$tninp001->getExpr_nm().'"  />
                         </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
@@ -388,7 +299,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                     <div class="panel-body">
 			<div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
                             <label>Nombre de Importador</label>                                        
-                            <input type="text" class="form-control" name="impr_nm" readonly value="'.$tninp001->getImpr_ad().'"  />
+                            <input type="text" class="form-control" name="impr_nm" readonly value="'.$tninp001->getImpr_nm().'"  />
                         </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
@@ -550,7 +461,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                         <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Condiciones de Transporte/Almacenamiento</label>                                      
-                                <input type="text" class="form-control" name="whos_trsp_cdt_inf" readonly value="'.$tninp001->getPrdt_cl().'" />                                    
+                                <input type="text" class="form-control" name="whos_trsp_cdt_inf" readonly value="'.$tninp001->getWhos_trsp_cdt_inf().'" />                                    
                             </div>
 					
                             <div class="col-xs-1 form-group">
@@ -559,13 +470,13 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
 
                             <div class="col-xs-5 form-group">
                                 <label>Nombre de Empresa de Transporte</label>                                        
-                                <input type="text" class="form-control" name="carr_nm" readonly value="'.$tninp001->getTrsp_way_nm().'"  />
+                                <input type="text" class="form-control" name="carr_nm" readonly value="'.$tninp001->getCarr_nm().'"  />
                             </div>
                         </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Número de Factura Comercial</label>                                      
-                                <input type="text" class="form-control" name="inv_no" readonly value="'.$tninp001->getPrdt_cl().'" />                                    
+                                <input type="text" class="form-control" name="inv_no" readonly value="'.$tninp001->getInv_no().'" />                                    
                             </div>
 					
                             <div class="col-xs-1 form-group">
@@ -574,13 +485,13 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
 
                             <div class="col-xs-5 form-group">
                                 <label>Fecha de Salida</label>                                        
-                                <input type="text" class="form-control" name="crt_de" readonly value="'.$tninp001->getTrsp_way_nm().'"  />
+                                <input type="text" class="form-control" name="crt_de" readonly value="'.$tninp001->getCrt_de().'"  />
                             </div>
                         </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Nombre de País de Procedencia</label>                                      
-                                <input type="text" class="form-control" name="org_ntn_nm" readonly value="'.$tninp001->getPrdt_cl().'" />                                    
+                                <input type="text" class="form-control" name="org_ntn_nm" readonly value="'.$tninp001->getOrg_ntn_nm().'" />                                    
                             </div>
 					
                             <div class="col-xs-1 form-group">
@@ -589,7 +500,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
 
                             <div class="col-xs-5 form-group">
                                 <label>Nombre de País de Destino</label>                                        
-                                <input type="text" class="form-control" name="dst_ntn_nm" readonly value="'.$tninp001->getTrsp_way_nm().'"  />
+                                <input type="text" class="form-control" name="dst_ntn_nm" readonly value="'.$tninp001->getDst_ntn_nm().'"  />
                             </div>
                         </div>';
             }else{
@@ -597,7 +508,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                         <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Nombre de Empresa de Transporte</label>                                      
-                                <input type="text" class="form-control" name="carr_nm" readonly value="'.$tninp001->getPrdt_cl().'" />                                    
+                                <input type="text" class="form-control" name="carr_nm" readonly value="'.$tninp001->getCarr_nm().'" />                                    
                             </div>
 					
                             <div class="col-xs-1 form-group">
@@ -606,13 +517,13 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
 
                             <div class="col-xs-5 form-group">
                                 <label>Nombre de Factura Comercial</label>                                        
-                                <input type="text" class="form-control" name="inv_no" readonly value="'.$tninp001->getTrsp_way_nm().'"  />
+                                <input type="text" class="form-control" name="inv_no" readonly value="'.$tninp001->getInv_no().'"  />
                             </div>
                         </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Fecha de Salida</label>                                      
-                                <input type="text" class="form-control" name="crt_de" readonly value="'.$tninp001->getPrdt_cl().'" />                                    
+                                <input type="text" class="form-control" name="crt_de" readonly value="'.$tninp001->getCrt_de().'" />                                    
                             </div>
 					
                             <div class="col-xs-1 form-group">
@@ -621,24 +532,24 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
 
                             <div class="col-xs-5 form-group">
                                 <label>Nombre de País de Procedencia</label>                                        
-                                <input type="text" class="form-control" name="org_ntn_nm" readonly value="'.$tninp001->getTrsp_way_nm().'"  />
+                                <input type="text" class="form-control" name="org_ntn_nm" readonly value="'.$tninp001->getOrg_ntn_nm().'"  />
                             </div>
                         </div>
 			<div class="col-xs-5 form-group">
                             <label>Nombre de País de Destino</label>                                      
-                            <input type="text" class="form-control" name="dst_ntn_nm" readonly value="'.$tninp001->getMfr_atr_no().'" />                                    
+                            <input type="text" class="form-control" name="dst_ntn_nm" readonly value="'.$tninp001->getDst_ntn_nm().'" />                                    
                         </div>';
 		}
                 
             $retval.='		
                         <div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
                             <label>Lugar de Carga</label>                                        
-                            <input type="text" class="form-control" name="crg_plc" readonly value="'.$tninp001->getMfr_nm().'"  />
+                            <input type="text" class="form-control" name="crg_plc" readonly value="'.$tninp001->getCrg_plc().'"  />
                         </div>
 			<div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>País de Entrada</label>                                      
-                                <input type="text" class="form-control" name="ptet_ntn_nm" readonly value="'.$tninp001->getMfr_cl_cd().'" />                                    
+                                <input type="text" class="form-control" name="ptet_ntn_nm" readonly value="'.$tninp001->getPtet_ntn_nm().'" />                                    
                             </div>
 					
                             <div class="col-xs-1 form-group">
@@ -647,12 +558,12 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
 
                             <div class="col-xs-5 form-group">
                                 <label>Puerto de Entrada</label>                                        
-                                <input type="text" class="form-control" name="ptet_nm" readonly value="'.$tninp001->getMfr_idt_no().'"  />
+                                <input type="text" class="form-control" name="ptet_nm" readonly value="'.$tninp001->getPtet_nm().'"  />
                             </div>
                         </div>                         						
 			<div class="col-xs-5 form-group" style="padding:5px 0 0 30px;">
                             <label>Nombre de País de Tránsito</label>                                      
-                            <input type="text" class="form-control" name="trst_ntn_nm" readonly value="'.$tninp001->getMfr_atr_no().'" />                                    
+                            <input type="text" class="form-control" name="trst_ntn_nm" readonly value="'.$tninp001->getTrst_ntn_nm().'" />                                    
                         </div>																												
                     </div>
 		</div>';
@@ -739,7 +650,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                         '.$adjunto.'
                     </div>
 		</div>';
-            
+        if($rol!='2'){
             $retval.='
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -763,7 +674,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                         </div>
                     </div>
                  </div>';
-          
+        }                          
     }
     return $retval;
     

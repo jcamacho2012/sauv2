@@ -141,7 +141,11 @@ function tareas($iduser,$rank){
                
                         if($rank==4){
                              echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-warning liberar">Liberar</button>';
-                        }                                                
+                        }
+                        
+                         if($rank==2){
+                             echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-info ver">Ver</button>';
+                        }   
                    echo' <td>
                   </tr>';
 		}
@@ -150,25 +154,41 @@ function tareas($iduser,$rank){
 
 function actualizarEstadoActividad($activity,$process,$estado,$rank){
     $conexion = Conexion::singleton_conexion();
-
-    if($estado=='2' || $estado=='3'){
-        $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";
-        $sentence = $conexion -> prepare($SQL);
-        $sentence -> bindParam(':activity', $activity);
-        $sentence -> bindParam(':process', $process);
-    }else{
-        if($rank==4){
-              $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
-                UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
+    
+    if($rank!='DESISTIDA'){
+        if($estado=='2'){
+            $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";
+            $sentence = $conexion -> prepare($SQL);
+            $sentence -> bindParam(':activity', $activity);
+        }else 
+            if($estado=='3'){
+                $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+                        UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
                 $sentence = $conexion -> prepare($SQL);
                 $sentence -> bindParam(':activity', $activity);
                 $sentence -> bindParam(':process', $process);
-        }else{
-            $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";                
+            }else{
+                if($rank==4){
+                      $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+                        UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
+                        $sentence = $conexion -> prepare($SQL);
+                        $sentence -> bindParam(':activity', $activity);
+                        $sentence -> bindParam(':process', $process);
+                }else{
+                    $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";                
+                        $sentence = $conexion -> prepare($SQL);
+                        $sentence -> bindParam(':activity', $activity);                
+                }
+            }        
+    }else{
+         $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+                        UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
                 $sentence = $conexion -> prepare($SQL);
-                $sentence -> bindParam(':activity', $activity);                
-        }
+                $sentence -> bindParam(':activity', $activity);
+                $sentence -> bindParam(':process', $process);
     }
+    
+    
     // consulta a base de datos 
     
     if ( $sentence -> execute())
@@ -182,11 +202,10 @@ function actualizarEstadoActividad($activity,$process,$estado,$rank){
       
 }
 
-function enviarNotificación($activity,$process,$reqno,$mensaje,$estado,$rank,$username){
-    if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
-        if($estado=='2'){
+function enviarNotificación($reqno,$mensaje,$opcion,$username){    
+        if($opcion=='2'){
             $estado='410';
-        }else if($estado=='3'){
+        }else if($opcion=='3'){
             $estado='310';
         }
         $SQL = "SELECT bonita.accion_notificacion(
@@ -197,21 +216,29 @@ function enviarNotificación($activity,$process,$reqno,$mensaje,$estado,$rank,$u
                 '21',
                 '".$username."',
                 '".$username."')"; 
-//        $fp = fopen('notificacion.txt', 'w');
-//        fwrite($fp, $SQL);
-        
+
         $conexion=new DB();
         $row = $conexion->consultar($SQL,3);
-//        fwrite($fp, $row[0]);
-        if($row[0]==true){
-            echo '1';
+
+        if($row[0]=='t'){
+            return true;
         }else{
-            echo '2';
-        }        
-    }else{
-        echo '3';
-    }       
-//    fclose($fp);     
+            return false;
+        }              
+}
+
+
+function consultarDesistimiento($reqno){    
+        $SQL = "SELECT bonita.consulta_existe_desistimiento('".$reqno."')";
+
+        $conexion=new DB();
+        $row = $conexion->consultar($SQL,3);
+
+        if($row[0]=='t'){
+            return true;
+        }else{
+            return false;
+        }              
 }
 
 function imponerTasas($reqno,$username){
@@ -222,7 +249,7 @@ function imponerTasas($reqno,$username){
         $conexion=new DB();
         $row = $conexion->consultar($SQL,3);
 
-        if($row[0]==true){
+        if($row[0]=='t'){
             return true;
         }else{
             return false;
@@ -271,6 +298,31 @@ if ( $updasentence -> execute())
     }
 
 }
+
+function prueba(){
+// conexon a base de datos
+$conexion = Conexion::singleton_conexion();
+
+// pues la fecha para saber desde cuando lo sigue xD
+
+// consulta a base de datos 
+ $insertactividad = "INSERT INTO rol (id,nombre)
+            VALUES (1, 'Doe')";
+
+$updasentence = $conexion -> prepare($insertactividad);
+
+
+if ( $updasentence -> execute())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
 
 function buscarNombreXId($id){
     $conexion = Conexion::singleton_conexion();
@@ -402,7 +454,7 @@ $conexion = Conexion::singleton_conexion();
     ';  
 }
 
-function consultaxid($reqno,$id,$rank){
+function consultaxid($reqno){
     // conexon a base de datos
   
     $conexion = Conexion::singleton_conexion();
