@@ -159,3 +159,19 @@ if(isset($_POST['opcion'])){
           
     }
 }
+
+/*
+ * Reasignar tareas a otros usuarios 
+ */
+
+if(isset($_POST['opcion'])){
+    if($_POST['opcion']=='asignar'){       
+        $lista=$_POST['lista'];
+        $usuario=$_POST['usuario'];
+        if(asignarSolicitudes($lista, $usuario)){
+            echo '1';
+        }else{
+            echo '2';
+        }                   
+    }
+}

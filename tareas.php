@@ -96,32 +96,42 @@ if (isset($_SESSION['iduser'])){
                 <div class="container">
                   <h2>Mis Tareas</h2>
                   <div>
-                        <div class="input-group"> <span class="input-group-addon">Buscar: </span>
+                      <?php 
+            if($_SESSION['rank']==2){
+                  echo '<div class="row" style="padding:5px 0 0 15px;">
+                            <div class="input-group"> <span class="input-group-addon">Buscar: </span>
+                                <input id="filter" type="text" class="form-control" placeholder="buscar por solicitud, documento o empresa" style="width: 30em;" >';
+                  echo listaUsuariosAsignar();
+                  echo '        <button type="button" id="asignar" class="btn btn-toolbar" style="margin-left: 2em;">Asignar</button>
+                                <button type="button" id="no_asignar" class="btn btn-toolbar" style="margin-left: .2em;">No Asignar</button>
+                            </div>                            
+                         </div>';
+                        
+              }else{
+                  echo '<div class="input-group"> <span class="input-group-addon">Buscar: </span>
                             <input id="filter" type="text" class="form-control" placeholder="buscar por solicitud, documento o empresa">
-                        </div>
-                       <table class="table table-striped">
+                        </div>';
+              }
+                    ?>                        
+                       <table class="table table-striped" data-height="299" data-click-to-select="true" data-single-select="true">
                	  	<thead>
-               	  		<tr>
-                                 <?php 
-                                    if($_SESSION['rank']!=2){                                        
-                                        echo ' <th class="hidden">activity</th>
-                                               <th class="hidden">process</th>';
-                                    }
-                                ?>                                                                   
-               	  		  <th>Solicitud</th>
-                                  <th>Documento</th>
-                                  <th>Empresa</th>
-                                  <?php 
-                                    if($_SESSION['rank']==2){
-                                        echo '                                              
-                                              <th>Usuario</th>
-                                              <th>Acciones</th>';
-                                    }else{
-                                        echo '<th>Acciones</th>';
-                                    }                                        
-                                    ?>
-                                  
-               	  		</tr>
+                            <tr>
+                                 <th class="hidden">activity</th>
+                                 <th class="hidden">process</th>
+                                 <th><input type="checkbox" id="selecctall" class="primary"/></th>                                 
+                                 <th>Solicitud</th>
+                                 <th>Documento</th>
+                                 <th>Empresa</th>
+                      <?php 
+                        if($_SESSION['rank']==2){
+                            echo '                                              
+                                 <th>Usuario</th>
+                                 <th>Acciones</th>';
+                        }else{
+                            echo '<th>Acciones</th>';
+                        }                                        
+                        ?>
+                            </tr>
                	  	</thead>
                	  	<tbody class="searchable">
                	  	  <?php  tareas($_SESSION['iduser'],$_SESSION['rank']);

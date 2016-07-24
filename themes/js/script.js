@@ -12,8 +12,56 @@
                         return rex.test($(this).text());
                     }).show();
                 })
-            }(jQuery));  
-   
+            }(jQuery)); 
+                
+                $("#selecctall").change(function(){
+                    $(".case:visible").prop('checked', $(this).prop("checked"));
+                });
+                
+                $("#asignar").click(function(){
+                    var val = [];
+                    $(':checkbox:checked:not(.primary):visible').each(function(i){
+                      val[i] = $(this).val();
+                    });
+                    var opcion='asignar';
+                    var usuario=$("#usuarios").val();
+                    var nombre=$( "#usuarios option:selected" ).text();
+                    if(usuario){
+                        $.ajax({
+                        url: 'acciones.php',
+                        method: 'POST',           
+                        data: { lista: val,opcion:opcion,usuario:usuario}
+                        }).success(function(response) {
+                            // Populate the form fields with the data returned from server
+                            switch (response) {
+                                case "1":
+                                    alert("SOLICITUD(ES) ASIGNADA(S) A "+nombre);
+                                    var pathname = window.location.pathname;
+                                    window.location.replace(pathname);
+                                    break;
+                                case "2":
+                                    alert("ERROR AL ASIGNAR SOLICITUD(ES)");                                    
+                                    break;                                                                
+                            }           
+                        })
+                        .fail(function(response){
+                            $('#userForm').append('<h1>No existe conexion con ecuapass</h1>');
+                        });
+                    }else{
+                        alert('SELECCIONAR USUARIO');
+                    }
+                    
+                });     
+                
+                var checkBoxes = $('.case, .primary');
+                checkBoxes.change(function () {
+                    $('#asignar').prop('disabled', checkBoxes.filter(':checked').length < 1);
+                    $('#no_asignar').prop('disabled', checkBoxes.filter(':checked').length < 1);
+                    $('#usuarios').prop('disabled', checkBoxes.filter(':checked').length < 1);
+                });
+                $('tbody .case').change();
+                    
+                
         	var td,campo,valor,id;
 		$(document).on("click","td.editable span",function(e)
 		{
@@ -73,7 +121,7 @@
             }
             else return true;
         };
-            
+               
         
         $('.hacer').on('click', function() {
             // Get the record's ID via attribute

@@ -88,7 +88,7 @@ function tareas($iduser,$rank){
                   ON process_instances.id=activities_instances.process_instances_id 
                   AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
     }else if($rank==2){
-          $SQL = "SELECT req_no,dcm_cd,co_nm,username FROM
+          $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,username,activities_instances.process_instances_id as id_process FROM
                   documents JOIN process_instances 
                   ON documents.process_instances_id=process_instances.id 
                   JOIN activities_instances 
@@ -118,13 +118,13 @@ function tareas($iduser,$rank){
 		foreach ($results as $key){
                 echo'
                   <tr>';
-                if($rank!='2'){
+                if($rank=='2'){
                 echo '
-                    <td class="hidden"  id="process">'.$key['id_process'].'</td>
-                    <td class="hidden"  id="activity">'.$key['id_activity'].'</td>';
+                    <td><input type="checkbox" class="case" name="case[]" value="'.$key['id_activity'].'"></td>';
                 }
-                        
                 echo'
+                    <td class="hidden"  id="process">'.$key['id_process'].'</td>
+                    <td class="hidden"  id="activity">'.$key['id_activity'].'</td>
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td> 
                     <td>'.$key['co_nm'].'</td>';
@@ -453,6 +453,54 @@ $conexion = Conexion::singleton_conexion();
       <!-- alertas -->
     ';  
 }
+
+function listaUsuariosAsignar(){
+    $conexion = Conexion::singleton_conexion();
+
+    // consulta a base de datos
+        $SQL = "SELECT iduser,username FROM users WHERE state='HABILITADO'";
+        $sentence = $conexion -> prepare($SQL);        
+        $sentence -> execute();
+        $results = $sentence -> fetchAll();
+        $response = array();
+	if (empty($results)) {
+	}else{
+                $lista='<select id="usuarios" class="selectpicker" name="rank" style="margin-left: 2em;">
+                            <option value="" disabled selected>Escoger Usuario</option>';
+                foreach ($results as $key){                 
+                    $lista.='<option value="'.$key['iduser'].'">'.$key['username'].'</option>';
+                }
+                $lista.= '</select>';  
+	}       
+        return $lista;
+}
+
+function asignarSolicitudes($lista,$usuario){
+    
+    $conexion = Conexion::singleton_conexion();
+    // consulta a base de datos
+    
+    foreach ($lista as $actividad) {
+        $actividades .= $actividad.',';
+    }
+    
+    $actividades = trim($actividades, ',');
+    
+    
+    $SQL = "UPDATE activities_instances SET date_modify=CURRENT_TIMESTAMP,user_id=:usuario WHERE id IN (:actividades);";
+
+    $sentence = $conexion -> prepare($SQL);  
+    $sentence -> bindParam(':usuario', $usuario);
+    $sentence -> bindParam(':actividades', $actividades);   
+    
+    if($sentence -> execute()){
+        return true;
+    }else{
+        return false;
+    }
+        
+}
+
 
 function consultaxid($reqno){
     // conexon a base de datos
@@ -814,40 +862,6 @@ echo'
   }
 }
 
-
-function seguirusuario($usuario){
-// conexon a base de datos
-$conexion = Conexion::singleton_conexion();
-
-// pues la fecha para saber desde cuando lo sigue xD
-$fecha = date('Y-m-d');
-
-// consulta a base de datos 
-$insertfollow = "INSERT INTO followers(friend,user,datefollow) VALUES (:friend,:user,:datefollow)";
-$updasentence = $conexion -> prepare($insertfollow);
-$updasentence -> bindParam(':friend',$usuario);
-$updasentence -> bindParam(':user',$_SESSION['iduser']);
-$updasentence -> bindParam(':datefollow',$fecha);
-$updasentence -> execute();
-
-header('Location: followers');
-
-}
-
-
-function dejardeseguir($usuario){
-// conexon a base de datos
-$conexion = Conexion::singleton_conexion();
-
-$SQL = "DELETE FROM followers WHERE friend = :friend AND user = :user";
-$notfollow = $conexion -> prepare($SQL);
-$notfollow -> bindParam(':friend',$usuario);
-$notfollow -> bindParam(':user',$_SESSION['iduser']);
-$notfollow -> execute();
-
-header('Location: followers');
-
-}
 
 
 
