@@ -28,6 +28,7 @@ if (isset($_SESSION['iduser'])){
     <link rel="stylesheet" href="themes/css/datepicker.css">
     <link rel="stylesheet" href="themes/css/bootstrap-switch.css">
     <link rel="stylesheet" href="themes/css/style.css">
+    
    
        
     <?php getstyle(); ?>
@@ -118,7 +119,11 @@ if (isset($_SESSION['iduser'])){
                             <tr>
                                  <th class="hidden">activity</th>
                                  <th class="hidden">process</th>
-                                 <th><input type="checkbox" id="selecctall" class="primary"/></th>                                 
+                        <?php 
+                        if($_SESSION['rank']==2){
+                            echo '<th><input type="checkbox" id="selecctall" class="primary"/></th>';
+                        }
+                        ?>                                                                  
                                  <th>Solicitud</th>
                                  <th>Documento</th>
                                  <th>Empresa</th>
@@ -146,12 +151,6 @@ if (isset($_SESSION['iduser'])){
                 </div>                             
               </div>
             </div>
-
-      
-          <!-- configuracion -->
-          
-
-          <!-- contenido -->
         </div>
       </div>
     </div>
@@ -166,7 +165,13 @@ if (isset($_SESSION['iduser'])){
     <script src="themes/js/additional-methods.min.js"></script>
     <script src="themes/js/bootstrap-datepicker.js"></script>
     <script src="themes/js/bootstrap-switch.js"></script>
-    <script src="themes/js/script.js"></script>  
-
+    <script src="themes/js/script.js"></script> 
+    <style>
+	li.list-group-item 
+        {
+            cursor: pointer;
+            font-family: "Helvetica Neue","Helvetica","Arial","sans-serif";
+        }
+    </style>   
   </body>
 </html>

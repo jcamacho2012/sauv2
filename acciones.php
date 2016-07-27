@@ -24,6 +24,7 @@ if (isset($_POST['estado'])){
         $rank=$_POST['rank'];
         $cedula=$_POST['cedula'];
         $username=$_POST['username'];
+        $cadena=$_POST['cadena'];
         if(!consultarDesistimiento($reqno)){
             if($_POST['rank']!=4){            
                 if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
@@ -37,7 +38,7 @@ if (isset($_POST['estado'])){
                 }
             }else{
                 if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
-                     if(preaprobacion($reqno, $cedula, $username)){
+                     if(preaprobacion($reqno, $cedula, $username,$cadena)){
                          if(imponerTasas($reqno, $username)){
                              echo '4';
                          }else{
@@ -173,5 +174,11 @@ if(isset($_POST['opcion'])){
         }else{
             echo '2';
         }                   
+    }
+}
+
+if(isset($_POST['opcion'])){
+    if($_POST['opcion']=='prueba'){       
+                  
     }
 }

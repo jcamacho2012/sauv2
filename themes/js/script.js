@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
      $(document).ready(function() {
+            // filtro para la busqueda de solicitudes en tareas pendientes
             (function($) {
                 $('#filter').keyup(function() {
                     var rex = new RegExp($(this).val(), 'i');
@@ -14,10 +15,22 @@
                 })
             }(jQuery)); 
                 
+                //evento checkbox para seleccionar/deseleccionar las tareas pendientes
                 $("#selecctall").change(function(){
                     $(".case:visible").prop('checked', $(this).prop("checked"));
                 });
                 
+                //evento de los checkbox de cada tarea para habilitar/deshabilitar los botones de asignación
+                var checkBoxes = $('.case, .primary');
+                checkBoxes.change(function () {
+                    $('#asignar').prop('disabled', checkBoxes.filter(':checked').length < 1);
+                    $('#no_asignar').prop('disabled', checkBoxes.filter(':checked').length < 1);
+                    $('#usuarios').prop('disabled', checkBoxes.filter(':checked').length < 1);
+                });
+                $('tbody .case').change();
+                
+                
+                //evento para asignar solicitudes a otros usuarios (Admin)
                 $("#asignar").click(function(){
                     var val = [];
                     $(':checkbox:checked:not(.primary):visible').each(function(i){
@@ -53,15 +66,8 @@
                     
                 });     
                 
-                var checkBoxes = $('.case, .primary');
-                checkBoxes.change(function () {
-                    $('#asignar').prop('disabled', checkBoxes.filter(':checked').length < 1);
-                    $('#no_asignar').prop('disabled', checkBoxes.filter(':checked').length < 1);
-                    $('#usuarios').prop('disabled', checkBoxes.filter(':checked').length < 1);
-                });
-                $('tbody .case').change();
                     
-                
+                //tabla editable (formulario calidad 130-039)
         	var td,campo,valor,id;
 		$(document).on("click","td.editable span",function(e)
 		{
@@ -108,21 +114,9 @@
 			}
 			else $(".mensaje").html("<p class='ko'>Debes ingresar un valor</p>");
 		});
-        });
-       
-        function validateNumber(event) {
-            var key = window.event ? event.keyCode : event.which;
-            if (event.keyCode === 8 || event.keyCode === 46
-                || event.keyCode === 37 || event.keyCode === 39) {
-                return true;
-            }
-            else if ( key < 48 || key > 57 ) {
-                return false;
-            }
-            else return true;
-        };
+        });      
                
-        
+        //ecvento hacer para visualizar los datos de la solicitud
         $('.hacer').on('click', function() {
             // Get the record's ID via attribute
             var req_no = $(this).attr('data-id');
@@ -229,110 +223,73 @@
                 
             });
         });
-       
+        
+        
 
-    $("#btn_enviar").click(function(){
-        var opcion= $("input[name=radio]:checked").val();
-        var obser= $("textarea#aprb_rmk").val();
-        if(opcion){                            
-            if((opcion==2 || opcion==3) && !obser){
-                alert("No ha ingresado alguna observacion");
-            }else if(opcion==1){
-                var num = $("#req_no").val();
-                var process = $("#process").val();
-                var activity = $("#activity").val();
-                var rank = $("#rol").val();
-                var cedula = $("#cedula").val();
-                var username = $("#username").val();
-                var estado="aprobar";
-                $.ajax({
-                        url: "acciones.php",
-                        method: "POST",           
-                        data: { reqno: num,estado:estado,rank:rank,process:process,activity:activity,cedula:cedula,username:username}
-                    }).success(function(response) {
-                        // Populate the form fields with the data returned from server
-                            switch (response) {
-                                case "1":
-                                    alert("APROBADA PARA REVISION FINAL");
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
-                                    break;
-                                case "2":
-                                    alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
-                                    break;
-                                case "3":
-                                    alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
-                                    break;
-                                case "4":
-                                    alert("SOLICITUD APROBADA");
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
-                                    break;
-                                case "5":
-                                    alert("ERROR AL IMPONER TASAS");
-                                    break;
-                                case "6":
-                                    alert("ERROR AL ACTUALIZAR DATOS DE VALIDACION");
-                                    break;
-                                case "7":
-                                    alert("ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
-                                    break;
-                                case "8":
-                                    alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO");
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
-                                    break;
-                                case "9":
-                                    alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO...ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
-                                    break;
-                            }
+        $(function () {
+            $('.list-group-item').each(function () {
+                // Settings
+                var widget = $(this),
+                    checkbox = $('<input type="checkbox" class="hidden" />'),
+                    color = (widget.data('color') ? widget.data('color') : "primary"),
+                    style = (widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+                    settings = {
+                        on: {
+                            icon: 'glyphicon glyphicon-check'
+                        },
+                        off: {
+                            icon: 'glyphicon glyphicon-unchecked'
+                        }
+                    };
+            
+                widget.css('cursor', 'pointer')
+                widget.append(checkbox);
 
-                         })
-                        .fail(function(response){
-                            alert(response);
-                        }); 
-            }else{
-                var num = $("#req_no").val();
-                var process = $("#process").val();
-                var activity = $("#activity").val();                
-                var username = $("#username").val();                                
-                var estado="subsanar";
+                // Event Handlers
+                widget.on('click', function () {
+                    checkbox.prop('checked', !checkbox.is(':checked'));
+                    checkbox.triggerHandler('change');
+                    updateDisplay();
+                });
+                checkbox.on('change', function () {
+                    updateDisplay();
+                });
+          
 
-                 $.ajax({
-                            url: "acciones.php",
-                            method: "POST",           
-                            data: { reqno: num,estado:estado,opcion:opcion,mensaje:obser,process:process,activity:activity,username:username}
-                        }).success(function(response) {
-                            // Populate the form fields with the data returned from server
-//                                alert(response);
-                                switch (response) {
-                                    case "1":
-                                        alert("SUBSANACION FUE ENVIADA");
-                                        var pathname = window.location.pathname;
-                                        window.location.replace(pathname);
-                                        break;
-                                    case "2":
-                                        alert("ERROR AL ENVIAR SUBSANACION");
-                                        break;
-                                    case "3":
-                                        alert("ERROR AL FINALIZAR PROCESOS");
-                                        break;  
-                                    case "8":
-                                        alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO");
-                                        var pathname = window.location.pathname;
-                                        window.location.replace(pathname);
-                                         break;
-                                    case "9":
-                                        alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO...ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
-                                        break;
-                                }
+                // Actions
+                function updateDisplay() {
+                    var isChecked = checkbox.is(':checked');
 
-                             })
-                            .fail(function(response){
-                                alert(response);
-                            });          
-            }
-        }else{
-            alert("no ha escogido ninguna opcion");
-        }   
-    });  
+                    // Set the button's state
+                    widget.data('state', (isChecked) ? "on" : "off");
+
+                    // Set the button's icon
+                    widget.find('.state-icon')
+                        .removeClass()
+                        .addClass('state-icon ' + settings[widget.data('state')].icon);
+
+                    // Update the button's color
+                    if (isChecked) {
+                        widget.addClass(style + color + ' active');
+                    } else {
+                        widget.removeClass(style + color + ' active');
+                    }
+                }
+
+                // Initialization
+                function init() {
+
+                    if (widget.data('checked') == true) {
+                        checkbox.prop('checked', !checkbox.is(':checked'));
+                    }
+
+                    updateDisplay();
+
+                    // Inject the icon if applicable
+                    if (widget.find('.state-icon').length == 0) {
+                        widget.prepend('<span class="state-icon ' + settings[widget.data('state')].icon + '"></span>');
+                    }
+                }
+                init();
+            }); 
+        });

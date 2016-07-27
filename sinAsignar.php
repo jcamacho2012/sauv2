@@ -99,11 +99,12 @@ if (isset($_SESSION['iduser'])){
                	  		  <th>Solicitud</th>
                                   <th>Documento</th>
                                   <th>Empresa</th>
+                                  <th>Ciudad</th>
                                   <th>Acciones</th>
                	  		</tr>
                	  	</thead>
                	  	<tbody class="searchable">
-               	  	  <?php tareaSinAsignar($_SESSION['city']); ?>
+               	  	  <?php tareaSinAsignar(); ?>
                	  	</tbody>
                      </table>
                       <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>

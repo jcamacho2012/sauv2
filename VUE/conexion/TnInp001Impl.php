@@ -119,7 +119,7 @@ function consulta_datos_formulario_001_004($req_no) {
                 end AS naturaleza	
                 ,COALESCE(a.prdt_bdnm::TEXT,'No Aplica') AS prdt_bdnm                
                 ,COALESCE(a.prdt_prcg_det::TEXT,'No Aplica') AS prdt_prcg_det					
-                ,COALESCE(CAST(round(a.pkgs_tot_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_tot_qt --UNO
+                ,COALESCE(CAST(round(a.pkgs_tot_qt,0)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_tot_qt --UNO
                 ,COALESCE(a.pkgs_tot_qt_ut::TEXT,'No Aplica') AS pkgs_tot_qt_ut
                 ,COALESCE(CAST(round(a.prdt_tot_nwt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS prdt_tot_nwt --UNO
                 ,COALESCE(a.prdt_tot_nwt_ut::TEXT,'No Aplica') AS prdt_tot_nwt_ut
@@ -139,7 +139,7 @@ function consulta_datos_producto_001_004($req_no) {
                 ,COALESCE(a.hc::TEXT,'No Aplica') AS hc					
                 ,COALESCE(a.prdt_desc::TEXT,'No Aplica') AS prdt_desc
                 ,COALESCE(a.prdt_stn::TEXT,'No Aplica') AS prdt_stn					
-                ,COALESCE(CAST(round(a.pkgs_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_qt								
+                ,COALESCE(CAST(round(a.pkgs_qt,0)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_qt								
                 ,COALESCE(a.pkgs_qt_ut::TEXT,'No Aplica') AS pkgs_qt_ut
                 ,COALESCE(CAST(round(a.prdt_nwt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS prdt_nwt
                 ,COALESCE(a.prdt_nwt_ut::TEXT,'No Aplica') AS prdt_nwt_ut														

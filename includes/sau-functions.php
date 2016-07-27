@@ -241,14 +241,14 @@ function consultarDesistimiento($reqno){
         }              
 }
 
-function imponerTasas($reqno,$username){
+function imponerTasas($reqno,$username){    
     $SQL = "SELECT bonita.accion_insertartasa_130xxx(
             '".$reqno."',
             '".$username."')"; 
         
         $conexion=new DB();
         $row = $conexion->consultar($SQL,3);
-
+                
         if($row[0]=='t'){
             return true;
         }else{
@@ -257,17 +257,24 @@ function imponerTasas($reqno,$username){
        
 }
 
-function preaprobacion($reqno,$cedula,$username){
+function preaprobacion($reqno,$cedula,$username,$cadena){
     $SQL = "SELECT bonita.accion_preaprobacion(
             '".$reqno."',
             '".$cedula."',
             '',
             '".$username."')"; 
-
+            
         $conexion=new DB();
         $row = $conexion->consultar($SQL,3);
-
-        if($row[0]==true){
+        
+    if(!empty($cadena)){
+        $SQL="UPDATE vue_gateway.tn_inp_006_it SET prnt_ctxt_fg='".$cadena."' where req_no='".$reqno."'";
+        $conexion=new DB();
+        $literales = $conexion->consultar($SQL,3);
+    }
+    
+                
+        if($row[0]=='t'){
             return true;
         }else{
             return false;
@@ -344,20 +351,19 @@ function buscarNombreXId($id){
 	}
 }
 
-function tareaSinAsignar($ciudad){
+function tareaSinAsignar(){
     // conexon a base de datos
     $conexion = Conexion::singleton_conexion();     
     // consulta a base de datos
     
-	  $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM
+	  $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,documents.req_city_cd, activities_instances.process_instances_id as id_process FROM
                   documents JOIN process_instances 
                   ON documents.process_instances_id=process_instances.id 
                   JOIN activities_instances 
                   ON process_instances.id=activities_instances.process_instances_id 
                   AND process_instances.state='READY' AND activities_instances.state='READY' 
-                  AND activities_instances.user_id=0 AND documents.req_city_cd=:ciudad";
+                  AND activities_instances.user_id=0";
 	$sentence = $conexion -> prepare($SQL);  
-        $sentence -> bindParam(':ciudad', $ciudad);
 	$sentence -> execute();
 	$results = $sentence -> fetchAll();
 	if (empty($results)) {
@@ -369,10 +375,16 @@ function tareaSinAsignar($ciudad){
                     <td class="hidden"  id="activity">'.$key['id_activity'].'</td>    
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td>
-                    <td>'.$key['co_nm'].'</td> 
+                    <td>'.$key['co_nm'].'</td>';
+            if($key['req_city_cd']=='MNT'){
+                echo'<td>MANTA</td>';
+            }else{
+                echo'<td>GUAYAQUIL</td>';
+            }
+            echo    '
                     <td>
                         <button type="button" data-id="'.$key['req_no'].'" class="btn btn-default tomar">Tomar/Revisar</button>                        
-                    <td>
+                    </td>
                   </tr>';
 		}
 	}	

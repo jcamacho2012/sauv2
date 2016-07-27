@@ -23,7 +23,7 @@ class TnInp001PdVO{
             $pd001->setHc($row['hc']);
             $pd001->setPrdt_desc($row['prdt_desc']);
             $pd001->setPrdt_stn($row['prdt_stn']);
-            $pd001->setPkgs_qt(number_format($row['pkgs_qt'],2)." ".$row['pkgs_qt_ut']); 
+            $pd001->setPkgs_qt($row['pkgs_qt']." ".$row['pkgs_qt_ut']); 
             $pd001->setPrdt_nwt(number_format($row['prdt_nwt'],2)." ".$row['prdt_nwt_ut']);                         
             $pd001->setLot_cd($row['lot_cd']);
             $listaProducto->append($pd001);                        

@@ -27,7 +27,7 @@ class TnInp006PdVO{
             $pd006->setHc($row['hc']);
             $pd006->setPrdt_nm($row['prdt_nm']);
             $pd006->setStn($row['stn']);
-            $pd006->setPkgs_qt(number_format($row['pkgs_qt'],2)." ".$row['pkgs_qt_ut']); 
+            $pd006->setPkgs_qt($row['pkgs_qt']." ".$row['pkgs_qt_ut']); 
             $pd006->setPrdt_nwt(number_format($row['prdt_nwt'],2)." ".$row['wt_ut']);
             //$pd006->setPck_qt(number_format($row['pck_qt'],2)." ".$row['pck_ut']);
             $pd006->setPrdt_lote($row['prdt_lote']);

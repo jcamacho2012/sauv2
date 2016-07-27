@@ -87,7 +87,7 @@ function consulta_datos_formulario_006_040($req_no) {
                 ,COALESCE(nullif(a.carr_nm,'')::TEXT,'No Aplica') AS carr_nm					
                 ,COALESCE(TO_CHAR(a.crt_de,'DD/MM/YYYY')::TEXT,'No Aplica') AS crt_de
                 ,COALESCE(a.hc_cd::TEXT,'No Aplica') AS hc_cd
-                ,COALESCE(CAST(round(a.pkgs_tot_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_tot_qt --UNO
+                ,COALESCE(CAST(round(a.pkgs_tot_qt,0)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_tot_qt --UNO
                 ,COALESCE(a.pkgs_tot_qt_ut::TEXT,'No Aplica') AS pkgs_tot_qt_ut
 		,COALESCE(CAST(round(a.pck_tot_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pck_tot_qt --UNO
                 ,COALESCE(a.pck_tot_qt_ut::TEXT,'No Aplica') AS pck_tot_qt_ut
@@ -106,21 +106,22 @@ function consulta_datos_formulario_006_040($req_no) {
 
 function consulta_datos_producto_006_040($req_no) {   
         $sql="SELECT  					
-                COALESCE(a.prdt_sn::TEXT,'No Aplica') AS prdt_sn
+                 CAST (COALESCE(a.prdt_sn::TEXT,'No Aplica') AS integer) AS prdt_sn                
                 ,COALESCE(a.hc::TEXT,'No Aplica') AS hc		
                 ,COALESCE(a.prdt_nm::TEXT,'No Aplica') AS prdt_nm
                 ,COALESCE(a.prdt_sn::TEXT,'No Aplica') AS prdt_sn	
                 ,COALESCE(a.stn::TEXT,'No Aplica') AS stn					
-                ,COALESCE(CAST(round(a.pkgs_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_qt								
+                ,COALESCE(CAST(round(a.pkgs_qt,0)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pkgs_qt								
                 ,COALESCE(a.pkgs_qt_ut::TEXT,'No Aplica') AS pkgs_qt_ut
                 ,COALESCE(CAST(round(a.prdt_nwt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS prdt_nwt
                 ,COALESCE(a.wt_ut::TEXT,'No Aplica') AS wt_ut		
 		,COALESCE(CAST(round(a.pck_qt,2)AS CHARACTER VARYING)::TEXT,'No Aplica') AS pck_qt
                 ,COALESCE(a.pck_ut::TEXT,'No Aplica') AS pck_ut	
 		,COALESCE(a.prdt_lote::TEXT,'No Aplica') AS prdt_lote	
-		,COALESCE(TO_CHAR(a.mdf_dt,'DD/MM/YYYY')::TEXT,'No Aplica') AS prdt_prodt	
+		,COALESCE(TO_CHAR(a.prdt_prodt,'DD/MM/YYYY')::TEXT,'No Aplica') AS prdt_prodt	
                 FROM  vue_gateway.tn_inp_006_it_pd as a			  				
-                where a.req_no='".$req_no."'";               					
+                where a.req_no='".$req_no."'
+                ORDER BY prdt_sn::int";               					
         $conexion=new DB();        
         $result = $conexion->consultar($sql,2);          
         $objeto=new TnInp006PdVO();        

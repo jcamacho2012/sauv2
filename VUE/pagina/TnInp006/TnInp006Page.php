@@ -19,193 +19,11 @@ function cargar_formulario_006_040($req_no,$dcm_cd,$rol,$process,$activity,$cedu
     $contenedor= cargar_lista_contenedor_006_040($req_no);
     $producto= cargar_lista_productos_006_040($req_no);
     $adjunto= cargar_lista_adjuntos($req_no);        
-    $notificacion= cargar_lista_notificaciones($req_no);
-    $retval.='
-            <script type="text/javascript">                    
-                $("#btn_enviar").click(function(){
-                    var opcion= $("input[name=radio]:checked").val();
-                    var obser= $("textarea#aprb_rmk").val();
-                    if(opcion){                            
-                        if((opcion==2 || opcion==3) && !obser){
-                            alert("No ha ingresado alguna observacion");
-                        }else if(opcion==1){
-                            var num = $("#req_no").val();
-                            var process = $("#process").val();
-                            var activity = $("#activity").val();
-                            var rank = $("#rol").val();
-                            var cedula = $("#cedula").val();
-                            var username = $("#username").val();
-                            var estado="aprobar";
-                            $.ajax({
-                                    url: "acciones.php",
-                                    method: "POST",           
-                                    data: { reqno: num,estado:estado,rank:rank,process:process,activity:activity,cedula:cedula,username:username}
-                                }).success(function(response) {
-                                    // Populate the form fields with the data returned from server
-                                        switch (response) {
-                                            case "1":
-                                                alert("APROBADA PARA REVISION FINAL");
-                                                var pathname = window.location.pathname;
-                                                window.location.replace(pathname);
-                                                break;
-                                            case "2":
-                                                alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
-                                                break;
-                                            case "3":
-                                                alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
-                                                break;
-                                            case "4":
-                                                alert("SOLICITUD APROBADA");
-                                                var pathname = window.location.pathname;
-                                                window.location.replace(pathname);
-                                                break;
-                                            case "5":
-                                                alert("ERROR AL IMPONER TASAS");
-                                                break;
-                                            case "6":
-                                                alert("ERROR AL ACTUALIZAR DATOS DE VALIDACION");
-                                                break;
-                                            case "7":
-                                                alert("ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
-                                                break;
-                                        }
-                                     })
-                                    .fail(function(response){
-                                        alert(response);
-                                    }); 
-                        }else{
-                            var num = $("#req_no").val();
-                            var process = $("#process").val();
-                            var activity = $("#activity").val();
-                            var rank = $("#rol").val();
-                            var username = $("#username").val();                                
-                            var estado="subsanar";
-                             $.ajax({
-                                        url: "acciones.php",
-                                        method: "POST",           
-                                        data: { reqno: num,estado:estado,opcion:opcion,rank:rank,mensaje:obser,process:process,activity:activity,username:username}
-                                    }).success(function(response) {
-                                        // Populate the form fields with the data returned from server
-                                            switch (response) {
-                                                case "1":
-                                                    alert("SUBSANACION FUE ENVIADA");
-                                                    var pathname = window.location.pathname;
-                                                    window.location.replace(pathname);
-                                                    break;
-                                                case "2":
-                                                    alert("ERROR AL ENVIAR SUBSANACION");
-                                                    break;
-                                                case "3":
-                                                    alert("ERROR AL FINALIZAR PROCESOS");
-                                                    break;                                                    
-                                            }
-
-                                         })
-                                        .fail(function(response){
-                                            alert(response);
-                                        });          
-                        }
-                    }else{
-                        alert("no ha escogido ninguna opcion");
-                    }   
-                });                    
-            </script>';
-    
-    $retval.="
-            <script>
-                function setCharAt(str,index,chr) {
-                        if(index > str.length-1) return str;
-                        return str.substr(0,index) + chr + str.substr(index+1);
-                }
-                $(document).ready(function() { 
-                    $('#cbe').change(function(){
-                        if (this.checked) {
-                            $('.txte').css('text-decoration', 'line-through');
-                            $('.literales input').val(setCharAt($('#cbe').val(),0,\"0\"));
-                        }
-                        else {
-                            $('.txte').css('text-decoration', 'none');
-                            $('.literales input').val(setCharAt($('#cbe').val(),0,\"1\"));
-                        }
-                    });
-                    $('#cbf').change(function(){
-                        if (this.checked) {
-                            $('.txtf').css('text-decoration', 'line-through');
-                            $('.literales input').val(setCharAt($('#cbf').val(),1,\"0\"));
-                        }
-                        else {
-                            $('.txtf').css('text-decoration', 'none');
-                            $('.literales input').val(setCharAt($('#cbf').val(),1,\"1\"));
-                        }
-                    });
-                    $('#cbg').change(function(){
-                        if (this.checked) {
-                            $('.txtg').css('text-decoration', 'line-through');
-                            $('.literales input').val(setCharAt($('#cbg').val(),2,\"0\"));
-                        }
-                        else {
-                            $('.txtg').css('text-decoration', 'none');
-                            $('.literales input').val(setCharAt($('#cbg').val(),2,\"1\"));
-                        }
-                    }) ;
-                    $('#cbh').change(function(){
-                        if (this.checked) {
-                            $('.txth').css('text-decoration', 'line-through');
-                            $('.literales input').val(setCharAt($('#cbh').val(),3,\"0\"));
-                        }
-                        else {
-                            $('.txth').css('text-decoration', 'none');
-                            $('.literales input').val(setCharAt($('#cbh').val(),3,\"1\"));
-                        }
-                    }) ;
-                    $('#cbi').change(function(){
-                        if (this.checked) {
-                            $('.txti').css('text-decoration', 'line-through');
-                            $('.literales input').val(setCharAt($('#cbi').val(),4,\"0\"));
-                        }
-                        else {
-                            $('.txti').css('text-decoration', 'none');
-                            $('.literales input').val(setCharAt($('#cbi').val(),4,\"1\"));
-                        }
-                    }) ;
-                    $('#cbj').change(function(){
-                        if (this.checked) {
-                            $('.txtj').css('text-decoration', 'line-through');
-                            $('.literales input').val(setCharAt($('#cbj').val(),5,\"0\"));
-                        }
-                        else {
-                            $('.txtj').css('text-decoration', 'none');
-                            $('.literales input').val(setCharAt($('#cbj').val(),5,\"1\"));
-                        }
-                    }) ;
-                    autoguardar();
-                });
-
-                function autoguardar() {
-                    $(function() {
-                        $(\"input\").autosave({                       
-                            url: \"autoguardar.php\",//set the php file that updates the database
-                            method: \"post\",
-                            grouped: true,//send data for all fields with the autosave
-                           success: function(data) {//on a successful update...
-                            $(\"#message\").html(\"Data updated successfully\").show();//...show a message...
-                            setTimeout('fadeMessage()',1500);//...and then fade it out after an interval                        
-                        },
-                            send: function(){//on a save...
-                            $(\"#message\").html(\"Sending data....\");//..show a message
-                            },
-                            dataType: \"html\"
-
-                    });	
-                   function fadeMessage(){
-                            $('#message').fadeOut('slow');//just a function to fade out the message
-                    }
-                    });        
-                }; 
-            </script>";
-    
+    $notificacion= cargar_lista_notificaciones($req_no);    
     
     $retval.='
+            <script src="themes/js/eventos.js"></script>
+            <script src="themes/js/brasil.js"></script> 
             <div class="display-2">
                 <h2 align="center">'.substr($tninp006->getDcm_no(), 0, -4).'  '.$tninp006->getDcm_nm().'</h2>
             </div>
@@ -401,33 +219,30 @@ function cargar_formulario_006_040($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                     </div>
                     <div class="col-xs-11 form-group" style="padding:5px 0 0 30px;">
                         <label>Nombre de Exportador</label>                                        
-                        <input type="text" class="form-control" name="expr_nm" readonly value="'.$tninp006->getExpr_ad().'"  />
+                        <input type="text" class="form-control" name="expr_nm" readonly value="'.$tninp006->getExpr_nm().'"  />
                     </div>
                     <div class="row" style="padding:5px 0 0 30px;">
                         <div class="col-xs-5 form-group">
                             <label>País Exportador</label>                                        
                             <input type="text" class="form-control" name="expr_ntn_nm" readonly value="'.$tninp006->getExpr_ntn_nm().'"  />
                         </div>
-
-                        <div class="col-xs-1 form-group">
-                            <!-- espacio entre columnas-->
-                        </div>
-
+                    </div>
+                    <div class="row" style="padding:5px 0 0 30px;">
                         <div class="col-xs-5 form-group">
                             <label>Provincia</label>                                      
                             <input type="text" class="form-control" name="expr_prvhc_nm" readonly value="'.$tninp006->getExpr_prvhc_nm().'" />                                    
                         </div>
-                    </div>						
-                    <div class="row" style="padding:5px 0 0 30px;">
-                        <div class="col-xs-5 form-group">
-                            <label>Cantón/Ciudad</label>                                        
-                            <input type="text" class="form-control" name="expr_cuty_nm" readonly value="'.$tninp006->getExpr_cuty_nm().'"  />
-                        </div>
 
                         <div class="col-xs-1 form-group">
                             <!-- espacio entre columnas-->
                         </div>
-
+                        
+                        <div class="col-xs-5 form-group">
+                            <label>Cantón/Ciudad</label>                                        
+                            <input type="text" class="form-control" name="expr_cuty_nm" readonly value="'.$tninp006->getExpr_cuty_nm().'"  />
+                        </div>                        
+                    </div>						
+                    <div class="row" style="padding:5px 0 0 30px;">                        
                         <div class="col-xs-5 form-group">
                             <label>Parroquia</label>                                        
                             <input type="text" class="form-control" name="expr_prqi_nm" readonly value="'.$tninp006->getExpr_prqi_nm().'"  />
@@ -781,7 +596,7 @@ function cargar_formulario_006_040($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                     </div>
                     <div class="col-xs-11 form-group">
                         <label>Observaciones del Aprobador</label>
-                        <textarea class="form-control" rows="5" name="aprb_rmk" id="aprb_rmk"></textarea>
+                        <textarea class="form-control" rows="5" name="aprb_rmk" maxlength="500" id="aprb_rmk"></textarea>
                     </div>
                 </div>
             </div>';
@@ -793,34 +608,27 @@ function cargar_formulario_006_040($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                     <h3>Literales Brasil</h3>
                 </div>
                 <div class="panel-body">                   
-                    <div class="literales">   
-                        <ul>
-                            <li class="txte">
-                                <input id="cbe" type="checkbox" name="bre" class="cb" value="111111"/>
-                                e)  os moluscos bivalves e gastrópodes foram colhidos em áreas submetidas a controle sanitário oficial para identificação de biotoxinas marinhas, de acordo com os padrões reconhecidos internacionalmente*/ los moluscos bivalves y gastrópodos se recolectaron en zonas sometidas a control sanitario oficial para la identificación de biotoxinas marinas, de conformidad con las normas internacionalmente reconocidas*;                        Al marcar esta opción, certifica el(los) producto(s) apto(s) para el consumo 
-                          </li>
-                           <li class="txtf">
-                                <input id="cbf" type="checkbox" name="brf" class="cb" value="111111"/>
-                                f)  o pescado e seus produtos não foram descongelados durante a estocagem e foram despachados com temperatura no centro do músculo não superior a -18ºC* / el pescado y sus productos no se descongelaron durante el almacenamiento y fueron enviados con una temperatura central del músculo no superior a -18 º C*;                        Al marcar esta opción, certifica el(los) producto(s) apto(s) para el consumo 
-                          </li>
-                           <li class="txtg">
-                                <input id="cbg" type="checkbox" name="brg" class="cb" value="111111"/>
-                                g)  o pescado e seus produtos encontram-se resfriados a uma temperatura próxima a 0ºC (ponto de fusão do gelo)* / el pescado y sus productos han sido enfriados a una temperatura cercana a 0 °C (punto de fusión del hielo)*;                        Al marcar esta opción, certifica el(los) producto(s) apto(s) para el consumo 
-                          </li>
-                           <li class="txth">
-                                <input id="cbh" type="checkbox" name="brh" class="cb" value="111111"/>
-                                h)  o pescado e seus produtos não sofreram a adição de fosfatos ou similares antes de seu congelamento* / el pescado y sus productos no han sido objeto de la adición de fosfatos o similares antes de su congelación*;                        Al marcar esta opción, certifica el(los) producto(s) apto(s) para el consumo 
-                          </li>
-                           <li class="txti">
-                                <input id="cbi" type="checkbox" name="bri" class="cb" value="111111"/>
-                                i)  a declaração do peso líquido do pescado congelado na rotulagem, quando glaciado, foi obtida descontando-se o peso da embalagem e do gelo de glaciamento* / Cuando el pescado esté glaseado, en la declaración del contenido neto del pescado no se incluye el glaseado*;                        Al marcar esta opción, certifica el(los) producto(s) apto(s) para el consumo 
-                          </li>
-                           <li class="txtj">
-                                <input id="cbj" type="checkbox" name="brj" class="cb" value="111111"/>
-                                j)  o material utilizado na embalagem é de primeiro uso e satisfaz os requerimentos higiênico – sanitários estabelecidos pela (s) Autoridade (s) Competente (s) do país de expedição * / el material utilizado en los envases es de primer uso y cumple con los requisitos higiénico - sanitarios establecidos por la (s)Autoridad (es) Competente (s) en el país de expedición*;                        i)  a declaração do peso líquido do pescado congelado na rotulagem, quando glaciado, foi obtida descontando-se o peso da embalagem e do gelo de glaciamento* / Cuando el pescado esté glaseado, en la declaración del contenido neto del pescado no se incluye el glaseado*;                        Al marcar esta opción, certifica el(los) producto(s) apto(s) para el consumo 
-                          </li>
-                        </ul>
-                   </div>                    
+                    <ul id="lista" class="list-group checked-list-box">
+                        <li class="list-group-item" data-color="success">                           
+                            e)  os moluscos bivalves e gastrópodes foram colhidos em áreas submetidas a controle sanitário oficial para identificação de biotoxinas marinhas, de acordo com os padrões reconhecidos internacionalmente*/ los moluscos bivalves y gastrópodos se recolectaron en zonas sometidas a control sanitario oficial para la identificación de biotoxinas marinas, de conformidad con las normas internacionalmente reconocidas*;
+                        </li>
+                        <li class="list-group-item" data-color="success">
+                            f)  o pescado e seus produtos não foram descongelados durante a estocagem e foram despachados com temperatura no centro do músculo não superior a -18ºC* / el pescado y sus productos no se descongelaron durante el almacenamiento y fueron enviados con una temperatura central del músculo no superior a -18 º C*;
+                        </li>
+                        <li class="list-group-item" data-color="success">
+                            g)  o pescado e seus produtos encontram-se resfriados a uma temperatura próxima a 0ºC (ponto de fusão do gelo)* / el pescado y sus productos han sido enfriados a una temperatura cercana a 0 °C (punto de fusión del hielo)*;
+                        </li>
+                        <li class="list-group-item" data-color="success">
+                            h)  o pescado e seus produtos não sofreram a adição de fosfatos ou similares antes de seu congelamento* / el pescado y sus productos no han sido objeto de la adición de fosfatos o similares antes de su congelación*;
+                        </li>
+                        <li class="list-group-item" data-color="success">
+                            i)  a declaração do peso líquido do pescado congelado na rotulagem, quando glaciado, foi obtida descontando-se o peso da embalagem e do gelo de glaciamento* / Cuando el pescado esté glaseado, en la declaración del contenido neto del pescado no se incluye el glaseado*;
+                        </li>
+                        <li class="list-group-item" data-color="success">
+                            j)  o material utilizado na embalagem é de primeiro uso e satisfaz os requerimentos higiênico – sanitários estabelecidos pela (s) Autoridade (s) Competente (s) do país de expedição * / el material utilizado en los envases es de primer uso y cumple con los requisitos higiénico - sanitarios establecidos por la (s)Autoridad (es) Competente (s) en el país de expedición*;
+                        </li>
+                        <span>Al marcar esta opción, certifica el(los) producto(s) apto(s) para el consumo</span>
+                    </ul> 
                 </div>
             </div>';
         }
@@ -843,15 +651,15 @@ function cargar_formulario_006_040($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                 <div class="panel-body">
                     <div class="funkyradio">
                          <div class="funkyradio-success">
-                            <input type="radio" name="radio" id="aprobar"/>
+                            <input type="radio" name="radio" id="aprobar" value="1"/>
                             <label for="aprobar">Aprobar</label>
                         </div>
                        <div class="funkyradio-warning">
-                            <input type="radio" name="radio" id="subsanar" />
+                            <input type="radio" name="radio" id="subsanar" value="2"/>
                             <label for="subsanar">Subsanar</label>
                         </div>
                         <div class="funkyradio-danger">
-                            <input type="radio" name="radio" id="rechazar" />
+                            <input type="radio" name="radio" id="rechazar" value="3"/>
                             <label for="rechazar">Rechazar</label>
                         </div>
                     <button type="button" class="btn btn-default" id="btn_enviar">Enviar</button>

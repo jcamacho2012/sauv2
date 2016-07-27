@@ -149,7 +149,7 @@ class TnInp001VO{
         $this->naturaleza=$array['naturaleza'];
         $this->prdt_bdnm=$array['prdt_bdnm'];        
         $this->prdt_prcg_det=$array['prdt_prcg_det'];
-        $this->pkgs_tot_qt=number_format($array['pkgs_tot_qt'],2)." ".$array['pkgs_tot_qt_ut'];        
+        $this->pkgs_tot_qt=$array['pkgs_tot_qt']." ".$array['pkgs_tot_qt_ut'];        
         $this->prdt_tot_nwt=number_format($array['prdt_tot_nwt'],2)." ".$array['prdt_tot_nwt_ut'];                  
         $this->dclr_rmk=$array['dclr_rmk'];
         $this->mdf_dt=$array['mdf_dt'];   

@@ -21,7 +21,7 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
     $adjunto= cargar_lista_adjuntos($req_no);        
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
-                <script src="themes/js/script.js"></script>
+                <script src="themes/js/eventos.js"></script>
          	<div class="display-2">
 			<h2 align="center">'.substr($tninp001->getDcm_no(), 0, -4).'  '.$tninp001->getDcm_nm().'</h2>
 		</div>
@@ -535,9 +535,11 @@ function cargar_formulario_001_004($req_no,$dcm_cd,$rol,$process,$activity,$cedu
                                 <input type="text" class="form-control" name="org_ntn_nm" readonly value="'.$tninp001->getOrg_ntn_nm().'"  />
                             </div>
                         </div>
-			<div class="col-xs-5 form-group">
-                            <label>Nombre de País de Destino</label>                                      
-                            <input type="text" class="form-control" name="dst_ntn_nm" readonly value="'.$tninp001->getDst_ntn_nm().'" />                                    
+                        <div class="row" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">
+                                <label>Nombre de País de Destino</label>                                      
+                                <input type="text" class="form-control" name="dst_ntn_nm" readonly value="'.$tninp001->getDst_ntn_nm().'" />                                    
+                            </div>
                         </div>';
 		}
                 

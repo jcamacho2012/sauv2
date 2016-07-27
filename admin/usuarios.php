@@ -88,7 +88,7 @@ if (isset($_SESSION['iduser'])) {
               }
 
               if (isset($_POST['nuevousuario'])) {
-                 newusuario($_POST['nombre'],$_POST['email'],$_POST['password'],$_POST['profile'],$_POST['rank'],$_POST['ciudad']);
+                 newusuario($_POST['nombre'],$_POST['apellido'],$_POST['usuario'],$_POST['email'],$_POST['password'],$_POST['profile'],$_POST['rank'],$_POST['ciudad']);
               }
               
               if (isset($_POST['deshabusuarioid'])) {
@@ -116,6 +116,10 @@ if (isset($_SESSION['iduser'])) {
                             
                         <label>Nombre:</label>
                         <input class="form-control" type="text" name="nombre" >
+                        <label>Apellido:</label>
+                        <input class="form-control" type="text" name="apellido" >
+                        <label>Usuario:</label>
+                        <input class="form-control" type="text" name="usuario" >
                         <label>Email:</label>
                         <input class="form-control" type="text" name="email" >
                         <label>Contraseña:</label>

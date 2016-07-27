@@ -38,11 +38,11 @@ function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
             break;
         }
         case '130-008':{
-            return cargar_formulario_008($array['req_no'], $array['dcm_cd'],$process,$activity,$cedula,$username);
+            return cargar_formulario_008($array['req_no'], $array['dcm_cd'],$rol,$process,$activity,$cedula,$username);
             break;
         }
         case '130-010':{
-            return cargar_formulario_010($array['req_no'],$process,$activity,$cedula,$username);
+            return cargar_formulario_010($array['req_no'],$rol,$process,$activity,$cedula,$username);
             break;
         }
         case '130-012':{
@@ -50,7 +50,7 @@ function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
             break;
         }
         case '130-014':{
-            return cargar_formulario_014($array['req_no'],$process,$activity,$cedula,$username);
+            return cargar_formulario_014($array['req_no'],$rol,$process,$activity,$cedula,$username);
             break;
         }
         case '130-016':{
