@@ -134,18 +134,6 @@ if (isset($_SESSION['iduser'])){
     <!-- validation -->
     <script src="themes/js/jquery.validate.min.js"></script>
     <script src="themes/js/additional-methods.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-             (function($) {
-                $('#filter').keyup(function() {
-                    var rex = new RegExp($(this).val(), 'i');
-                    $('.searchable tr').hide();
-                    $('.searchable tr').filter(function() {
-                        return rex.test($(this).text());
-                    }).show();
-                })
-            }(jQuery));  
-        });
-    </script>
+    <script src="themes/js/script.js"></script>   
   </body>
 </html>

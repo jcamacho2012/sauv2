@@ -72,7 +72,7 @@ if (isset($_SESSION['iduser'])){
             <li><a href="allusers"><i class="fa fa-users"></i> Usuarios</a></li>
             <li><a href="feed"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>-->
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
-             <?php if($_SESSION['rank']==4){
+             <?php if($_SESSION['rank']==4 || $_SESSION['rank']==3){
                      echo "<li><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
                      <li class=\"active\"><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
                      <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";

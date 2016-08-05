@@ -225,6 +225,35 @@
         });
         
         
+         $('.tomar').on('click', function() {
+        // Get the record's ID via attribute
+            var id= $("input[name=id]").val();
+            var activity=$(this).closest("tr").find("#activity").text();
+            var process=$(this).closest("tr").find("#process").text();
+            var opcion='tomar';
+
+            $.ajax({
+                url: 'acciones.php',
+                method: 'POST',           
+                data: { id: id,opcion:opcion,activity:activity,process:process}
+            }).success(function(response) {
+                // Populate the form fields with the data returned from server
+                switch (response) {
+                            case "1":
+                                alert('Solicitud fue tomada');
+                                var pathname = window.location.pathname;
+                                var res = pathname.replace("unAssig", "task");
+                                window.location.replace(res);  
+                                break;                           
+                            default:
+                                 alert('Solicitud fue tomada por '+response);
+                                var pathname = window.location.pathname;
+                                window.location.replace(pathname)
+                                break;                                
+                        }                                                
+            });
+        });
+        
 
         $(function () {
             $('.list-group-item').each(function () {

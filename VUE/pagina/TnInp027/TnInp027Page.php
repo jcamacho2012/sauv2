@@ -10,7 +10,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php'
  * and open the template in the editor.
  */
 
-function cargar_formulario_027($req_no,$process,$activity,$cedula,$username){    
+function cargar_formulario_027($req_no,$process,$activity,$cedula,$rol,$username){    
     $tninp027= consulta_datos_formulario_027($req_no);  
     $solicitud=$tninp027->getReq_no();
     if(empty($solicitud)){
@@ -20,97 +20,7 @@ function cargar_formulario_027($req_no,$process,$activity,$cedula,$username){
     $producto= cargar_lista_productos_027($req_no);
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
-    $retval='
-                                <script type="text/javascript">                    
-                    $("#btn_enviar").click(function(){
-                        var opcion= $("input[name=radio]:checked").val();
-                        var obser= $("textarea#aprb_rmk").val();
-                        if(opcion){                            
-                            if((opcion==2 || opcion==3) && !obser){
-                                alert("No ha ingresado alguna observacion");
-                            }else if(opcion==1){
-                                var num = $("#req_no").val();
-                                var process = $("#process").val();
-                                var activity = $("#activity").val();
-                                var rank = $("#rol").val();
-                                var cedula = $("#cedula").val();
-                                var username = $("#username").val();
-                                var estado="aprobar";
-                                $.ajax({
-                                        url: "acciones.php",
-                                        method: "POST",           
-                                        data: { reqno: num,estado:estado,rank:rank,process:process,activity:activity,cedula:cedula,username:username}
-                                    }).success(function(response) {
-                                        // Populate the form fields with the data returned from server
-                                            switch (response) {
-                                                case "1":
-                                                    alert("APROBADA PARA REVISION FINAL");
-                                                    var pathname = window.location.pathname;
-                                                    window.location.replace(pathname);
-                                                    break;
-                                                case "2":
-                                                    alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
-                                                    break;
-                                                case "3":
-                                                    alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
-                                                    break;
-                                                case "4":
-                                                    alert("SOLICITUD APROBADA");
-                                                    var pathname = window.location.pathname;
-                                                    window.location.replace(pathname);
-                                                    break;
-                                                case "5":
-                                                    alert("ERROR AL IMPONER TASAS");
-                                                    break;
-                                                case "6":
-                                                    alert("ERROR AL ACTUALIZAR DATOS DE VALIDACION");
-                                                    break;
-                                                case "7":
-                                                    alert("ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
-                                                    break;
-                                            }
-
-                                         })
-                                        .fail(function(response){
-                                            alert(response);
-                                        }); 
-                            }else{
-                                var num = $("#req_no").val();
-                                var process = $("#process").val();
-                                var activity = $("#activity").val();
-                                var rank = $("#rol").val();
-                                var username = $("#username").val();                                
-                                var estado="subsanar";
-                                 $.ajax({
-                                            url: "acciones.php",
-                                            method: "POST",           
-                                            data: { reqno: num,estado:estado,opcion:opcion,rank:rank,mensaje:obser,process:process,activity:activity,username:username}
-                                        }).success(function(response) {
-                                            // Populate the form fields with the data returned from server
-                                                switch (response) {
-                                                    case "1":
-                                                        alert("SUBSANACION FUE ENVIADA");
-                                                        var pathname = window.location.pathname;
-                                                        window.location.replace(pathname);
-                                                        break;
-                                                    case "2":
-                                                        alert("ERROR AL ENVIAR SUBSANACION");
-                                                        break;
-                                                    case "3":
-                                                        alert("ERROR AL FINALIZAR PROCESOS");
-                                                        break;                                                    
-                                                }
-                                                                                                    
-                                             })
-                                            .fail(function(response){
-                                                alert(response);
-                                            });          
-                            }
-                        }else{
-                            alert("no ha escogido ninguna opcion");
-                        }   
-                    });                    
-                </script>
+    $retval='                         
             	<div class="display-2">
                     <h2 align="center">'.substr($tninp027->getDcm_no(), 0, -4).'  '.$tninp027->getDcm_nm().'</h2>
 		</div>  
@@ -150,7 +60,7 @@ function cargar_formulario_027($req_no,$process,$activity,$cedula,$username){
                             </div>
 
                             <div class="col-xs-1 form-group">
-                                <input type="text" class="form-control"  id="rol" readonly value="rol" /> 
+                                <input type="text" class="form-control"  id="rol" readonly value="'.$rol.'" /> 
                             </div>
 
                             <div class="col-xs-5 form-group">                                     
@@ -160,7 +70,7 @@ function cargar_formulario_027($req_no,$process,$activity,$cedula,$username){
                         <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Número de Solicitud</label>                                      
-                                <input type="text" class="form-control" name="req_no" readonly value="'.$tninp027->getReq_no().'" />                                    
+                                <input type="text" class="form-control" name="req_no" id="req_no" readonly value="'.$tninp027->getReq_no().'" />                                    
                             </div>
 
                             <div class="col-xs-1 form-group">
@@ -317,16 +227,16 @@ function cargar_formulario_027($req_no,$process,$activity,$cedula,$username){
                             </div>
                         </div>
                         <div class="row" style="padding:5px 0 0 30px;">						
-                                <div class="col-xs-5 form-group">
-                                        <label>Parroquia</label>                                        
-                                        <input type="text" class="form-control" name="expr_prqi_nm" readonly value="'.$tninp027->getExpr_prqi_nm().'"  />
-                                </div>
+                            <div class="col-xs-5 form-group">
+                                    <label>Parroquia</label>                                        
+                                    <input type="text" class="form-control" name="expr_prqi_nm" readonly value="'.$tninp027->getExpr_prqi_nm().'"  />
+                            </div>
                         </div>
                         <div class="row" style="padding:5px 0 0 30px;">						
-                                <div class="col-xs-11 form-group">
-                                        <label>Dirección</label>                                        
-                                        <input type="text" class="form-control" name="expr_ad" readonly value="'.$tninp027->getExpr_ad().'"  />
-                                </div>
+                            <div class="col-xs-11 form-group">
+                                    <label>Dirección</label>                                        
+                                    <input type="text" class="form-control" name="expr_ad" readonly value="'.$tninp027->getExpr_ad().'"  />
+                            </div>
                         </div>						
                         <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
@@ -489,7 +399,7 @@ function cargar_formulario_027($req_no,$process,$activity,$cedula,$username){
                         </div>
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del Aprobador</label>
-                            <textarea class="form-control" rows="5" name="aprb_rmk" id="aprb_rmk"></textarea>
+                            <textarea class="form-control" rows="5" name="aprb_rmk"  maxlength="500" id="aprb_rmk"></textarea>
                         </div>
                     </div>
 		</div>';
@@ -512,15 +422,15 @@ function cargar_formulario_027($req_no,$process,$activity,$cedula,$username){
                     <div class="panel-body">
                         <div class="funkyradio">
                              <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="aprobar"/>
+                                <input type="radio" name="radio" id="aprobar" value="1"/>
                                 <label for="aprobar">Aprobar</label>
                             </div>
                            <div class="funkyradio-warning">
-                                <input type="radio" name="radio" id="subsanar" />
+                                <input type="radio" name="radio" id="subsanar" value="2"/>
                                 <label for="subsanar">Subsanar</label>
                             </div>
                             <div class="funkyradio-danger">
-                                <input type="radio" name="radio" id="rechazar" />
+                                <input type="radio" name="radio" id="rechazar" value="3"/>
                                 <label for="rechazar">Rechazar</label>
                             </div>
                         <button type="button" class="btn btn-default" id="btn_enviar">Enviar</button>

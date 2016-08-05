@@ -11,6 +11,7 @@ function consulta_datos_notificacion($req_no) {
     $sql=" SELECT 
 	COALESCE(ntcp_nm::TEXT,'No Aplica') AS ntcp_nm
 	,COALESCE(ntfc_ctxt::TEXT,'No Aplica') AS ntfc_ctxt
+        ,COALESCE(TO_CHAR(rgs_dt,'DD/MM/YYYY HH24:MI')::TEXT,'No Aplica') AS rgs_dt
 	from vue_gateway.tn_eld_ntfc 
         where req_no='".$req_no."'";     
         $conexion=new DB();        

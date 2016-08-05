@@ -331,39 +331,26 @@ if ( $updasentence -> execute())
 }
 
 
-function buscarNombreXId($id){
-    $conexion = Conexion::singleton_conexion();
-    
-    // consulta a base de datos
-    
-	$SQL = "SELECT username FROM users where iduser=:id";
-	$sentence = $conexion -> prepare($SQL);  
-        $sentence -> bindParam(':id', $id);        
-	$sentence -> execute();
-	$results = $sentence -> fetchAll();
-
-        if (empty($results)) {
-           return 'Sin Asignar';
-	}else{
-		foreach ($results as $key){
-                    return $key['username'];
-		}
-	}
-}
-
-function tareaSinAsignar(){
+function tareaSinAsignar($rol){
     // conexon a base de datos
     $conexion = Conexion::singleton_conexion();     
     // consulta a base de datos
+    if($rol==4){
+        $name='REVISION FINAL';
+    }else{
+        $name='RECEPTOR CALIFICADO';
+    }
     
 	  $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,documents.req_city_cd, activities_instances.process_instances_id as id_process FROM
                   documents JOIN process_instances 
                   ON documents.process_instances_id=process_instances.id 
                   JOIN activities_instances 
                   ON process_instances.id=activities_instances.process_instances_id 
-                  AND process_instances.state='READY' AND activities_instances.state='READY' 
+                  AND process_instances.state='READY' AND activities_instances.state='READY'
+                  AND activities_instances.name=:name
                   AND activities_instances.user_id=0";
-	$sentence = $conexion -> prepare($SQL);  
+	$sentence = $conexion -> prepare($SQL);
+        $sentence -> bindParam(':name', $name);
 	$sentence -> execute();
 	$results = $sentence -> fetchAll();
 	if (empty($results)) {
@@ -545,14 +532,73 @@ function tomar($id,$process,$activity){
   
     $conexion = Conexion::singleton_conexion();
     // consulta a base de datos
+    if(revisarActividad($process, $activity)){
+         $SQL = "UPDATE activities_instances SET user_id= :id,date_modify=now() WHERE id = :activity AND process_instances_id=:process";
+
+        $sentence = $conexion -> prepare($SQL);  
+        $sentence -> bindParam(':id', $id);
+        $sentence -> bindParam(':activity', $activity);
+        $sentence -> bindParam(':process', $process);
+        $sentence -> execute();
+        
+        return true;
+    }else{        
+        return buscarNombre($activity, $process);
+    }
+   
+
+}
+
+
+function buscarNombre($activity,$process){
+    $conexion = Conexion::singleton_conexion();
     
-    $SQL = "UPDATE activities_instances SET user_id= :id,date_modify=now() WHERE id = :activity AND process_instances_id=:process";
+    // consulta a base de datos
+    
+	$SQL = "SELECT users.username 
+                FROM activities_instances JOIN users
+                on activities_instances.user_id=users.iduser
+                WHERE  id=:activity AND process_instances_id=:process";
+        
+	$sentence = $conexion -> prepare($SQL);  
+        $sentence -> bindParam(':activity', $activity);
+        $sentence -> bindParam(':process', $process);  
+	$sentence -> execute();
+	$results = $sentence -> fetchAll();
+
+        if (empty($results)) {
+           return 'Sin Asignar';
+	}else{
+		foreach ($results as $key){
+                    return $key['username'];
+		}
+	}
+}
+
+function revisarActividad($process,$activity){
+    // conexon a base de datos
+  
+    $conexion = Conexion::singleton_conexion();
+    // consulta a base de datos
+    
+    $SQL = "SELECT user_id FROM activities_instances WHERE  id=:activity AND process_instances_id=:process";
 
     $sentence = $conexion -> prepare($SQL);  
-    $sentence -> bindParam(':id', $id);
     $sentence -> bindParam(':activity', $activity);
     $sentence -> bindParam(':process', $process);
-    $sentence -> execute();
+    $sentence -> execute();    
+    $results = $sentence -> fetchAll();
+    
+    if (empty($results)) {            
+    }else{
+            foreach ($results as $key){
+                if($key['user_id']=='0'){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+    }
 
 }
 

@@ -10,14 +10,16 @@ function cargar_lista_notificaciones($req_no){
     $listaNotificacion= consulta_datos_notificacion($req_no);
     $retval='<table class="table table-striped"><tr>
     <th>Nombre</th>
-    <th>Mensaje</th>    
+    <th>Mensaje</th>
+    <th>Fecha</th>
     </tr>';    
     if(count($listaNotificacion)<1){
-        $retval.='<td></td><td>No hay Mensajes</td>';
+        $retval.='<td></td><td>No hay Mensajes</td><td></td>';
     }else{        
         foreach($listaNotificacion as $notificacion){            
             $retval.=' <tr><td>'.$notificacion->getNombre().'</td>'                                   
-                    . '<td>'.$notificacion->getMensaje().'</td></tr>';                                                                   
+                    . '<td>'.$notificacion->getMensaje().'</td>'
+                    . '<td>'.$notificacion->getFecha().'</td></tr>';
         }            
     }
     $retval.='</table>';

@@ -141,7 +141,12 @@ if(isset($_POST['opcion'])){
         $id=$_POST['id'];
         $process=$_POST['process'];
         $activity=$_POST['activity'];
-        echo tomar($id,$process,$activity);
+        $resultado=  tomar($id, $process, $activity);
+        if($resultado){
+            echo '1';
+        }else{
+            echo $resultado;
+        }        
     }
  
 }

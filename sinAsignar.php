@@ -66,7 +66,7 @@ if (isset($_SESSION['iduser'])){
             <li><a href="allusers"><i class="fa fa-users"></i> Usuarios</a></li>
             <li><a href="feed"><i class="fa fa-commenting-o"></i> Publicaciones</a></li>-->
             <li><a href="config"><i class="fa fa-cog"></i> Configuración</a></li>
-             <?php if($_SESSION['rank']==4){
+             <?php if($_SESSION['rank']==4 || $_SESSION['rank']==3){
                       echo "<li class=\"active\"><a href=\"unAssig\"><i class=\"fa fa-tasks\"></i> Tareas Sin Asignar</a></li>
                      <li><a href=\"task\"><i class=\"fa fa-tasks\"></i> Mis Tareas</a></li>
                      <li><a href=\"done\"><i class=\"fa fa-check-circle\"></i> Terminadas</a></li>";
@@ -104,7 +104,7 @@ if (isset($_SESSION['iduser'])){
                	  		</tr>
                	  	</thead>
                	  	<tbody class="searchable">
-               	  	  <?php tareaSinAsignar(); ?>
+               	  	  <?php tareaSinAsignar($_SESSION['rank']); ?>
                	  	</tbody>
                      </table>
                       <input type="hidden" class="form-control" name="id" value="<?php echo $_SESSION['iduser']; ?>"/>
@@ -131,43 +131,6 @@ if (isset($_SESSION['iduser'])){
     <!-- validation -->
     <script src="themes/js/jquery.validate.min.js"></script>
     <script src="themes/js/additional-methods.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-             (function($) {
-                $('#filter').keyup(function() {
-                    var rex = new RegExp($(this).val(), 'i');
-                    $('.searchable tr').hide();
-                    $('.searchable tr').filter(function() {
-                        return rex.test($(this).text());
-                    }).show();
-                })
-            }(jQuery));  
-        });
-        
-            
-            
-        $('.tomar').on('click', function() {
-        // Get the record's ID via attribute
-            var id= $("input[name=id]").val();
-            var activity=$(this).closest("tr").find("#activity").text();
-            var process=$(this).closest("tr").find("#process").text();
-            var opcion='tomar';
-
-            $.ajax({
-                url: 'acciones.php',
-                method: 'POST',           
-                data: { id: id,opcion:opcion,activity:activity,process:process}
-            }).success(function(response) {
-                // Populate the form fields with the data returned from server
-                alert('Solicitud fue tomada');
-                var pathname = window.location.pathname;
-                var res = pathname.replace("unAssig", "task");
-                window.location.replace(res);
-
-                
-            });
-        });
-        
-    </script>
+    <script src="themes/js/script.js"></script> 
   </body>
 </html>

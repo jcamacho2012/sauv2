@@ -9,7 +9,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php'
  * and open the template in the editor.
  */
 
-function cargar_formulario_014($req_no,$rol,$process,$activity,$cedula,$username){      
+function cargar_formulario_014($req_no,$process,$activity,$cedula,$rol,$username){      
     $tninp014= consulta_datos_formulario_014($req_no);    
     $solicitud=$tninp014->getReq_no();
     if(empty($solicitud)){

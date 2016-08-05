@@ -742,7 +742,7 @@ echo'
 }
 
 
-function newusuario($nombre,$apellido,$usuario,$email,$password,$profile,$rank,$ciudad){
+function newusuario($nombre,$apellido,$usuario,$email,$password,$cedula,$profile,$rank,$ciudad){
 
 // conexon a base de datos
 $conexion = Conexion::singleton_conexion();
@@ -755,13 +755,14 @@ $newprofile = md5($nombre);
 $nuevapassword=password_hash($password, PASSWORD_BCRYPT, ['cost'=>12]);
 
 
-$SQL = "INSERT INTO users(name,lastname,username,email,password,profile,public,rank,city,state) VALUES(:name,:lastname,:username,:email,:password,:profile,:public,:rank,:ciudad,'HABILITADO')";
+$SQL = "INSERT INTO users(name,lastname,username,email,password,identity_card,profile,public,rank,city,state) VALUES(:name,:lastname,:username,:email,:password,:cedula,:profile,:public,:rank,:ciudad,'HABILITADO')";
 $sentence = $conexion -> prepare($SQL);
 $sentence -> bindParam(':name',$nombre);
 $sentence -> bindParam(':lastname',$apellido);
 $sentence -> bindParam(':username',$usuario);
 $sentence -> bindParam(':email',$email);
 $sentence -> bindParam(':password',$nuevapassword);
+$sentence -> bindParam(':cedula',$cedula);
 $sentence -> bindParam(':profile',$newprofile);
 $sentence -> bindParam(':public',$profile);
 $sentence -> bindParam(':rank',$rank);
