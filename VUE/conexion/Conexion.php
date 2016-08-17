@@ -7,11 +7,11 @@
  */
 
 class DB{
-    private $host="192.168.1.7";
-    private $port="5433";
+    private $host="192.168.1.175";
+    private $port="5432";
     private $dbname="Solicitudes_Dev";
     private $user="postgres";
-    private $password="puntocafe";
+    private $password="vue_gateway";
     private $conexion;
     
     function __construct() {

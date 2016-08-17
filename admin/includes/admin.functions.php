@@ -280,15 +280,11 @@ function userslist(){
                         <input type="hidden" name="editarusuario" value="'.$key['iduser'].'">
                         <button type="submit" class="btn btn-block btn-xs btn-warning"><i class="glyphicon glyphicon-tasks"></i> Editar</button>
                    </form>
-
-                   <form method="POST" action="">
-                        <input type="hidden" name="eliminarusuario" value="'.$key['iduser'].'">
-                        <button type="submit" class="btn btn-block btn-xs btn-danger"><i class="glyphicon glyphicon-remove-sign"></i> Eliminar</button>
-                   </form>
                    
                    <form method="POST" action="">
                         <input type="hidden" name="deshabusuarioid" value="'.$key['iduser'].'">
-                        <input type="hidden" name="deshabusuarioestado" value="'.$key['state'].'">    
+                        <input type="hidden" name="deshabusuarioestado" value="'.$key['state'].'">
+                        <input type="hidden" name="city" value="'.$key['city'].'"> 
                         <button type="submit" class="btn btn-block btn-xs btn-info"><i class="glyphicon glyphicon-'.(($key['state']=="HABILITADO")? "thumbs-down":"thumbs-up").'"></i>'.(($key['state']=="HABILITADO")? " Deshabilitar":" Habilitar").'</button>
                    </form>
 
@@ -299,6 +295,68 @@ function userslist(){
 	}	
 }
 
+/*
+ * RETORNA EL ID DE USUARIO CON MENOR CANTIDAD DE TAREAS ASIGNADAS (POR CIUDAD)
+ */
+function balanceo($ciudad){
+    echo "funcion balanceo".$ciudad;
+    $lista=tareasAsignadas($ciudad);
+    if(empty($lista)){
+        echo "lista de usuarios esta vacía";
+    }else{
+        usort($lista, array("tarea","ordenar"));
+        return $lista[0]->getIduser();
+    }    
+}
+
+/*
+ * LISTA DE USUARIOS HABILITADOS CON LA CANTIDAD DE SOLICITUDES ASIGNADAS EN PROCESO DE REVISION (POR CIUDAD)
+ */
+function tareasAsignadas($ciudad){
+    $SQL="SELECT users.iduser as id, users.username as username,users.city as ciudad FROM
+            users
+            WHERE state='HABILITADO' AND users.username!='admin' AND rank=1 AND users.city='".$ciudad."'";
+    $conexion = SAU::singleton_conexion();
+    $sentence = $conexion -> prepare($SQL);
+    $sentence -> execute();
+    $results = $sentence -> fetchAll();
+    $listaUsuario;
+    $i=0;
+    if (empty($results)) {
+        # code...
+    }else{
+        foreach ($results as $key) {
+            $cantidad=  tareasDisponiblexUsuario($key['id']);               
+            $tarea=new tarea($key['id'],$key['username'], $key['ciudad'], $cantidad);
+            $listaUsuario[$i++]=$tarea;
+        }
+    }
+    return $listaUsuario;
+}
+
+/*
+ * RETORNA LA CANTIDAD DE TAREAS ASIGNADAS EN PROCESO DE REVISION (POR ID DE USUARIO)
+ */
+function tareasDisponiblexUsuario($id){
+    $SQL="SELECT COUNT(*) AS cantidad FROM 
+            activities_instances JOIN users
+            ON activities_instances.user_id=users.iduser
+            AND activities_instances.state='READY' AND users.iduser=:id";
+    
+    $conexion = SAU::singleton_conexion();
+    $sentence = $conexion -> prepare($SQL);
+    $sentence -> bindParam(':id',$id);
+    $sentence -> execute();
+    $results = $sentence -> fetchAll();
+    
+    if (empty($results)) {
+        # code...
+    }else{
+        foreach ($results as $key) {
+            return $key['cantidad'];
+        }
+    }
+}
 
 function followlist(){
     // conexon a base de datos
@@ -561,9 +619,9 @@ function editarusuario($user){
 
         $rango = rol($key['nombre']);
          if ($key['city'] == 'GYE') {
-          $ciudad = '<option value="GYE" selected>GUAYAQUIL</option><option value="MNT">MANTA</option>';
+          $ciudad = '<option value="GYE" selected>GUAYAQUIL</option><option value="MEC">MANTA</option>';
         }else{
-          $ciudad = '<option value="MNT" selected>MANTA</option><option value="GYE">GUAYAQUIL</option>';
+          $ciudad = '<option value="MEC" selected>MANTA</option><option value="GYE">GUAYAQUIL</option>';
         }
         
 
@@ -686,7 +744,43 @@ echo'
   
 }
 
-function deshabusuario($id,$estado){
+function buscarSolicitudesPorUsuario($id){
+    $SQL="SELECT id FROM activities_instances WHERE user_id=".$id." AND state='READY'";
+    $conexion = SAU::singleton_conexion();
+    $sentence = $conexion -> prepare($SQL);
+    $sentence -> execute();
+    $results = $sentence -> fetchAll();
+    $lista;
+    $i=0;
+    if (empty($results)) {
+        # code...
+    }else{
+        foreach ($results as $key) {                                     
+            $lista[$i++]=$key['id'];
+        }
+    }
+    return $lista;
+}
+
+function cambiarUsuarioAsignado($id,$usuario){
+// conexon a base de datos
+    $conexion = Conexion::singleton_conexion();
+
+
+    $upd = "UPDATE activities_instances SET user_id=:user WHERE id=:id";
+    $updasentence = $conexion -> prepare($upd);
+    $updasentence -> bindParam(':user',$usuario);
+    $updasentence -> bindParam(':id',$id);
+    $updasentence -> execute();
+
+    if($updasentence){
+        return TRUE;
+    }else {
+        return FALSE;
+    } 
+}
+
+function deshabusuario($id,$estado,$ciudad){
 // conexon a base de datos
 $conexion = Conexion::singleton_conexion();
 
@@ -696,20 +790,45 @@ if($estado=='HABILITADO'){
 }else{
     $estado='HABILITADO';
 }
-$SQL = "UPDATE users SET estado = :estado WHERE iduser = :iduser";
+
+
+$SQL = "UPDATE users SET state = :estado WHERE iduser = :iduser";
 $sentence = $conexion -> prepare($SQL);
 $sentence -> bindParam(':estado', $estado);
 $sentence -> bindParam(':iduser', $id);
 $sentence -> execute();
 
-echo'
-  <!-- alertas -->
-  <div class="col-md-12">
-  <div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-   <strong><i class="fa fa-check"></i> Correcto! </strong> El usuario fue '.$estado.'. </div>            
-  </div>
-  <!-- alertas -->
-';
+if($sentence){
+    $lista=buscarSolicitudesPorUsuario($id);
+    for($i=0; $i<  count($lista); $i++)
+      {
+	  $id=$lista[$i];
+          $usuario=balanceo($ciudad);
+          if(!cambiarUsuarioAsignado($id, $usuario)){
+              $i=  count($lista);
+          }
+
+      }   
+    echo'
+        <!-- alertas -->
+        <div class="col-md-12">
+        <div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+         <strong><i class="fa fa-check"></i> Correcto! </strong> El usuario fue '.$estado.'. </div>            
+        </div>
+        <!-- alertas -->
+      ';
+}else{
+    echo'
+    <!-- alertas -->
+    <div class="col-md-12">
+    <div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+     <strong><i class="fa fa-check"></i> Error! </strong> El usuario no cambio de estado. </div>            
+    </div>
+    <!-- alertas -->
+  ';
+}
+
+
 
   
 }

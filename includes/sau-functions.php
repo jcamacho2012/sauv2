@@ -363,7 +363,7 @@ function tareaSinAsignar($rol){
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td>
                     <td>'.$key['co_nm'].'</td>';
-            if($key['req_city_cd']=='MNT'){
+            if($key['req_city_cd']=='MEC'){
                 echo'<td>MANTA</td>';
             }else{
                 echo'<td>GUAYAQUIL</td>';

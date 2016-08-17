@@ -92,7 +92,7 @@ if (isset($_SESSION['iduser'])) {
               }
               
               if (isset($_POST['deshabusuarioid'])) {
-                 deshabusuario($_POST['deshabusuarioid'],$_POST['deshabusuarioestado']);
+                 deshabusuario($_POST['deshabusuarioid'],$_POST['deshabusuarioestado'],$_POST['city']);
               }
 
               ?>
