@@ -25,6 +25,7 @@ if (isset($_POST['estado'])){
         $cedula=$_POST['cedula'];
         $username=$_POST['username'];
         $cadena=$_POST['cadena'];
+        
         if(!consultarDesistimiento($reqno)){
             if($_POST['rank']!=4){            
                 if(actualizarEstadoActividad($activity,$process,$estado,$rank)){
@@ -107,10 +108,15 @@ if(isset($_POST['opcion'])){
         $username=$_POST['username'];
         
         if(!consultarDesistimiento($reqno)){
-            $response = array();
-            $response=consultaxid($reqno);
-            $formulario=  dibujarFormulario($response,$rank,$process,$activity,$cedula,$username);
-            echo $formulario;  
+            if(verificarTareaAsignada($activity, $id)){
+                $response = array();
+                $response=consultaxid($reqno);
+                $formulario=  dibujarFormulario($response,$rank,$process,$activity,$cedula,$username);
+                echo $formulario;  
+            }else{
+                echo '7';
+            }
+            
         }else{
             if(actualizarEstadoActividad($activity,$process,$estado,'DESISTIDA')){
                 echo '8';
@@ -141,12 +147,17 @@ if(isset($_POST['opcion'])){
         $id=$_POST['id'];
         $process=$_POST['process'];
         $activity=$_POST['activity'];
-        $resultado=  tomar($id, $process, $activity);
-        if($resultado){
-            echo '1';
+        if(verificarTareaTomada($activity)){
+            $resultado=  tomar($id, $process, $activity);
+            if($resultado){
+                echo '1';
+            }else{
+                echo $resultado;
+            }   
         }else{
-            echo $resultado;
-        }        
+            echo '2';
+        }
+            
     }
  
 }

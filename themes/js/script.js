@@ -4,6 +4,34 @@
  * and open the template in the editor.
  */
      $(document).ready(function() {
+         
+             $("#migracion").change(function(){ 
+                $("#vigencia").prop("disabled", false);
+                $("#secuencial_migracion").prop("disabled", false);
+                $("#verificar").prop("disabled", false); 
+            });
+                        
+            $("#vigencia").datepicker({
+                format: "yyyy/mm/dd",
+                language: "es",
+                autoclose: true
+            });
+            
+            $("#verificar").click(function(){
+                var secuencial= $("#secuencial_migracion").val();
+                if(secuencial.length != 0){
+                       $.ajax({
+                            url: "ajax.php",
+                            method: "POST",
+                            data: { secuencial: secuencial}
+                                }).success(function(response) {                   
+                                    alert(response);
+                                });
+                }else{
+                    alert("no hay valor del secuencial");
+                }                                            
+            });                 
+                    
             // filtro para la busqueda de solicitudes en tareas pendientes
             (function($) {
                 $('#filter').keyup(function() {
@@ -39,6 +67,7 @@
                     var opcion='asignar';
                     var usuario=$("#usuarios").val();
                     var nombre=$( "#usuarios option:selected" ).text();
+                    $('#myModal').modal('show'); 
                     if(usuario){
                         $.ajax({
                         url: 'acciones.php',
@@ -48,20 +77,47 @@
                             // Populate the form fields with the data returned from server
                             switch (response) {
                                 case "1":
-                                    alert("SOLICITUD(ES) ASIGNADA(S) A "+nombre);
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
+                                    $('.modal-header').empty();    
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-success');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">SOLICITUD(ES) ASIGNADA(S) A '+nombre+'</h2>');
+                                    setTimeout(function() {
+                                        var pathname = window.location.pathname;
+                                        window.location.replace(pathname);
+                                    }, 2000);  
+
                                     break;
                                 case "2":
-                                    alert("ERROR AL ASIGNAR SOLICITUD(ES)");                                    
+                                    $('.modal-header').empty();    
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-danger');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">ERROR AL ASIGNAR SOLICITUD(ES)</h2>');
+                                    $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                                </div>");
                                     break;                                                                
                             }           
                         })
                         .fail(function(response){
                             $('#userForm').append('<h1>No existe conexion con ecuapass</h1>');
                         });
-                    }else{
-                        alert('SELECCIONAR USUARIO');
+                    }else{                        
+                        $('.modal-header').empty();    
+                        $('.modal-footer').remove();
+                        $('.modal-header').removeClass('modal-header-info');
+                        $('.modal-header').addClass('modal-header-danger');
+                        $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO..</h4>');                                    
+                        $('.modal-body').empty();
+                        $('.modal-body').append('<h2 class="text-center">SELECCIONAR USUARIO</h2>');
+                        $('.modal-content').append("<div class='modal-footer'>\n\
+                                                        <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                    </div>");
                     }
                     
                 });     
@@ -149,18 +205,38 @@
                 // Populate the form fields with the data returned from server
                     switch (response) {
                             case "8":
-                                alert("SOLICITUD "+req_no+" FUE DESISTIDA POR EL USUARIO");
-                                var pathname = window.location.pathname;
-                                window.location.replace(pathname);
+                                $('.modal-header').empty();                                    
+                                $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                $('.modal-body').empty();
+                                $('.modal-body').append('<h2 class="text-center">SOLICITUD '+req_no.substring(14, 21)+' FUE DESISTIDA POR EL USUARIO</h2>');
+                                setTimeout(function() {
+                                    var pathname = window.location.pathname;
+                                    window.location.replace(pathname);
+                                }, 3000);
                                 break;
-                            case "9":
-                                alert("SOLICITUD "+req_no+" FUE DESISTIDA POR EL USUARIO...ERROR AL FINALIZAR PROCESO");
-                                var pathname = window.location.pathname;
-                                window.location.replace(pathname);
+                            case "9":                                
+                                $('.modal-header').empty();                                    
+                                $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                $('.modal-body').empty();
+                                $('.modal-body').append('<h2 class="text-center">SOLICITUD '+req_no.substring(14, 21)+' FUE DESISTIDA POR EL USUARIO...ERROR AL FINALIZAR PROCESO</h2>');
+                                setTimeout(function() {
+                                    var pathname = window.location.pathname;
+                                    window.location.replace(pathname);
+                                }, 3000);
+                                break;
+                            case "7":
+                                $('.modal-header').empty();                                    
+                                $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                $('.modal-body').empty();
+                                $('.modal-body').append('<h2 class="text-center">SOLICITUD '+req_no.substring(14, 21)+' ESTA SIENDO O FUE PROCESADA POR OTRO USUARIO</h2>');
+                                setTimeout(function() {
+                                    var pathname = window.location.pathname;
+                                    window.location.replace(pathname);
+                                }, 3000);
                                 break;
                             default:
                                  $('#fountainG').remove();
-                                 $('#contenido').append(response); 
+                                 $('#contenido').append(response);
                                 break;                                
                         }                              
                  })
@@ -195,6 +271,7 @@
                 // Populate the form fields with the data returned from server
                      $('#fountainG').remove();
                      $('#contenido').append(response);
+
                      
                      $(':input').prop('readonly', true);
 
@@ -240,17 +317,29 @@
                 // Populate the form fields with the data returned from server
                 switch (response) {
                             case "1":
-                                alert('Solicitud fue tomada');
-                                var pathname = window.location.pathname;
-                                var res = pathname.replace("unAssig", "task");
-                                window.location.replace(res);  
-                                break;                           
+                                $('.modal-header').empty();
+                                $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');
+                                $('.modal-body').empty();
+                                $('.modal-body').append('<h2 class="text-center">SOLICITUD '+req_no.substring(14, 21)+' FUE TOMADA</h2>');
+                                setTimeout(function() {
+                                    var pathname = window.location.pathname;
+                                    var res = pathname.replace("unAssig", "task");
+                                    window.location.replace(res);
+                                }, 3000);
+                                break;
+                            case "2":
+                                $('.modal-header').empty();
+                                $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');
+                                $('.modal-body').empty();
+                                $('.modal-body').append('<h2 class="text-center">SOLICITUD FUE TOMADA POR OTRO USUARIO</h2>');
+                                setTimeout(function() {
+                                    var pathname = window.location.pathname;
+                                    window.location.replace(pathname);
+                                }, 3000);
+                                break;
                             default:
-                                 alert('Solicitud fue tomada por '+response);
-                                var pathname = window.location.pathname;
-                                window.location.replace(pathname)
-                                break;                                
-                        }                                                
+                                break;
+                        }
             });
         });
         

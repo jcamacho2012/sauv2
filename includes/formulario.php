@@ -54,7 +54,7 @@ function dibujarFormulario($array,$rol,$process,$activity,$cedula,$username){
             break;
         }
         case '130-016':{
-            return cargar_formulario_016($array['req_no'],$rol);
+            return cargar_formulario_016($array['req_no'],$process,$activity,$cedula,$rol,$username);
             break;
         }
         case '130-019':{

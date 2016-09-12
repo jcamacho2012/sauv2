@@ -139,7 +139,7 @@ function tareas($iduser,$rank){
                             echo '<button type="button" data-id="'.$key['req_no'].'" class="btn btn-primary hacer">Hacer</button>';
                         }
                
-                        if($rank==4){
+                        if($rank==4 || $rank==3){
                              echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-warning liberar">Liberar</button>';
                         }
                         
@@ -201,6 +201,50 @@ function actualizarEstadoActividad($activity,$process,$estado,$rank){
     }
       
 }
+
+function verificarTareaAsignada($activity,$id){
+     $conexion = Conexion::singleton_conexion();
+
+    // consulta a base de datos
+        $SQL = "SELECT id 
+            FROM activities_instances 
+            WHERE id=:activity AND state='READY' AND user_id=:id";
+
+        $sentence = $conexion -> prepare($SQL);     
+        $sentence -> bindParam(':id', $id);          
+        $sentence -> bindParam(':activity', $activity);
+	$sentence -> execute();
+	$results = $sentence -> fetchAll();
+     // conexon a base de datos
+   
+	if (empty($results)) {
+            return FALSE;
+	}else{		
+            return TRUE;
+	}	
+}
+
+function verificarTareaTomada($activity){
+     $conexion = Conexion::singleton_conexion();
+
+    // consulta a base de datos
+        $SQL = "SELECT id 
+            FROM activities_instances 
+            WHERE id=:activity AND state='READY' AND user_id=0";
+
+        $sentence = $conexion -> prepare($SQL);                                
+        $sentence -> bindParam(':activity', $activity);
+	$sentence -> execute();
+	$results = $sentence -> fetchAll();
+     // conexon a base de datos
+   
+	if (empty($results)) {
+            return FALSE;
+	}else{		
+            return TRUE;
+	}	
+}
+
 
 function enviarNotificación($reqno,$mensaje,$opcion,$username){    
         if($opcion=='2'){
@@ -338,7 +382,7 @@ function tareaSinAsignar($rol){
     if($rol==4){
         $name='REVISION FINAL';
     }else{
-        $name='RECEPTOR CALIFICADO';
+        $name='REVISION CALIFICADO';
     }
     
 	  $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,documents.req_city_cd, activities_instances.process_instances_id as id_process FROM
@@ -457,7 +501,7 @@ function listaUsuariosAsignar(){
     $conexion = Conexion::singleton_conexion();
 
     // consulta a base de datos
-        $SQL = "SELECT iduser,username FROM users WHERE state='HABILITADO'";
+        $SQL = "SELECT iduser,username FROM users WHERE state='HABILITADO' ORDER BY username";
         $sentence = $conexion -> prepare($SQL);        
         $sentence -> execute();
         $results = $sentence -> fetchAll();

@@ -20,7 +20,7 @@
                 var cedula = $("#cedula").val();
                 var username = $("#username").val();
                 var estado="aprobar";
-                
+
                 //formularios de brasil
                 var cadena='';
                 $('#lista li').each(function(idx, li) {
@@ -31,7 +31,7 @@
                         cadena=cadena+'0';
                     }                               
                 });
-   
+                $('#myModal').modal('show'); 
                 $.ajax({
                         url: "acciones.php",
                         method: "POST",           
@@ -39,41 +39,113 @@
                     }).success(function(response) {
                         // Populate the form fields with the data returned from server
                             switch (response) {
-                                case "1":
-                                    alert("APROBADA PARA REVISION FINAL");
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
+                                case "1":                                   
+                                    $('.modal-header').empty();                                    
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-success');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">APROBADA PARA REVISION FINAL</h2>');                                    
+                                    setTimeout(function() {
+                                        var pathname = window.location.pathname;
+                                        window.location.replace(pathname);
+                                    }, 2500);                                    
                                     break;
                                 case "2":
-                                    alert("ERROR AL CREAR ACTIVIDAD DE APROBADOR");
+                                    $('.modal-header').empty();    
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-danger');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">ERROR AL CREAR ACTIVIDAD DE APROBADOR</h2>');
+                                    $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                                </div>");
                                     break;
                                 case "3":
-                                    alert("ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR");
+                                    $('.modal-header').empty();
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-danger');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">ERROR AL ACTUALIZAR ACTIVIDAD DE PRIMER REVISOR</h2>');
+                                    $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                                </div>");
                                     break;
                                 case "4":
-                                    alert("SOLICITUD APROBADA");
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
+                                    $('.modal-header').empty();                                    
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-success');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">SOLICITUD APROBADA</h2>');
+                                    setTimeout(function() {
+                                        var pathname = window.location.pathname;
+                                        window.location.replace(pathname);
+                                    }, 2500);                                       
                                     break;
                                 case "5":
-                                    alert("ERROR AL IMPONER TASAS");
+                                    $('.modal-header').empty();
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-danger');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">ERROR AL IMPONER TASAS</h2>');
+                                    $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                                </div>");
                                     break;
-                                case "6":
-                                    alert("ERROR AL ACTUALIZAR DATOS DE VALIDACION");
+                                case "6":                                    
+                                    $('.modal-header').empty();
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-danger');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">ERROR AL ACTUALIZAR DATOS DE VALIDACION</h2>');
+                                    $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                                </div>");
                                     break;
-                                case "7":
-                                    alert("ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
+                                case "7":                                    
+                                    $('.modal-header').empty();
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-danger');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD</h2>');
+                                    $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                                </div>");
                                     break;
                                 case "8":
-                                    alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO");
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
+                                    $('.modal-header').empty();                                    
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">SOLICITUD '+num.substring(14, 21)+' FUE DESISTIDA POR EL USUARIO</h2>');
+                                    setTimeout(function() {
+                                        var pathname = window.location.pathname;
+                                        window.location.replace(pathname);
+                                    }, 3000);
                                     break;
-                                case "9":
-                                    alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO...ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
+                                case "9":                                    
+                                    $('.modal-header').empty();
+                                    $('.modal-footer').remove();
+                                    $('.modal-header').removeClass('modal-header-info');
+                                    $('.modal-header').addClass('modal-header-danger');
+                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                    $('.modal-body').empty();
+                                    $('.modal-body').append('<h2 class="text-center">SOLICITUD '+num.substring(14, 21)+' FUE DESISTIDA POR EL USUARIO...ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD</h2>');
+                                    $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
+                                                                </div>");
                                     break;
-                            }
-
+                            }                             
                          })
                         .fail(function(response){
                             alert(response);
@@ -93,27 +165,62 @@
                             // Populate the form fields with the data returned from server
 //                                alert(response);
                                 switch (response) {
-                                    case "1":
-                                        alert("SUBSANACION FUE ENVIADA");
-                                        var pathname = window.location.pathname;
-                                        window.location.replace(pathname);
+                                    case "1":                                        
+                                        $('.modal-header').empty();                                    
+                                        $('.modal-header').removeClass('modal-header-info');
+                                        $('.modal-header').addClass('modal-header-success');
+                                        $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                        $('.modal-body').empty();
+                                        $('.modal-body').append('<h2 class="text-center">SUBSANACION FUE ENVIADA</h2>');
+                                        setTimeout(function() {
+                                            var pathname = window.location.pathname;
+                                            window.location.replace(pathname);
+                                        }, 2500);                                        
                                         break;
-                                    case "2":
-                                        alert("ERROR AL ENVIAR SUBSANACION");
+                                    case "2":                                        
+                                        $('.modal-header').empty();
+                                        $('.modal-header').removeClass('modal-header-info');
+                                        $('.modal-header').addClass('modal-header-danger');
+                                        $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                        $('.modal-body').empty();
+                                        $('.modal-body').append('<h2 class="text-center">ERROR AL ENVIAR SUBSANACION</h2>');
+                                        $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                        <button type='button' class='btn btn-default pull-left'>Cerrar</button>\n\
+                                                                    </div>");
                                         break;
-                                    case "3":
-                                        alert("ERROR AL FINALIZAR PROCESOS");
+                                    case "3":                                        
+                                        $('.modal-header').empty();
+                                        $('.modal-header').removeClass('modal-header-info');
+                                        $('.modal-header').addClass('modal-header-danger');
+                                        $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                        $('.modal-body').empty();
+                                        $('.modal-body').append('<h2 class="text-center">ERROR AL FINALIZAR PROCESOS</h2>');
+                                        $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                        <button type='button' class='btn btn-default pull-left'>Cerrar</button>\n\
+                                                                    </div>");
                                         break;  
-                                    case "8":
-                                        alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO");
-                                        var pathname = window.location.pathname;
-                                        window.location.replace(pathname);
+                                    case "8":                                        
+                                        $('.modal-header').empty();                                    
+                                        $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                        $('.modal-body').empty();
+                                        $('.modal-body').append('<h2 class="text-center">SOLICITUD '+num+' FUE DESISTIDA POR EL USUARIO</h2>');
+                                        setTimeout(function() {
+                                            var pathname = window.location.pathname;
+                                            window.location.replace(pathname);
+                                        }, 2500);
                                          break;
-                                    case "9":
-                                        alert("SOLICITUD "+num+" FUE DESISTIDA POR EL USUARIO...ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD");
+                                    case "9":                                        
+                                        $('.modal-header').empty();
+                                        $('.modal-header').removeClass('modal-header-info');
+                                        $('.modal-header').addClass('modal-header-danger');
+                                        $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');                                    
+                                        $('.modal-body').empty();
+                                        $('.modal-body').append('<h2 class="text-center">SOLICITUD '+num+' FUE DESISTIDA POR EL USUARIO...ERROR AL TERMINAR PROCESO DE LA ACTIVIDAD</h2>');
+                                        $('.modal-content').append("<div class='modal-footer'>\n\
+                                                                        <button type='button' class='btn btn-default pull-left'>Cerrar</button>\n\
+                                                                    </div>");
                                         break;
                                 }
-
                              })
                             .fail(function(response){
                                 alert(response);

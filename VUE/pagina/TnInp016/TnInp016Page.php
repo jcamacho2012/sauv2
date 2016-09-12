@@ -8,7 +8,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/VUE/pagina/TnNtfc/TnNtfcPage.php'
  * and open the template in the editor.
  */
 
-function cargar_formulario_016($req_no,$rol){    
+function cargar_formulario_016($req_no,$process,$activity,$cedula,$rol,$username){    
     $tninp016= consulta_datos_formulario_016($req_no);   
     $solicitud=$tninp016->getReq_no();
     if(empty($solicitud)){
@@ -17,62 +17,7 @@ function cargar_formulario_016($req_no,$rol){
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
     $retval='
-                <script type="text/javascript"> 
-                       $("#btn_enviar").click(function(){
-                            var opcion= $("input[name=radio]:checked").val();
-                            var obser= $("textarea#aprb_rmk").val();
-                            if(opcion){                            
-                                if((opcion==2 || opcion==3) && !obser){
-                                    alert("No ha ingresado alguna observacion");
-                                }else if(opcion==1){
-                                    alert("tramite aprobado");
-                                }else{
-                                    alert("envio a subsanar");
-                                }
-                            }else{
-                                alert("no ha escogido ninguna opcion");
-                            }   
-                        });     
-                      
-                      $("#verificar").click(function(){
-                        var secuencial= $("#secuencial_migracion").val();
-                        if(secuencial.length != 0){
-                               $.ajax({
-                                    url: "ajax.php",
-                                    method: "POST",
-                                    data: { secuencial: secuencial}
-                                        }).success(function(response) {                   
-                                            alert(response);
-                                        });
-                        }else{
-                            alert("no hay valor del secuencial");
-                        }                                            
-                    });
-                    
-                    // When the document is ready
-                    $(document).ready(function () {
-                        $("#nuevo").change(function(){ 
-                            $("#vigencia").prop("disabled", true);            
-                            $("#secuencial_migracion").prop("disabled", true);
-                            $("#verificar").prop("disabled", true); 
-                            $("#vigencia").val("");            
-                            $("#secuencial_migracion").val("");
-                        });
-                        
-                            $("#migracion").change(function(){ 
-                                $("#vigencia").prop("disabled", false);
-                                $("#secuencial_migracion").prop("disabled", false);
-                                $("#verificar").prop("disabled", false); 
-                            });
-                        
-                        $("#vigencia").datepicker({
-                            format: "yyyy/mm/dd",
-                            language: "es",
-                            autoclose: true
-                        });
-
-                    });
-                </script>
+                <script src="themes/js/eventos.js"></script>
             	<div class="display-2">
                     <h2 align="center">'.substr($tninp016->getDcm_no(), 0, -4).'  '.$tninp016->getDcm_nm().'</h2>
                 </div>
@@ -93,10 +38,36 @@ function cargar_formulario_016($req_no,$rol){
                         <h3>Datos de Solicitud</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="hidden" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">                                   
+                                <input type="text" class="form-control"  id="process" readonly value="'.$process.'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <!-- espacio entre columnas-->
+                            </div>
+
+                            <div class="col-xs-5 form-group">                                     
+                                <input type="text" class="form-control"  id="activity" readonly value="'.$activity.'"  />
+                            </div>
+                         </div>
+                          <div class="hidden" style="padding:5px 0 0 30px;">
+                            <div class="col-xs-5 form-group">                                   
+                                <input type="text" class="form-control"  id="cedula" readonly value="'.$cedula.'" />                                    
+                            </div>
+
+                            <div class="col-xs-1 form-group">
+                                <input type="text" class="form-control"  id="rol" readonly value="'.$rol.'" /> 
+                            </div>
+
+                            <div class="col-xs-5 form-group">                                     
+                                <input type="text" class="form-control"  id="username" readonly value="'.$username.'"  />
+                            </div>
+                         </div>
                          <div class="row" style="padding:5px 0 0 30px;">
                             <div class="col-xs-5 form-group">
                                 <label>Número de Solicitud</label>                                      
-                                <input type="text" class="form-control" name="req_no" readonly value="'.$tninp016->getReq_no().'" />                                    
+                                <input type="text" class="form-control" name="req_no" id="req_no" readonly value="'.$tninp016->getReq_no().'" />                                    
                             </div>
 
                             <div class="col-xs-1 form-group">
@@ -601,7 +572,7 @@ function cargar_formulario_016($req_no,$rol){
                         </div>
                         <div class="col-xs-11 form-group">
                             <label>Observaciones del Aprobador</label>
-                            <textarea class="form-control" rows="5" name="aprb_rmk"></textarea>
+                            <textarea class="form-control" rows="5" name="aprb_rmk" maxlength="500" id="aprb_rmk"></textarea>
                         </div>
                     </div>
 		</div>';
@@ -624,15 +595,15 @@ function cargar_formulario_016($req_no,$rol){
                     <div class="panel-body">
                         <div class="funkyradio">
                              <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="aprobar"/>
+                                <input type="radio" name="radio" id="aprobar" value="1"/>
                                 <label for="aprobar">Aprobar</label>
                             </div>
                            <div class="funkyradio-warning">
-                                <input type="radio" name="radio" id="subsanar" />
+                                <input type="radio" name="radio" id="subsanar" value="2" />
                                 <label for="subsanar">Subsanar</label>
                             </div>
                             <div class="funkyradio-danger">
-                                <input type="radio" name="radio" id="rechazar" />
+                                <input type="radio" name="radio" id="rechazar" value="3"/>
                                 <label for="rechazar">Rechazar</label>
                             </div>
                         <button type="button" class="btn btn-default" id="btn_enviar">Enviar</button>

@@ -21,7 +21,7 @@ function cargar_formulario_021($req_no,$process,$activity,$cedula,$rol,$username
         $adjunto= cargar_lista_adjuntos($req_no);
         $notificacion= cargar_lista_notificaciones($req_no);
         $retval=' 
-
+                <script src="themes/js/eventos.js"></script>
                	<div class="display-2">
                     <h2 align="center">'.substr($tninp021->getDcm_no(), 0, -4).'  '.$tninp021->getDcm_nm().'</h2>
 		</div>     

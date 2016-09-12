@@ -161,6 +161,7 @@ if (isset($_SESSION['iduser'])) {
                	
 
                	  <table class="table table-striped">
+                      <caption >Usuarios Habilitados</caption>
                	  	<thead>
                	  		<tr>
                                     <th>Nombre</th>
@@ -173,7 +174,24 @@ if (isset($_SESSION['iduser'])) {
                	  		</tr>
                	  	</thead>
                	  	<tbody>
-               	  	  <?php userslist(); ?>
+               	  	  <?php userslisthabilitados(); ?>
+               	  	</tbody>
+               	  </table>
+                   <table class="table table-striped">
+                      <caption >Usuarios Deshabilitados</caption>
+               	  	<thead>
+               	  		<tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Perfil Publico</th>                                   
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Ciudad</th>
+                                    <th>Acciones</th>
+               	  		</tr>
+               	  	</thead>
+               	  	<tbody>
+               	  	  <?php userslistdeshabilitados(); ?>
                	  	</tbody>
                	  </table>
                   

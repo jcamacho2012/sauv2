@@ -91,6 +91,7 @@ if (isset($_SESSION['iduser'])){
        
           <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mensaje">
           <!-- contenido -->
+          
           <div class="col-sm-6" id="contenido">
               <div class="well configuracion-cube">
                 <h4><i class="fa fa-tasks"></i> Mis Tareas</h4>               
@@ -147,10 +148,27 @@ if (isset($_SESSION['iduser'])){
                       <input type="hidden" class="form-control" name="rank" value="<?php echo $_SESSION['rank']; ?>"/>
                       <input type="hidden" class="form-control" name="username" value="<?php echo $_SESSION['username']; ?>"/>
                       <input type="hidden" class="form-control" name="identity_card" value="<?php echo $_SESSION['identity_card']; ?>"/>
+                        <!-- Modal -->
+                       
                   </div>                 
                 </div>                             
               </div>
             </div>
+            <div id="cargando" class="bs-example">
+                <div id="myModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header modal-header-info">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="titulo">Espere un momento..</h4>
+                            </div>
+                            <div class="modal-body">
+                                <center><img src="themes/images/loading.gif" alt="loading" height="100" width="100"></center>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+             </div>
         </div>
       </div>
     </div>
@@ -166,12 +184,14 @@ if (isset($_SESSION['iduser'])){
     <script src="themes/js/bootstrap-datepicker.js"></script>
     <script src="themes/js/bootstrap-switch.js"></script>
     <script src="themes/js/script.js"></script> 
+    <script src="themes/js/eventos.js"></script>
     <style>
 	li.list-group-item 
         {
             cursor: pointer;
             font-family: "Helvetica Neue","Helvetica","Arial","sans-serif";
         }
+        .close {display: none;}
     </style>   
   </body>
 </html>

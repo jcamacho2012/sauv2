@@ -19,7 +19,8 @@ function cargar_formulario_019($req_no,$process,$activity,$cedula,$rol,$username
     $producto= cargar_lista_productos_019($req_no);
     $adjunto= cargar_lista_adjuntos($req_no);
     $notificacion= cargar_lista_notificaciones($req_no);
-    $retval='                      
+    $retval='     
+                <script src="themes/js/eventos.js"></script>
                 <div class="display-2">
                     <h2 align="center">'.substr($tninp019->getDcm_no(), 0, -4).'  '.$tninp019->getDcm_nm().'</h2>
                 </div>
@@ -346,7 +347,7 @@ function cargar_formulario_019($req_no,$process,$activity,$cedula,$rol,$username
                                 <input type="radio" name="radio" id="rechazar" value="3"/>
                                 <label for="rechazar">Rechazar</label>
                             </div>
-                        <button type="button" class="btn btn-default" id="btn_enviar">Enviar</button>
+                        <button type="button" class="btn btn-default" id="btn_enviar" >Enviar</button>
                         </div>
                     </div>
                  </div>';

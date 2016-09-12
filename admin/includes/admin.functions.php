@@ -2,6 +2,7 @@
 error_reporting(E_ALL ^ E_NOTICE);
 //require_once '../sau-config.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/sau-config.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/tarea.php';
 
 // iniciamos session XD
 session_start();
@@ -247,12 +248,60 @@ function getroles(){
 }
 
 
-function userslist(){
+function userslisthabilitados(){
     // conexon a base de datos
     $conexion = Conexion::singleton_conexion();
 
     // consulta a base de datos
-	$SQL = "SELECT iduser,username,email,public,nombre,city,state FROM users,rol where users.rank=rol.id";
+	$SQL = "SELECT iduser,username,email,public,nombre,city,state FROM users,rol WHERE users.rank=rol.id AND state='HABILITADO'";
+	$sentence = $conexion -> prepare($SQL);
+	$sentence -> execute();
+	$results = $sentence -> fetchAll();
+	if (empty($results)) {
+	}else{
+		foreach ($results as $key){
+             
+            if ($key['public'] == 1){
+            	$publico = 'SI';
+            }else{
+                $publico = 'NO';
+            }
+          
+        echo'
+              <tr>
+                <td>'.$key['username'].'</td>
+                <td>'.$key['email'].'</td>
+                <td>'.$publico.'</td>
+                <td>'.$key['nombre'].'</td>
+                <td>'.$key['state'].'</td>
+                <td>'.$key['city'].'</td>    
+                <td>
+                   
+                   <form method="POST" action="">
+                        <input type="hidden" name="editarusuario" value="'.$key['iduser'].'">
+                        <button type="submit" class="btn btn-block btn-xs btn-warning"><i class="glyphicon glyphicon-tasks"></i> Editar</button>
+                   </form>
+                   
+                   <form method="POST" action="">
+                        <input type="hidden" name="deshabusuarioid" value="'.$key['iduser'].'">
+                        <input type="hidden" name="deshabusuarioestado" value="'.$key['state'].'">
+                        <input type="hidden" name="city" value="'.$key['city'].'"> 
+                        <button type="submit" class="btn btn-block btn-xs btn-info"><i class="glyphicon glyphicon-'.(($key['state']=="HABILITADO")? "thumbs-down":"thumbs-up").'"></i>'.(($key['state']=="HABILITADO")? " Deshabilitar":" Habilitar").'</button>
+                   </form>
+
+                </td>
+              </tr>
+			';
+		}
+	}	
+}
+
+function userslistdeshabilitados(){
+    // conexon a base de datos
+    $conexion = Conexion::singleton_conexion();
+
+    // consulta a base de datos
+	$SQL = "SELECT iduser,username,email,public,nombre,city,state FROM users,rol WHERE users.rank=rol.id AND state='DESHABILITADO'";
 	$sentence = $conexion -> prepare($SQL);
 	$sentence -> execute();
 	$results = $sentence -> fetchAll();
@@ -298,11 +347,10 @@ function userslist(){
 /*
  * RETORNA EL ID DE USUARIO CON MENOR CANTIDAD DE TAREAS ASIGNADAS (POR CIUDAD)
  */
-function balanceo($ciudad){
-    echo "funcion balanceo".$ciudad;
+function balanceo($ciudad){   
     $lista=tareasAsignadas($ciudad);
     if(empty($lista)){
-        echo "lista de usuarios esta vacía";
+        //nothing
     }else{
         usort($lista, array("tarea","ordenar"));
         return $lista[0]->getIduser();
@@ -316,7 +364,7 @@ function tareasAsignadas($ciudad){
     $SQL="SELECT users.iduser as id, users.username as username,users.city as ciudad FROM
             users
             WHERE state='HABILITADO' AND users.username!='admin' AND rank=1 AND users.city='".$ciudad."'";
-    $conexion = SAU::singleton_conexion();
+    $conexion = Conexion::singleton_conexion();
     $sentence = $conexion -> prepare($SQL);
     $sentence -> execute();
     $results = $sentence -> fetchAll();
@@ -343,7 +391,7 @@ function tareasDisponiblexUsuario($id){
             ON activities_instances.user_id=users.iduser
             AND activities_instances.state='READY' AND users.iduser=:id";
     
-    $conexion = SAU::singleton_conexion();
+    $conexion = Conexion::singleton_conexion();
     $sentence = $conexion -> prepare($SQL);
     $sentence -> bindParam(':id',$id);
     $sentence -> execute();
@@ -746,7 +794,7 @@ echo'
 
 function buscarSolicitudesPorUsuario($id){
     $SQL="SELECT id FROM activities_instances WHERE user_id=".$id." AND state='READY'";
-    $conexion = SAU::singleton_conexion();
+    $conexion = Conexion::singleton_conexion();
     $sentence = $conexion -> prepare($SQL);
     $sentence -> execute();
     $results = $sentence -> fetchAll();
