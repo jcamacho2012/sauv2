@@ -75,8 +75,8 @@ if (isset($_SESSION['iduser'])) {
 
              <?php
 
-              if (isset($_POST['nombre']) || isset($_POST['email']) || isset($_POST['public']) || isset($_POST['rango']) || isset($_POST['ciudad'])) {
-                   cambiardatos($_POST['nombre'],$_POST['email'],$_POST['public'],$_POST['rango'],$_POST['ciudad'],$_POST['userid']);
+              if (isset($_POST['nombre']) || isset($_POST['email']) || isset($_POST['public']) || isset($_POST['cedula']) || isset($_POST['rango']) || isset($_POST['ciudad'])) {
+                   cambiardatos($_POST['nombre'],$_POST['email'],$_POST['public'],$_POST['rango'],$_POST['cedula'],$_POST['ciudad'],$_POST['userid']);
               }
 
               if (isset($_POST['nueva2'])) {

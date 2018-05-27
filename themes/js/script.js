@@ -65,11 +65,10 @@
                       val[i] = $(this).val();
                     });
                     
-                    alert("val");
                     var opcion='asignar';
                     var usuario=$("#usuarios").val();
                     var nombre=$( "#usuarios option:selected" ).text();
-                    $('#myModal').modal('show'); 
+                    
                     if(usuario){
                         $.ajax({
                         url: 'acciones.php',
@@ -79,30 +78,20 @@
                             // Populate the form fields with the data returned from server
                             switch (response) {
                                 case "1":
-                                    $('.modal-header').empty();    
-                                    $('.modal-footer').remove();
-                                    $('.modal-header').removeClass('modal-header-info');
-                                    $('.modal-header').addClass('modal-header-success');
-                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO..</h4>');                                    
-                                    $('.modal-body').empty();
-                                    $('.modal-body').append('<h2 class="text-center">SOLICITUD(ES) ASIGNADA(S) A '+nombre+'</h2>');
+                                    $('#mensaje_tarea').addClass("alert alert-info alert-dismissible fade in");
+                                    $('#mensaje_tarea').append("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong><i class='fa fa-check'></i> Solicitud(es) Asignadas a "+nombre+" </strong>");
                                     setTimeout(function() {
                                         var pathname = window.location.pathname;
                                         window.location.replace(pathname);
-                                    }, 2000);  
-
+                                    }, 2000); 
                                     break;
                                 case "2":
-                                    $('.modal-header').empty();    
-                                    $('.modal-footer').remove();
-                                    $('.modal-header').removeClass('modal-header-info');
-                                    $('.modal-header').addClass('modal-header-danger');
-                                    $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO..</h4>');                                    
-                                    $('.modal-body').empty();
-                                    $('.modal-body').append('<h2 class="text-center">ERROR AL ASIGNAR SOLICITUD(ES)</h2>');
-                                    $('.modal-content').append("<div class='modal-footer'>\n\
-                                                                    <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
-                                                                </div>");
+                                    $('#mensaje_tarea').addClass("alert alert-danger alert-dismissible fade in");
+                                    $('#mensaje_tarea').append("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong><i class='fa fa-check'></i> Error al asignar solicitud(es)</strong>");
+                                    setTimeout(function() {
+                                        var pathname = window.location.pathname;
+                                        window.location.replace(pathname);
+                                    }, 2000);                                    
                                     break;                                                                
                             }           
                         })
@@ -110,18 +99,13 @@
                             $('#userForm').append('<h1>No existe conexion con ecuapass</h1>');
                         });
                     }else{                        
-                        $('.modal-header').empty();    
-                        $('.modal-footer').remove();
-                        $('.modal-header').removeClass('modal-header-info');
-                        $('.modal-header').addClass('modal-header-danger');
-                        $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO..</h4>');                                    
-                        $('.modal-body').empty();
-                        $('.modal-body').append('<h2 class="text-center">SELECCIONAR USUARIO</h2>');
-                        $('.modal-content').append("<div class='modal-footer'>\n\
-                                                        <button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Cerrar</button>\n\
-                                                    </div>");
-                    }
-                    
+                        $('#mensaje_tarea').addClass("alert alert-danger alert-dismissible fade in");
+                        $('#mensaje_tarea').append("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong><i class='fa fa-check'></i> Seleccione usuario para asignar solicitud(es) </strong>");
+                        setTimeout(function() {
+                            var pathname = window.location.pathname;
+                            window.location.replace(pathname);
+                        }, 2000); 
+                        }
                 });     
                 
                     

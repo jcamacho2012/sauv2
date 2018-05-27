@@ -98,15 +98,21 @@ function tareas($iduser,$rank){
             break;
         }
         case 2:{// Rol Admin
-            $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,username,activities_instances.process_instances_id as id_process FROM
-                  documents JOIN process_instances 
-                  ON documents.process_instances_id=process_instances.id 
-                  JOIN activities_instances 
-                  ON process_instances.id=activities_instances.process_instances_id
-                  JOIN users
-                  ON activities_instances.user_id=users.iduser
-                  AND process_instances.state='READY' AND activities_instances.state='READY'
-                  ORDER BY activities_instances.date_create DESC";
+            $SQL = "
+                SELECT 
+                    activities_instances.id as id_activity,
+                    req_no,
+                    dcm_cd,
+                    co_nm,
+                    username,activities_instances.process_instances_id as id_process 
+                FROM documents JOIN process_instances 
+                ON documents.process_instances_id=process_instances.id 
+                JOIN activities_instances 
+                ON process_instances.id=activities_instances.process_instances_id
+                JOIN users
+                ON activities_instances.user_id=users.iduser
+                AND process_instances.state='READY' AND activities_instances.state='READY'
+                ORDER BY activities_instances.date_create DESC";
             break;
         }
         case 3:{// Rol Calificado
@@ -165,8 +171,10 @@ function tareas($iduser,$rank){
                     
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td> 
-                    <td>'.$key['co_nm'].'</td>
-                    <td>'.$key['tiempo'].'</td>';
+                    <td>'.$key['co_nm'].'</td>';
+                if($rank!='2'){
+                    echo '<td>'.$key['tiempo'].'</td>';
+                }
                 
                 if($rank=='2'){
                 echo '
@@ -204,9 +212,14 @@ function tareas($iduser,$rank){
 
 function ultimoUsuario($process_instances_id,$req_no){
     $conexion = Conexion::singleton_conexion();
-     $SQL = "SELECT users.username FROM activities_instances INNER JOIN documents on activities_instances.process_instances_id=documents.process_instances_id
+     $SQL = "
+            SELECT 
+                users.username 
+            FROM activities_instances INNER JOIN documents 
+            ON activities_instances.process_instances_id=documents.process_instances_id
             JOIN users on users.iduser=activities_instances.user_id
-            and documents.process_instances_id=:process_instances_id and documents.req_no=:req_no and user_id !=0
+            and documents.process_instances_id=:process_instances_id and documents.req_no=:req_no 
+            and user_id !=0 and activities_instances.state='FINISH'
             ORDER by date_modify DESC LIMIT 1";
      $sentence = $conexion -> prepare($SQL);
      $sentence -> bindParam(':process_instances_id', $process_instances_id);
@@ -230,31 +243,31 @@ function actualizarEstadoActividad($activity,$process,$estado,$rank){
     
     if($rank!='DESISTIDA'){
         if($estado=='2'){
-            $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";
+            $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now(), date_finish=now() WHERE id = :activity;";
             $sentence = $conexion -> prepare($SQL);
             $sentence -> bindParam(':activity', $activity);
         }else 
             if($estado=='3'){
-                $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+                $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now(),date_finish=now() WHERE id = :activity;
                         UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
                 $sentence = $conexion -> prepare($SQL);
                 $sentence -> bindParam(':activity', $activity);
                 $sentence -> bindParam(':process', $process);
             }else{
                 if($rank==4){
-                      $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+                      $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now(), date_finish=now() WHERE id = :activity;
                         UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
                         $sentence = $conexion -> prepare($SQL);
                         $sentence -> bindParam(':activity', $activity);
                         $sentence -> bindParam(':process', $process);
                 }else{
-                    $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;";                
+                    $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now(), date_finish=now() WHERE id = :activity;";                
                         $sentence = $conexion -> prepare($SQL);
                         $sentence -> bindParam(':activity', $activity);                
                 }
             }        
     }else{
-         $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now() WHERE id = :activity;
+         $SQL = "UPDATE activities_instances SET state='FINISH', date_modify= now(), date_finish=now() WHERE id = :activity;
                         UPDATE process_instances SET state='FINISH', date_modify= now() WHERE id = :process;";
                 $sentence = $conexion -> prepare($SQL);
                 $sentence -> bindParam(':activity', $activity);
@@ -517,53 +530,66 @@ function tareaTerminadas($iduser,$rank){
     // conexon a base de datos
     $conexion = Conexion::singleton_conexion();     
     // consulta a base de datos
-        if($rank==2){
-            $SQL = "SELECT req_no,dcm_cd,co_nm,username,activities_instances.date_modify as date_modify FROM
-                  documents JOIN process_instances 
-                  ON documents.process_instances_id=process_instances.id 
-                  JOIN activities_instances 
-                  ON process_instances.id=activities_instances.process_instances_id
-                  JOIN users
-                  ON activities_instances.user_id=users.iduser
-                  
-                  ORDER BY activities_instances.date_modify DESC";
+    switch ($rank){
+        case 2:{
+            $SQL = "
+                SELECT 
+                    req_no,
+                    dcm_cd,
+                    co_nm,
+                    username,
+                    activities_instances.date_finish as date_finish 
+                FROM documents JOIN process_instances 
+                ON documents.process_instances_id=process_instances.id 
+                JOIN activities_instances 
+                ON process_instances.id=activities_instances.process_instances_id
+                JOIN users
+                ON activities_instances.user_id=users.iduser  
+                AND activities_instances.state='FINISH'
+                ORDER BY activities_instances.date_modify DESC";            
             $sentence = $conexion -> prepare($SQL); 
-            //AND process_instances.state='FINISH' AND activities_instances.state='FINISH'
-        }else{
-            $SQL = "SELECT req_no,dcm_cd,co_nm,activities_instances.date_modify as date_modify FROM
-                  documents JOIN process_instances 
-                  ON documents.process_instances_id=process_instances.id 
-                  JOIN activities_instances 
-                  ON process_instances.id=activities_instances.process_instances_id 
-                  AND activities_instances.state='FINISH' 
-                  AND activities_instances.user_id=:user
-                  ORDER BY activities_instances.date_modify DESC";
+            break;
+        }
+        default :{
+            $SQL = "
+                SELECT 
+                    req_no,
+                    dcm_cd,
+                    co_nm,
+                    activities_instances.date_finish as date_finish 
+                FROM documents JOIN process_instances 
+                ON documents.process_instances_id=process_instances.id 
+                JOIN activities_instances 
+                ON process_instances.id=activities_instances.process_instances_id 
+                AND activities_instances.state='FINISH' 
+                AND activities_instances.user_id=:user
+                ORDER BY activities_instances.date_modify DESC";
             $sentence = $conexion -> prepare($SQL);  
             $sentence -> bindParam(':user', $iduser);
+            break;
         }
-	            
-	
-	$sentence -> execute();
-	$results = $sentence -> fetchAll();
-	if (empty($results)) {
-	}else{
-		foreach ($results as $key){
-                echo'
-                  <tr>    
-                    <td>'.$key['req_no'].'</td>
-                    <td>'.$key['dcm_cd'].'</td>
-                    <td>'.$key['co_nm'].'</td>';
-                if($rank==2){
-                    echo '<td>'.$key['username'].'</td>
-                          <td>'.$key['date_modify'].'</td>';
-                }else{
-                    echo '<td>'.$key['date_modify'].'</td>';
-                }
-                     
-                  echo '
-                    </tr>';
-		}
-	}	
+    }
+                  	
+    $sentence -> execute();
+    $results = $sentence -> fetchAll();
+    if (empty($results)) {
+    }else{
+        foreach ($results as $key){
+        echo'
+          <tr>    
+            <td>'.$key['req_no'].'</td>
+            <td>'.$key['dcm_cd'].'</td>
+            <td>'.$key['co_nm'].'</td>';
+        if($rank==2){
+            echo '<td>'.$key['username'].'</td>
+                  <td>'.$key['date_finish'].'</td>';
+        }else{
+            echo '<td>'.$key['date_finish'].'</td>';
+        }
+          echo '
+            </tr>';
+        }
+    }	
 }
 
 
@@ -594,14 +620,19 @@ function listaUsuariosAsignar(){
     $conexion = Conexion::singleton_conexion();
 
     // consulta a base de datos
-        $SQL = "SELECT iduser,username FROM users WHERE state='HABILITADO' ORDER BY username";
+        $SQL = "
+            SELECT 
+                iduser,
+                username 
+            FROM users 
+            WHERE state='HABILITADO' ORDER BY username";
         $sentence = $conexion -> prepare($SQL);        
         $sentence -> execute();
         $results = $sentence -> fetchAll();
         $response = array();
 	if (empty($results)) {
 	}else{
-                $lista='<select id="usuarios" class="selectpicker" name="rank" style="margin-left: 2em;">
+                $lista='<select id="usuarios" class="selectpicker form-control" name="rank" style="margin-left: 2em;">
                             <option value="" disabled selected>Escoger Usuario</option>';
                 foreach ($results as $key){                 
                     $lista.='<option value="'.$key['iduser'].'">'.$key['username'].'</option>';
@@ -623,7 +654,7 @@ function asignarSolicitudes($lista,$usuario){
     $actividades = trim($actividades, ',');
     
     
-    $SQL = "UPDATE activities_instances SET date_modify=CURRENT_TIMESTAMP,user_id=:usuario WHERE id IN (:actividades);";
+    $SQL = "UPDATE activities_instances SET date_modify=CURRENT_TIMESTAMP,user_id=:usuario, date_take=now() WHERE id IN (:actividades);";
 
     $sentence = $conexion -> prepare($SQL);  
     $sentence -> bindParam(':usuario', $usuario);
@@ -670,7 +701,11 @@ function tomar($id,$process,$activity){
     $conexion = Conexion::singleton_conexion();
     // consulta a base de datos
     if(revisarActividad($process, $activity)){
-         $SQL = "UPDATE activities_instances SET user_id= :id,date_modify=now(), date_take=now() WHERE id = :activity AND process_instances_id=:process";
+         $SQL = "
+                UPDATE 
+                    activities_instances 
+                SET user_id= :id,date_modify=now(), date_take=now() 
+                WHERE id = :activity AND process_instances_id=:process";
 
         $sentence = $conexion -> prepare($SQL);  
         $sentence -> bindParam(':id', $id);

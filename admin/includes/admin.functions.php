@@ -650,7 +650,17 @@ function editarusuario($user){
   $conexion = Conexion::singleton_conexion();
 
   // consulta a base de datos
-  $SQL = "SELECT iduser,username,email,public,nombre,city FROM users,rol where users.rank=rol.id and iduser = :iduser";
+  $SQL = "
+        SELECT 
+            iduser,
+            username,
+            email,
+            public,
+            identity_card,
+            nombre,
+            city 
+        FROM users inner join rol 
+        ON users.rank=rol.id and iduser = :iduser";
   $sentence = $conexion -> prepare($SQL);
   $sentence -> bindParam(':iduser',$user);
   $sentence -> execute();
@@ -683,6 +693,8 @@ function editarusuario($user){
                   <input class="form-control" type="text" name="nombre" value="'.$key['username'].'" >
                   <label>Correo Electronico:</label>
                   <input class="form-control" type="text" name="email" value="'.$key['email'].'" >
+                  <label>Cédula:</label>
+                  <input class="form-control" type="text" name="cedula" value="'.$key['identity_card'].'" >                  
                   <label>Perfil Publico:</label>
                   <select class="form-control" name="public">
                       '.$publico.'
@@ -759,7 +771,7 @@ header('Location: '.$_SERVER['HTTP_REFERER'].'');
 }
 
 
-function cambiardatos($nombre,$email,$public,$rango,$ciudad,$usuario){
+function cambiardatos($nombre,$email,$public,$rango,$cedula,$ciudad,$usuario){
 // conexon a base de datos
 $conexion = Conexion::singleton_conexion();
 
@@ -769,13 +781,14 @@ $conexion = Conexion::singleton_conexion();
 $newprofile = md5($nombre);
 
 // consulta a base de datos
-$SQL = "UPDATE users SET username = :name, email = :email, public = :public, profile = :profile, rank = :rank , city = :ciudad WHERE iduser = :iduser";
+$SQL = "UPDATE users SET username = :name, email = :email, public = :public, identity_card=:cedula, profile = :profile, rank = :rank , city = :ciudad WHERE iduser = :iduser";
 $sentence = $conexion -> prepare($SQL);
 $sentence -> bindParam(':name', $nombre);
 $sentence -> bindParam(':email', $email);
 $sentence -> bindParam(':public', $public);
 $sentence -> bindParam(':profile', $newprofile);
 $sentence -> bindParam(':rank', $rango);
+$sentence -> bindParam(':cedula', $cedula);
 $sentence -> bindParam(':ciudad', $ciudad);
 $sentence -> bindParam(':iduser', $usuario);
 $sentence -> execute();

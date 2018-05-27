@@ -118,12 +118,12 @@ $(document).ready(function() {
                   <div>
                       <?php 
             if($_SESSION['rank']==2){
-                  echo '<div class="row" style="padding:5px 0 0 15px;">
-                            <div class="input-group">';
-                  echo listaUsuariosAsignar();
-                  echo '        <button type="button" id="asignar" class="btn btn-toolbar" style="margin-left: 2em;">Asignar</button>
-                                <button type="button" id="no_asignar" class="btn btn-toolbar" style="margin-left: .2em;">No Asignar</button>
-                            </div>                            
+                  echo '<div>
+                            <div class="input-group">
+                            <button type="button" id="asignar" class="btn btn-primary" style="margin-left: 2em;">Asignar</button>';                            
+                  
+                  echo listaUsuariosAsignar();                  
+                  echo '
                          </div>';
                         
               }else{
@@ -143,7 +143,7 @@ $(document).ready(function() {
                                  <th>Solicitud</th>
                                  <th>Documento</th>
                                  <th>Empresa</th>
-                                 <th>Tiempo</th>
+                                 
                       <?php 
                         if($_SESSION['rank']==2){
                             echo '
@@ -151,6 +151,7 @@ $(document).ready(function() {
                                 <th>Ultimo Usuario</th>
                                  <th>Acciones</th>';
                         }else{
+                            echo '<th>Tiempo</th>';
                             echo '<th>Acciones</th>';
                         }                                        
                         ?>
