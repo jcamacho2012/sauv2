@@ -64,6 +64,8 @@
                     $(':checkbox:checked:not(.primary):visible').each(function(i){
                       val[i] = $(this).val();
                     });
+                    
+                    alert("val");
                     var opcion='asignar';
                     var usuario=$("#usuarios").val();
                     var nombre=$( "#usuarios option:selected" ).text();
@@ -176,6 +178,7 @@
         $('.hacer').on('click', function() {
             // Get the record's ID via attribute
             var req_no = $(this).attr('data-id');
+            alert('verHACER');
             var id= $("input[name=id]").val();
             var rank= $("input[name=rank]").val();
             var identity_card= $("input[name=identity_card]").val();
@@ -183,7 +186,7 @@
             var activity=$(this).closest("tr").find("#activity").text();
             var process=$(this).closest("tr").find("#process").text();
             var opcion='hacer';
-
+            
             $("#contenido").empty();
             $('.greyBox').after("<div class='redBox'>Iron man</div>");
             $("#contenido").append("<div id='fountainG'>\n\

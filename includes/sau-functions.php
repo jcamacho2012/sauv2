@@ -117,14 +117,15 @@ function tareas($iduser,$rank){
 	}else{
 		foreach ($results as $key){
                 echo'
-                  <tr>';
+                  <tr>
+                    <td id="process" class="hidden">'.$key['id_process'].'</td>
+                    <td id="activity" class="hidden">'.$key['id_activity'].'</td>';
                 if($rank=='2'){
                 echo '
                     <td><input type="checkbox" class="case" name="case[]" value="'.$key['id_activity'].'"></td>';
                 }
                 echo'
-                    <td class="hidden"  id="process">'.$key['id_process'].'</td>
-                    <td class="hidden"  id="activity">'.$key['id_activity'].'</td>
+                    
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td> 
                     <td>'.$key['co_nm'].'</td>';
@@ -132,6 +133,8 @@ function tareas($iduser,$rank){
                 if($rank=='2'){
                 echo '
                     <td>'.$key['username'].'</td>';
+                 echo '
+                    <td>'.ultimoUsuario($key['id_process'], $key['req_no']).'</td>';
                 }
                 echo ' 
                     <td>';
@@ -146,10 +149,33 @@ function tareas($iduser,$rank){
                          if($rank==2){
                              echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-info ver">Ver</button>';
                         }   
-                   echo' <td>
+                   echo' </td>
                   </tr>';
 		}
 	}	
+}
+
+function ultimoUsuario($process_instances_id,$req_no){
+    $conexion = Conexion::singleton_conexion();
+     $SQL = "SELECT users.username FROM activities_instances INNER JOIN documents on activities_instances.process_instances_id=documents.process_instances_id
+            JOIN users on users.iduser=activities_instances.user_id
+            and documents.process_instances_id=:process_instances_id and documents.req_no=:req_no and user_id !=0
+            ORDER by date_modify DESC LIMIT 1";
+     $sentence = $conexion -> prepare($SQL);
+     $sentence -> bindParam(':process_instances_id', $process_instances_id);
+     $sentence -> bindParam(':req_no', $req_no);
+     $sentence -> execute();
+     $results = $sentence -> fetchAll();
+     // conexon a base de datos
+   
+	if (empty($results)) {
+            return '-';
+	}else{		
+            foreach ($results as $key){
+                return $key['username'];
+            }
+	}	
+     
 }
 
 function actualizarEstadoActividad($activity,$process,$estado,$rank){
