@@ -108,9 +108,11 @@ $(document).ready(function() {
        
           <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mensaje">
           <!-- contenido -->
+             
           
           <!--<div id="contenido">-->
-              <div class="well configuracion-cube" id="contenido">
+              <div class="well configuracion-cube" id="contenido"> 
+                <div id="mensaje_tarea"></div>  
                 <h4><i class="fa fa-tasks"></i> Mis Tareas</h4>               
                                  
                   <div>
@@ -141,6 +143,7 @@ $(document).ready(function() {
                                  <th>Solicitud</th>
                                  <th>Documento</th>
                                  <th>Empresa</th>
+                                 <th>Tiempo</th>
                       <?php 
                         if($_SESSION['rank']==2){
                             echo '

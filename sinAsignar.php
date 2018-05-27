@@ -22,9 +22,13 @@ if (isset($_SESSION['iduser'])){
 
     <title><?php echo SITETITLE; ?></title>
 
-    <!-- SAU core CSS -->
+     <!-- SAU core CSS -->
     <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
     <link href="themes/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="themes/css/datepicker.css">
+    <link rel="stylesheet" href="themes/css/bootstrap-switch.css">
+    <link rel="stylesheet" href="themes/css/style.css">
+    
     <?php getstyle(); ?>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -32,6 +36,27 @@ if (isset($_SESSION['iduser'])){
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <script src="themes/js/jquery.min.js"></script>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="themes/js/bootstrap.min.js"></script>
+    <!-- validation -->
+    <script src="themes/js/jquery.validate.min.js"></script>
+    <script src="themes/js/additional-methods.min.js"></script>
+  
+      <script src="//code.jquery.com/jquery-1.12.3.js"></script>
+      <script src="themes/js/bootstrap-datepicker.js"></script>
+    <script src="themes/js/bootstrap-switch.js"></script>
+     
+        <script src="themes/js/jquery.dataTables.min.js"></script>        
+        <script src="themes/js/dataTables.bootstrap.min.js"></script>        
+        <link href="themes/css/dataTables.bootstrap.min.css" rel="stylesheet">
+        
+    <script type="text/javascript">
+$(document).ready(function() {	
+	 $('#example').DataTable();
+});    
+</script>
   </head>
 
   <body class="dashboard-panel">
@@ -84,14 +109,11 @@ if (isset($_SESSION['iduser'])){
           <!-- contenido -->
             <div class="col-sm-6">
               <div class="well configuracion-cube">
+                <div id="mensaje_tarea"></div> 
                 <h4><i class="fa fa-tasks"></i> Tareas Sin Asignar</h4>               
-                <div class="container">
-                  <h2>Tareas Sin Asignar</h2>
-                  <div>
-                        <div class="input-group"> <span class="input-group-addon">Buscar: </span>
-                            <input id="filter" type="text" class="form-control" placeholder="buscar por solicitud, documento o empresa">
-                        </div>
-                       <table class="table table-striped">
+                <div class="container">                  
+                  <div>                       
+                       <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" data-height="299" data-click-to-select="true" data-single-select="true">
                	  	<thead>
                	  		<tr>
                                   <th class="hidden">activity</th>
@@ -100,6 +122,7 @@ if (isset($_SESSION['iduser'])){
                                   <th>Documento</th>
                                   <th>Empresa</th>
                                   <th>Ciudad</th>
+                                  <th>Sin Revisión</th>
                                   <th>Acciones</th>
                	  		</tr>
                	  	</thead>
@@ -125,12 +148,8 @@ if (isset($_SESSION['iduser'])){
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    <script src="themes/js/jquery.min.js"></script>
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="themes/js/bootstrap.min.js"></script>
-    <!-- validation -->
-    <script src="themes/js/jquery.validate.min.js"></script>
-    <script src="themes/js/additional-methods.min.js"></script>
-    <script src="themes/js/script.js"></script> 
+    
+    <script src="themes/js/script.js"></script>
+    <script src="themes/js/eventos.js"></script>
   </body>
 </html>

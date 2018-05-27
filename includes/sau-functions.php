@@ -80,15 +80,25 @@ function tareas($iduser,$rank){
     $conexion = Conexion::singleton_conexion();
 
     // consulta a base de datos
-    if($rank==4){
-         $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM
-                  documents JOIN process_instances 
-                  ON documents.process_instances_id=process_instances.id 
-                  JOIN activities_instances 
-                  ON process_instances.id=activities_instances.process_instances_id 
-                  AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
-    }else if($rank==2){
-          $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,username,activities_instances.process_instances_id as id_process FROM
+    switch ($rank){
+        case 1:{// Rol General
+            $SQL = "
+                SELECT 
+                    activities_instances.id as id_activity,
+                    req_no,
+                    dcm_cd,
+                    co_nm,
+                    TimeDiffUnits(activities_instances.date_take, now()) as tiempo,
+                    activities_instances.process_instances_id as id_process 
+                FROM documents JOIN  process_instances 
+                ON documents.process_instances_id=process_instances.id 
+                JOIN activities_instances
+                ON process_instances.id=activities_instances.process_instances_id
+                AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
+            break;
+        }
+        case 2:{// Rol Admin
+            $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,username,activities_instances.process_instances_id as id_process FROM
                   documents JOIN process_instances 
                   ON documents.process_instances_id=process_instances.id 
                   JOIN activities_instances 
@@ -97,15 +107,42 @@ function tareas($iduser,$rank){
                   ON activities_instances.user_id=users.iduser
                   AND process_instances.state='READY' AND activities_instances.state='READY'
                   ORDER BY activities_instances.date_create DESC";
-    }else{
-        $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm, activities_instances.process_instances_id as id_process FROM 
-                documents JOIN  process_instances 
+            break;
+        }
+        case 3:{// Rol Calificado
+            $SQL = "
+                SELECT 
+                    activities_instances.id as id_activity,
+                    req_no,
+                    dcm_cd,
+                    co_nm,
+                    TimeDiffUnits(activities_instances.date_take, now()) as tiempo,
+                    activities_instances.process_instances_id as id_process 
+                FROM documents JOIN  process_instances 
                 ON documents.process_instances_id=process_instances.id 
                 JOIN activities_instances
                 ON process_instances.id=activities_instances.process_instances_id
                 AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
+            break;
         }
-
+        case 4:{// Rol Aprobador
+            $SQL = "
+                SELECT 
+                    activities_instances.id as id_activity,
+                    req_no,
+                    dcm_cd,
+                    co_nm, 
+                    TimeDiffUnits(activities_instances.date_take, now()) as tiempo,
+                    activities_instances.process_instances_id as id_process 
+                FROM documents JOIN process_instances 
+                ON documents.process_instances_id=process_instances.id 
+                JOIN activities_instances 
+                ON process_instances.id=activities_instances.process_instances_id 
+                AND process_instances.state='READY' AND activities_instances.state='READY' AND activities_instances.user_id=:iduser";
+            break;
+        }
+    }
+    
 	$sentence = $conexion -> prepare($SQL);
         if($rank!=2){
              $sentence -> bindParam(':iduser', $iduser);
@@ -128,7 +165,8 @@ function tareas($iduser,$rank){
                     
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td> 
-                    <td>'.$key['co_nm'].'</td>';
+                    <td>'.$key['co_nm'].'</td>
+                    <td>'.$key['tiempo'].'</td>';
                 
                 if($rank=='2'){
                 echo '
@@ -138,17 +176,26 @@ function tareas($iduser,$rank){
                 }
                 echo ' 
                     <td>';
-                        if($rank!=2){
-                            echo '<button type="button" data-id="'.$key['req_no'].'" class="btn btn-primary hacer">Hacer</button>';
-                        }
-               
-                        if($rank==4 || $rank==3){
-                             echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-warning liberar">Liberar</button>';
-                        }
-                        
-                         if($rank==2){
-                             echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-info ver">Ver</button>';
-                        }   
+                switch ($rank){
+                    case 1:{//Rol General
+                        echo '<button type="button" data-id="'.$key['req_no'].'" class="btn btn-primary hacer">Hacer</button>';
+                        break;
+                    }
+                    case 2:{// Rol Admin
+                        echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-info ver">Ver</button>';
+                        break;
+                    }
+                    case 3:{// Rol Calificado
+                        echo '<button type="button" data-id="'.$key['req_no'].'" class="btn btn-primary hacer">Hacer</button>';
+                        echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-warning liberar">Liberar</button>';
+                        break;
+                    }
+                    case 4:{// Rol Aprobador
+                        echo '<button type="button" data-id="'.$key['req_no'].'" class="btn btn-primary hacer">Hacer</button>';
+                        echo'<button type="button" data-id="'.$key['req_no'].'" class="btn btn-warning liberar">Liberar</button>';
+                        break;
+                    }
+                }                           
                    echo' </td>
                   </tr>';
 		}
@@ -405,20 +452,42 @@ function tareaSinAsignar($rol){
     // conexon a base de datos
     $conexion = Conexion::singleton_conexion();     
     // consulta a base de datos
-    if($rol==4){
-        $name='REVISION FINAL';
-    }else{
-        $name='REVISION CALIFICADO';
+    switch ($rol){
+        case 1:{
+            $name='REVISION GENERAL';
+            break;
+        }
+        case 3:{
+            $name='REVISION CALIFICADO';
+            break;
+        }
+        case 4:{
+            $name='REVISION FINAL';
+            break;
+        }
     }
     
-	  $SQL = "SELECT activities_instances.id as id_activity,req_no,dcm_cd,co_nm,documents.req_city_cd, activities_instances.process_instances_id as id_process FROM
-                  documents JOIN process_instances 
-                  ON documents.process_instances_id=process_instances.id 
-                  JOIN activities_instances 
-                  ON process_instances.id=activities_instances.process_instances_id 
-                  AND process_instances.state='READY' AND activities_instances.state='READY'
-                  AND activities_instances.name=:name
-                  AND activities_instances.user_id=0";
+	  $SQL = "
+            SELECT 
+                activities_instances.id as id_activity,
+                req_no,
+                dcm_cd,
+                co_nm,
+                CASE documents.req_city_cd
+                        WHEN 'GYE' THEN 'GUAYAQUIL'
+                        WHEN 'MEC' THEN 'MANTA'
+                END as req_city_cd,
+                TimeDiffUnits(activities_instances.date_create, now()) as tiempo,
+                activities_instances.process_instances_id as id_process 
+            FROM documents JOIN process_instances 
+            ON documents.process_instances_id=process_instances.id 
+            JOIN activities_instances 
+            ON process_instances.id=activities_instances.process_instances_id 
+            AND process_instances.state='READY' AND activities_instances.state='READY'
+            AND activities_instances.name=:name
+            AND activities_instances.user_id=0";
+
+                
 	$sentence = $conexion -> prepare($SQL);
         $sentence -> bindParam(':name', $name);
 	$sentence -> execute();
@@ -432,12 +501,9 @@ function tareaSinAsignar($rol){
                     <td class="hidden"  id="activity">'.$key['id_activity'].'</td>    
                     <td>'.$key['req_no'].'</td>
                     <td>'.$key['dcm_cd'].'</td>
-                    <td>'.$key['co_nm'].'</td>';
-            if($key['req_city_cd']=='MEC'){
-                echo'<td>MANTA</td>';
-            }else{
-                echo'<td>GUAYAQUIL</td>';
-            }
+                    <td>'.$key['co_nm'].'</td>
+                    <td>'.$key['req_city_cd'].'</td>
+                    <td>'.$key['tiempo'].'</td>';           
             echo    '
                     <td>
                         <button type="button" data-id="'.$key['req_no'].'" class="btn btn-default tomar">Tomar/Revisar</button>                        
@@ -459,9 +525,10 @@ function tareaTerminadas($iduser,$rank){
                   ON process_instances.id=activities_instances.process_instances_id
                   JOIN users
                   ON activities_instances.user_id=users.iduser
-                  AND process_instances.state='FINISH' AND activities_instances.state='FINISH'
+                  
                   ORDER BY activities_instances.date_modify DESC";
             $sentence = $conexion -> prepare($SQL); 
+            //AND process_instances.state='FINISH' AND activities_instances.state='FINISH'
         }else{
             $SQL = "SELECT req_no,dcm_cd,co_nm,activities_instances.date_modify as date_modify FROM
                   documents JOIN process_instances 
@@ -506,7 +573,7 @@ $conexion = Conexion::singleton_conexion();
 
 
 // consulta a base de datos
-    $SQL = "UPDATE activities_instances SET user_id=0, date_modify= now() WHERE id = :activity and process_instances_id=:process";
+    $SQL = "UPDATE activities_instances SET user_id=0, date_modify= now() ,date_take=NULL WHERE id = :activity and process_instances_id=:process";
     $sentence = $conexion -> prepare($SQL);
     $sentence -> bindParam(':activity', $activity);
     $sentence -> bindParam(':process', $process);
@@ -603,7 +670,7 @@ function tomar($id,$process,$activity){
     $conexion = Conexion::singleton_conexion();
     // consulta a base de datos
     if(revisarActividad($process, $activity)){
-         $SQL = "UPDATE activities_instances SET user_id= :id,date_modify=now() WHERE id = :activity AND process_instances_id=:process";
+         $SQL = "UPDATE activities_instances SET user_id= :id,date_modify=now(), date_take=now() WHERE id = :activity AND process_instances_id=:process";
 
         $sentence = $conexion -> prepare($SQL);  
         $sentence -> bindParam(':id', $id);

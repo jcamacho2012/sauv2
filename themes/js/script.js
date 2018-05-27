@@ -290,6 +290,7 @@
             var activity=$(this).closest("tr").find("#activity").text();
             var process=$(this).closest("tr").find("#process").text();       
             var opcion='liberar';
+            var req_no = $(this).attr('data-id');
 
             $.ajax({
                 url: 'acciones.php',
@@ -297,9 +298,13 @@
                 data: { activity:activity,process:process,opcion:opcion}
             }).success(function(response) {
                 // Populate the form fields with the data returned from server
-                alert('Solicitud fue liberada');
-                var pathname = window.location.pathname;
-                window.location.replace(pathname);
+                //alert('Solicitud fue liberada prueba');
+                $('#mensaje_tarea').addClass("alert alert-info alert-dismissible fade in");
+                $('#mensaje_tarea').append("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong><i class='fa fa-check'></i> Solicitud "+req_no.substring(14, 21)+" Liberada </strong>");
+                setTimeout(function() {
+                    var pathname = window.location.pathname;
+                    window.location.replace(pathname);
+                }, 2000);
                 
             });
         });
@@ -311,38 +316,35 @@
             var activity=$(this).closest("tr").find("#activity").text();
             var process=$(this).closest("tr").find("#process").text();
             var opcion='tomar';
+            var req_no = $(this).attr('data-id');
 
             $.ajax({
                 url: 'acciones.php',
                 method: 'POST',           
                 data: { id: id,opcion:opcion,activity:activity,process:process}
             }).success(function(response) {
-                // Populate the form fields with the data returned from server
+                // Populate the form fields with the data returned from server                
                 switch (response) {
-                            case "1":
-                                $('.modal-header').empty();
-                                $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');
-                                $('.modal-body').empty();
-                                $('.modal-body').append('<h2 class="text-center">SOLICITUD '+req_no.substring(14, 21)+' FUE TOMADA</h2>');
-                                setTimeout(function() {
-                                    var pathname = window.location.pathname;
-                                    var res = pathname.replace("unAssig", "task");
-                                    window.location.replace(res);
-                                }, 3000);
-                                break;
-                            case "2":
-                                $('.modal-header').empty();
-                                $('.modal-header').append('<h4 class="modal-title" id="titulo">ESTADO DE PROCESAMIENTO..</h4>');
-                                $('.modal-body').empty();
-                                $('.modal-body').append('<h2 class="text-center">SOLICITUD FUE TOMADA POR OTRO USUARIO</h2>');
-                                setTimeout(function() {
-                                    var pathname = window.location.pathname;
-                                    window.location.replace(pathname);
-                                }, 3000);
-                                break;
-                            default:
-                                break;
-                        }
+                    case "1":                               
+                        $('#mensaje_tarea').addClass("alert alert-success alert-dismissible fade in");
+                        $('#mensaje_tarea').append("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong><i class='fa fa-check'></i> Solicitud "+req_no.substring(14, 21)+" tomada </strong>");
+                        setTimeout(function() {
+                            var pathname = window.location.pathname;
+                            var res = pathname.replace("unAssig", "task");
+                            window.location.replace(res);
+                        }, 2000);
+                        break;
+                    case "2":
+                        $('#mensaje_tarea').addClass("alert alert-danger alert-dismissible fade in");
+                        $('#mensaje_tarea').append("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong><i class='fa fa-check'></i> Solicitud "+req_no.substring(14, 21)+" fue tomada por otro usuario </strong>");
+                        setTimeout(function() {
+                            var pathname = window.location.pathname;
+                            window.location.replace(pathname);
+                        }, 3000);
+                        break;
+                    default:
+                        break;
+                }
             });
         });
         

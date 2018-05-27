@@ -1,19 +1,5 @@
 <?php 
 
-//--------------------------------------------------------------
-//  _____  __  __  ____                __                   
-// /\___ \/\ \/\ \/\  _`\             /\ \                  
-// \/__/\ \ \ \_\ \ \ \/\_\    ___    \_\ \     __    ____  
-//    _\ \ \ \  _  \ \ \/_/_  / __`\  /'_` \  /'__`\ /',__\ 
-//   /\ \_\ \ \ \ \ \ \ \L\ \/\ \L\ \/\ \L\ \/\  __//\__, `\
-//   \ \____/\ \_\ \_\ \____/\ \____/\ \___,_\ \____\/\____/
-//    \/___/  \/_/\/_/\/___/  \/___/  \/__,_ /\/____/\/___/ 
-// 
-//      http://www.jhcodes.com/ - SAU v2.0 Beta 1
-//                jessus.herrera@hotmail.com
-//
-//--------------------------------------------------------------
-
 // incluimos las funciones
 
 require_once $_SERVER["DOCUMENT_ROOT"].'/sauv2/includes/sau-functions.php';
@@ -23,11 +9,11 @@ include $_SERVER["DOCUMENT_ROOT"].'/sauv2/themes/header.php';
 ?>
 
 
-
 <div id="login" class="text-center">
-    
-    <img src="themes/sau-logo-white.png">
-	
+    <div>
+        <img src="themes/map.png" width="400" height="100">
+    </div>
+    	
 	<div class="well">
       <?php saustatus(); ?>
 	</div>
